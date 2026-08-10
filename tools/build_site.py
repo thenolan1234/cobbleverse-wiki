@@ -229,16 +229,23 @@ def build_payloads(d: dict, trainers_guide: dict | None = None):
             "src": sp.get("src"),
             "addon": bool(sp.get("addon")),
         }
-        # structured condition fields for the spawn-trap build checklist
+        # structured condition fields for the spawn-trap build checklist.
+        # Presets (e.g. 'natural') supply conditions too - entry-level
+        # values win, preset values fill the gaps.
+        merged = {}
+        for p in sp.get("presets") or []:
+            pc = (d.get("presets", {}).get(p) or {}).get("condition") or {}
+            merged.update(pc)
+        merged.update(cond)
         for src_k, out_k in (("neededBaseBlocks", "base"),
                              ("neededNearbyBlocks", "near")):
-            v = cond.get(src_k)
+            v = merged.get(src_k)
             if v:
                 entry[out_k] = v
         for k in ("minSkyLight", "maxSkyLight", "canSeeSky", "timeRange",
                   "isRaining", "isThundering", "minY", "maxY"):
-            if k in cond:
-                entry[k] = cond[k]
+            if k in merged:
+                entry[k] = merged[k]
         spawns_by.setdefault(sp["pokemon"], []).append(entry)
 
     evo_from: dict[str, list] = {}
