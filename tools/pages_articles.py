@@ -219,9 +219,8 @@ def build_structures(inv: list, have: set, species: dict) -> str:
         for e in entries:
             name = e["rel"].split("/")[-1].replace("_", " ").replace("-", " ").title()
             links = ""
-            base = e["slug"].split("-")[-1]
-            for cand in (e["slug"].replace("-", ""), base,
-                         e["slug"].split("/")[-1].replace("-", "")):
+            for cand in ([e["slug"].replace("-", "")] +
+                         e["slug"].split("-")):
                 if cand in species:
                     links = (f" · <a href='spawns.html#{esc(cand)}'>spawns</a>"
                              f" · <a href='pokedex.html#{esc(cand)}'>dex</a>")

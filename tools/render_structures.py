@@ -184,26 +184,40 @@ def load_nbt(blob: bytes):
     return nbtlib.File.load(io.BytesIO(blob), gzipped=blob[:2] == b"\x1f\x8b")
 
 
-def render_structure(blob: bytes, idx: AssetIndex) -> Image.Image | None:
-    nbt = load_nbt(blob)
+def _collect(nbt, offset, name_index, keep, occupied):
+    """Append one structure's blocks (with offset) into a shared block list,
+    remapping palette indices into the shared name table."""
     palette = nbt.get("palette") or (nbt.get("palettes") or [[]])[0]
-    names = [str(p["Name"]) for p in palette]
-    blocks = nbt.get("blocks") or []
-    if not blocks:
-        return None
-
-    keep = []
-    occupied = set()
-    for b in blocks:
+    local = [str(p["Name"]) for p in palette]
+    remap = []
+    for nm in local:
+        if nm not in name_index:
+            name_index[nm] = len(name_index)
+        remap.append(name_index[nm])
+    ox, oy, oz = offset
+    for b in nbt.get("blocks") or []:
         st = int(b["state"])
-        if st >= len(names) or is_skipped(names[st]):
+        if st >= len(local) or is_skipped(local[st]):
             continue
         x, y, z = (int(v) for v in b["pos"])
-        keep.append((x, y, z, st))
-        if not is_clear(names[st]):
-            occupied.add((x, y, z))
+        pos = (x + ox, y + oy, z + oz)
+        keep.append((pos[0], pos[1], pos[2], remap[st]))
+        if not is_clear(local[st]):
+            occupied.add(pos)
+
+
+def render_parts(parts, idx: AssetIndex) -> Image.Image | None:
+    """parts: [(nbt, (ox, oy, oz)), ...] - render one or many pieces."""
+    keep: list = []
+    occupied: set = set()
+    name_index: dict[str, int] = {}
+    for nbt, offset in parts:
+        _collect(nbt, offset, name_index, keep, occupied)
     if not keep:
         return None
+    names = [None] * len(name_index)
+    for nm, i in name_index.items():
+        names[i] = nm
 
     sprites: dict[int, Image.Image] = {}
     for st in {k[3] for k in keep}:
@@ -241,15 +255,49 @@ def render_structure(blob: bytes, idx: AssetIndex) -> Image.Image | None:
     return canvas
 
 
+def render_structure(blob: bytes, idx: AssetIndex) -> Image.Image | None:
+    return render_parts([(load_nbt(blob), (0, 0, 0))], idx)
+
+
+def render_piece_grid(zf: zipfile.ZipFile, pieces: list[tuple[str, str]],
+                      idx: AssetIndex) -> Image.Image | None:
+    """pieces: [(digits, zip path)] with digits like '213' = grid coords.
+    Digit order is [x][y][z]; strides accumulate actual piece sizes."""
+    loaded = []
+    for digits, path in pieces:
+        if not re.fullmatch(r"\d{3}", digits):
+            return None
+        nbt = load_nbt(zf.read(path))
+        size = [int(v) for v in nbt["size"]]
+        coord = tuple(int(c) - 1 for c in digits)
+        loaded.append((coord, size, nbt))
+    # cumulative offsets per axis from the max size at each grid index
+    strides = []
+    for axis in range(3):
+        sizes: dict[int, int] = {}
+        for coord, size, _ in loaded:
+            sizes[coord[axis]] = max(sizes.get(coord[axis], 0), size[axis])
+        offs = {}
+        acc = 0
+        for i in sorted(sizes):
+            offs[i] = acc
+            acc += sizes[i]
+        strides.append(offs)
+    parts = [(nbt, (strides[0][c[0]], strides[1][c[1]], strides[2][c[2]]))
+             for c, _, nbt in loaded]
+    return render_parts(parts, idx)
+
+
 # ---------------------------------------------------------------- inventory
 
 _PIECE_RE = re.compile(r"/\d{1,4}\.nbt$")
 
 
 def inventory():
-    """[(slug, archive, path, size, ns)] for standalone structure nbts."""
+    """Standalone structure nbts plus assembled 3-digit piece grids."""
     out = []
     seen = set()
+    groups: dict[tuple, list] = {}
     for arc in STRUCT_SOURCES:
         if not os.path.exists(arc):
             continue
@@ -258,8 +306,13 @@ def inventory():
             n = info.filename
             if not n.endswith(".nbt") or "/structure" not in n:
                 continue
+            gm = re.match(r"data/([^/]+)/structures?/(.+?)(?:/main)?/(\d{3})\.nbt$", n)
+            if gm:
+                groups.setdefault((arc, gm.group(1), gm.group(2)), []).append(
+                    (gm.group(3), n, info.file_size))
+                continue
             if _PIECE_RE.search(n):
-                continue                    # jigsaw piece grids - skip v1
+                continue                    # other numeric pieces - skip
             if info.file_size < 2500:
                 continue
             m = re.match(r"data/([^/]+)/structures?/(.+)\.nbt$", n)
@@ -272,6 +325,16 @@ def inventory():
             seen.add(slug)
             out.append({"slug": slug, "arc": arc, "path": n,
                         "size": info.file_size, "ns": ns, "rel": rel})
+    for (arc, ns, rel), pieces in groups.items():
+        if len(pieces) < 4:
+            continue
+        slug = re.sub(r"[^a-z0-9]+", "-", rel.lower()).strip("-")
+        if slug in seen:
+            continue
+        seen.add(slug)
+        out.append({"slug": slug, "arc": arc, "ns": ns, "rel": rel,
+                    "size": sum(p[2] for p in pieces),
+                    "group": [(d, p) for d, p, _ in pieces]})
     return out
 
 
@@ -299,7 +362,10 @@ def main() -> None:
         try:
             if e["arc"] not in zips:
                 zips[e["arc"]] = zipfile.ZipFile(e["arc"])
-            img = render_structure(zips[e["arc"]].read(e["path"]), idx)
+            if "group" in e:
+                img = render_piece_grid(zips[e["arc"]], e["group"], idx)
+            else:
+                img = render_structure(zips[e["arc"]].read(e["path"]), idx)
             if img is None:
                 err += 1
                 continue
