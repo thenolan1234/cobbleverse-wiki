@@ -58,6 +58,8 @@ _SPECIES_RE = re.compile(r"data/([^/]+)/species/(.+)\.json$")
 _SPECIES_ADD_RE = re.compile(r"data/([^/]+)/species_additions/(.+)\.json$")
 _SPAWN_RE = re.compile(r"data/([^/]+)/spawn_pool_world/(.+)\.json$")
 _PRESET_RE = re.compile(r"data/([^/]+)/spawn_detail_presets/(.+)\.json$")
+_SEASONING_RE = re.compile(r"data/([^/]+)/seasonings/(.+)\.json$")
+_BAIT_RE = re.compile(r"data/([^/]+)/spawn_bait_effects/(.+)\.json$")
 _FOSSIL_RE = re.compile(r"data/([^/]+)/fossils/(.+)\.json$")
 _TRAINER_RE = re.compile(r"data/rctmod/trainers/([^/]+)\.json$")
 _MOB_RE = re.compile(r"data/rctmod/mobs/(.+)\.json$")
@@ -95,6 +97,8 @@ class Store:
         self.species: dict[str, dict] = {}          # filled in finalize()
         self.species_adds: list[dict] = []
         self.presets: dict[str, dict] = {}
+        self.seasonings: dict[str, dict] = {}
+        self.baits: dict[str, dict] = {}
         self.fossils: list[dict] = []
         self.trainers: dict[str, dict] = {}
         self.mobs: dict[str, dict] = {}
@@ -425,6 +429,16 @@ def ingest(store: Store, origin: str, path: str, blob: bytes, addon: bool) -> No
         store.presets[m.group(2)] = raw
         return
 
+    if m := _SEASONING_RE.search(path):
+        if not addon:
+            store.seasonings[path] = raw
+        return
+
+    if m := _BAIT_RE.search(path):
+        if not addon:
+            store.baits[path] = raw
+        return
+
     if m := _FOSSIL_RE.search(path):
         store.fossils.append({"id": m.group(2), "raw": raw, "src": origin})
         return
@@ -664,6 +678,8 @@ def main() -> None:
         "species": store.species,
         "spawns": store.all_spawns,
         "presets": store.presets,
+        "seasonings": list(store.seasonings.values()),
+        "baits": list(store.baits.values()),
         "fossils": store.fossils,
         "trainers": store.trainers,
         "mobs": store.mobs,

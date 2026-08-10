@@ -436,6 +436,105 @@ def build_payloads(d: dict, trainers_guide: dict | None = None):
     return pokedex_payload, items_payload, trainers_payload, spawnfinder_payload
 
 
+# ---------------------------------------------------------------- seasonings
+
+_STAT = {"hp": "HP", "atk": "Attack", "def": "Defence", "spa": "Sp. Attack",
+         "spd": "Sp. Defence", "spe": "Speed"}
+
+
+def _stat(sub):
+    return _STAT.get(str(sub).split(":")[-1], str(sub).split(":")[-1])
+
+
+def _pct(x):
+    v = float(x) * 100
+    return f"{v:.0f}%" if v == int(v) else f"{v:.1f}%"
+
+
+def _bait_phrase(e):
+    t = e.get("type", "").split(":")[-1]
+    ch, val, sub = e.get("chance", 1), e.get("value", 0), e.get("subcategory")
+    if t == "nature":
+        return f"{_pct(ch)} chance to bias natures toward {_stat(sub)}"
+    if t == "iv":
+        return f"+{val:g} {_stat(sub)} IVs ({_pct(ch)})"
+    if t == "ev":
+        return f"lures Pokémon that yield {_stat(sub)} EVs"
+    if t == "egg_group":
+        return f"lures the {str(sub).replace('_', ' ')} egg group (+{val:g} weight)"
+    if t == "typing":
+        return f"lures {str(sub).split(':')[-1]}-type Pokémon (+{val:g} weight)"
+    if t == "pokemon_chance":
+        return f"{_pct(ch)} chance of {str(sub).split(':')[-1].replace('_', ' ').title()}"
+    if t == "bite_time":
+        return f"shortens fishing bite time ({val:g})"
+    if t == "ha_chance":
+        return f"{_pct(ch)} chance of a hidden ability"
+    if t == "level_raise":
+        return f"raises spawn level by {val:g}"
+    if t == "friendship":
+        return f"+{val:g} starting friendship"
+    if t == "gender_chance":
+        return f"{_pct(ch)} chance of {str(sub).split(':')[-1]} gender"
+    if t == "drops_reroll":
+        return "rerolls the Pokémon's drops"
+    if t == "shiny_reroll":
+        return f"extra shiny roll ×{val:g}" if val else "extra shiny roll"
+    if t == "rarity_bucket":
+        return "shifts spawns one rarity bucket up (toward ultra-rare)"
+    return f"{t} {val:g} {sub or ''}".strip()
+
+
+def seasoning_sections(d, name_of):
+    from templates import icon_img, esc
+    rows = []
+    for b in sorted(d.get("baits", []), key=lambda b: name_of(b.get("item", ""))):
+        item = b.get("item")
+        if not item:
+            continue
+        effects = "; ".join(_bait_phrase(e) for e in b.get("effects", []))
+        rows.append(
+            f"<tr><td>{icon_img(item, 20)} "
+            f"<a href='items.html#{esc(item)}'>{esc(name_of(item))}</a></td>"
+            f"<td>{esc(effects)}</td></tr>")
+    bait_body = (
+        "<p>Season a <a href='items.html#cobblemon:poke_snack'>Poké Snack"
+        "</a> with these ingredients to steer what spawns near it — every "
+        "value below is read from the pack's own "
+        "<code>spawn_bait_effects</code> data. Combine with a spawn "
+        "platform (see Spawn trapping above) for best results.</p>"
+        "<table class='data'><tr><th>Ingredient</th><th>Bait effect</th></tr>"
+        + "".join(rows) + "</table>")
+
+    srows = []
+    for s in sorted(d.get("seasonings", []),
+                    key=lambda s: name_of(s.get("ingredient", ""))):
+        item = s.get("ingredient")
+        fx = s.get("mobEffects") or []
+        if not item or not fx:
+            continue
+        parts = []
+        for e in fx:
+            nm = str(e.get("effect", "")).split(":")[-1].replace("_", " ").title()
+            dur = int(e.get("duration", 0)) // 20
+            amp = int(e.get("amplifier", 0))
+            parts.append(f"{nm}{' ' + 'I' * (amp + 1) if amp else ''} "
+                         f"({dur}s)")
+        srows.append(
+            f"<tr><td>{icon_img(item, 20)} "
+            f"<a href='items.html#{esc(item)}'>{esc(name_of(item))}</a></td>"
+            f"<td>{esc('; '.join(parts))}</td></tr>")
+    food_body = (
+        "<p>These ingredients grant potion effects when cooked into snacks "
+        "and eaten (from the pack's <code>seasonings</code> data; "
+        "ingredients that only change the snack's colour are omitted).</p>"
+        "<table class='data'><tr><th>Ingredient</th><th>Effect when eaten"
+        "</th></tr>" + "".join(srows) + "</table>")
+
+    return [{"heading": "Poké Snack bait ingredients", "body": bait_body},
+            {"heading": "Seasoning food effects", "body": food_body}]
+
+
 # ---------------------------------------------------------------- main
 
 def main() -> None:
@@ -448,6 +547,16 @@ def main() -> None:
     for key in ("progression", "legendaries", "trainers_guide", "mods",
                 "mechanics", "regions", "items_notable", "videos", "tips"):
         content[key] = load_json(os.path.join(content_dir, f"{key}.json"))
+
+    # data-exact seasoning tables regenerate into Mechanics every build
+    if content.get("mechanics"):
+        gen_headings = {"Poké Snack bait ingredients",
+                        "Seasoning food effects"}
+        content["mechanics"] = dict(content["mechanics"])
+        secs = [s for s in content["mechanics"].get("sections", [])
+                if s.get("heading") not in gen_headings]
+        secs.extend(seasoning_sections(d, make_name_of(d["names"])))
+        content["mechanics"]["sections"] = secs
 
     counts = {
         "species": len(d["species"]),
