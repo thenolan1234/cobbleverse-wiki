@@ -157,7 +157,8 @@ def build_videos(content: dict | None) -> str:
              "internet</p>",
              _safe(content.get("intro", ""))]
     for sec in content.get("sections", []):
-        parts.append(f"<section><h2>{esc(sec.get('heading'))}</h2>")
+        parts.append(f"<section><h2 id='{slugify(sec.get('heading', ''))}'>"
+                     f"{esc(sec.get('heading'))}</h2>")
         if sec.get("note"):
             parts.append(f"<p class='meta'>{esc(sec['note'])}</p>")
         parts.append("<div class='cards'>")
