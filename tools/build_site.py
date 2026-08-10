@@ -494,6 +494,48 @@ def main() -> None:
                  .replace("</", "<\\/") + ";")
     print(f"  {os.path.getsize(os.path.join(ROOT, 'searchindex.js')) / 1_000_000:5.1f} MB  searchindex.js ({len(idx):,} entries)")
 
+    # ---- hover preview data (shared card tooltips on every page)
+    species_dex = {sid: s.get("dex") for sid, s in d["species"].items()}
+    lang = d.get("lang", {})
+    ser_titles = {}
+    for sid_, s_ in d.get("series", {}).items():
+        t_ = s_.get("title") or sid_
+        if "." in t_:
+            t_ = lang.get(t_, pretty(sid_))
+        ser_titles[sid_] = t_
+    hover = {"p": {}, "i": {}, "t": {}}
+    for sid, s in d["species"].items():
+        hover["p"][sid] = {
+            "n": s["name"], "d": s.get("dex"), "ty": s.get("types", []),
+            "b": sum((s.get("stats") or {}).values()), "c": s.get("catchRate")}
+    for iid, nm in d["names"].items():
+        e = {"n": nm}
+        tip = d["tooltips"].get(iid)
+        if tip and len(tip) <= 220:
+            e["tip"] = tip
+        hover["i"][iid] = e
+    for tid, t in d["trainers"].items():
+        team = t.get("team", [])
+        lvls = [m.get("level") for m in team if m.get("level")]
+        e = {"n": t["name"], "c": len(team)}
+        if lvls:
+            e["lo"], e["hi"] = min(lvls), max(lvls)
+        if team and team[0].get("species"):
+            lead = str(team[0]["species"]).lower()
+            e["ld"] = lead
+            if species_dex.get(lead):
+                e["ldx"] = species_dex[lead]
+        mob = d.get("mobs", {}).get(tid) or {}
+        ser = (mob.get("series") or [None])[0]
+        if ser:
+            e["s"] = ser_titles.get(ser, ser)
+        hover["t"][tid] = e
+    with open(os.path.join(ROOT, "hoverdata.js"), "w", encoding="utf-8") as fh:
+        fh.write("const HOVER_DATA=" +
+                 json.dumps(hover, separators=(",", ":"), ensure_ascii=False)
+                 .replace("</", "<\\/") + ";")
+    print(f"  {os.path.getsize(os.path.join(ROOT, 'hoverdata.js')) / 1_000_000:5.1f} MB  hoverdata.js")
+
     for fname, html in pages.items():
         path = os.path.join(ROOT, fname)
         with open(path, "w", encoding="utf-8") as fh:

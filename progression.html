@@ -68,6 +68,21 @@ nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
 }
 #gq-results .gempty{padding:10px 12px;color:var(--silt);font-size:12px}
 
+/* hover preview cards */
+.hovercard{
+  position:fixed;z-index:200;width:270px;pointer-events:none;
+  background:var(--deep);border:1px solid var(--reef);border-radius:5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.55);padding:11px 13px;
+  display:flex;gap:12px;align-items:center;
+}
+.hovercard img{width:74px;height:74px;image-rendering:pixelated;flex-shrink:0}
+.hovercard .hc-t{font-family:"Space Grotesk",sans-serif;font-weight:600;
+  font-size:14.5px;color:var(--foam);line-height:1.25}
+.hovercard .hc-m{font-size:11px;color:var(--tide);margin-top:3px;
+  text-transform:capitalize}
+.hovercard .hc-d{font-size:11px;color:var(--silt);margin-top:4px;
+  line-height:1.45;font-style:italic}
+
 /* ---- article pages ---- */
 .article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
 .article h1{font-size:30px;margin-bottom:6px}
@@ -369,6 +384,7 @@ footer.gen a{color:var(--silt);text-decoration:underline}
   <div><h4>Gratitude Bloom <a class='ico' href='items.html#mega_showdown:gracidea_flower'><img class="spr" src="icons/mega_showdown/gracidea_flower.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Gracidea Flower</a></h4><p>Catch Shaymin, the Pokémon that transforms ruined lands into flower fields.</p></div></div></section></div>
 <footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
 <script defer src="searchindex.js"></script>
+<script defer src="hoverdata.js"></script>
 <script>window.addEventListener('DOMContentLoaded',function(){
 (function(){
   var inp = document.getElementById('gq');
@@ -446,6 +462,92 @@ footer.gen a{color:var(--silt);text-decoration:underline}
       ev.preventDefault(); inp.focus(); inp.select();
     }
   });
+})();
+
+
+(function(){
+  if(typeof HOVER_DATA === 'undefined') return;
+  var card = document.createElement('div');
+  card.className = 'hovercard';
+  card.style.display = 'none';
+  document.body.appendChild(card);
+  var timer = null;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function iconPath(id){
+    var c = id.indexOf(':');
+    if(c < 0) return null;
+    return 'icons/' + id.slice(0, c) + '/' + id.slice(c + 1).replace(/\//g, '__') + '.png';
+  }
+  function monImg(id, dex){
+    return '<img src="renders/' + esc(id) + '.png" alt="" ' +
+      'onerror="if(this.dataset.f||!' + (dex ? 'true' : 'false') +
+      '){this.style.display=\'none\'}else{this.dataset.f=1;this.src=\'sprites/' +
+      (dex || 0) + '.png\'}">';
+  }
+  function parse(el){
+    var go = el.getAttribute('data-go');
+    if(go) return go.indexOf(':') >= 0 ? {k: 'i', id: go} : {k: 'p', id: go};
+    var href = el.getAttribute('href') || '';
+    var m = href.match(/(?:^|\/)(pokedex|items|trainers|spawns)\.html#(.+)$/);
+    if(!m) return null;
+    var id = decodeURIComponent(m[2]);
+    if(m[1] === 'items') return {k: 'i', id: id};
+    if(m[1] === 'trainers') return {k: 't', id: id};
+    return {k: 'p', id: id};
+  }
+  function render(a, info, e){
+    var html = '';
+    if(info.k === 'p'){
+      html = monImg(info.id, e.d) + '<div>' +
+        '<div class="hc-t">' + (e.d ? '#' + String(e.d).padStart(3, '0') + ' ' : '') + esc(e.n) + '</div>' +
+        '<div class="hc-m">' + esc((e.ty || []).join(' / ')) + '</div>' +
+        '<div class="hc-d" style="font-style:normal">BST ' + esc(e.b) +
+        (e.c ? ' · catch rate ' + esc(e.c) : '') + '</div></div>';
+    } else if(info.k === 'i'){
+      var p = iconPath(info.id);
+      html = (p ? '<img src="' + esc(p) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        '<div class="hc-m" style="text-transform:none">' + esc(info.id) + '</div>' +
+        (e.tip ? '<div class="hc-d">' + esc(e.tip) + '</div>' : '') + '</div>';
+    } else {
+      html = (e.ld ? monImg(e.ld, e.ldx) : '') +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        (e.s ? '<div class="hc-m">' + esc(e.s) + ' series</div>' : '') +
+        '<div class="hc-d" style="font-style:normal">' + esc(e.c) + ' Pokémon' +
+        (e.hi ? ' · Lv ' + esc(e.lo) + '–' + esc(e.hi) : '') + '</div></div>';
+    }
+    card.innerHTML = html;
+    card.style.visibility = 'hidden';
+    card.style.display = 'flex';
+    var r = a.getBoundingClientRect();
+    var ch = card.offsetHeight, cw = card.offsetWidth;
+    var left = Math.max(6, Math.min(r.left, window.innerWidth - cw - 10));
+    var top = r.bottom + 8;
+    if(top + ch > window.innerHeight - 8) top = r.top - ch - 8;
+    card.style.left = left + 'px';
+    card.style.top = Math.max(6, top) + 'px';
+    card.style.visibility = 'visible';
+  }
+  document.addEventListener('mouseover', function(ev){
+    var a = ev.target.closest ? ev.target.closest('a[href], [data-go]') : null;
+    clearTimeout(timer);
+    if(!a){ card.style.display = 'none'; return; }
+    var info = parse(a);
+    if(!info){ card.style.display = 'none'; return; }
+    var e = HOVER_DATA[info.k] && HOVER_DATA[info.k][info.id];
+    if(!e){ card.style.display = 'none'; return; }
+    timer = setTimeout(function(){ render(a, info, e); }, 160);
+  });
+  document.addEventListener('mouseout', function(ev){
+    if(ev.target.closest && ev.target.closest('a[href], [data-go]')){
+      clearTimeout(timer);
+      card.style.display = 'none';
+    }
+  });
+  window.addEventListener('scroll', function(){
+    clearTimeout(timer); card.style.display = 'none';
+  }, true);
 })();
 });</script>
 </body></html>
