@@ -235,10 +235,10 @@ def build_structures(inv: list, have: set, species: dict) -> str:
                 f"</figcaption></figure>")
         parts.append("</div></section>")
     parts.append("<div class='callout'>Renders show every block in the "
-                 "structure file with hidden faces removed; multi-piece "
-                 "jigsaw assemblies (e.g. Giratina Island) aren't stitched "
-                 "yet, and in-world generation adds terrain around what you "
-                 "see here. Click any render for full size.</div>")
+                 "structure files with hidden faces removed — multi-piece "
+                 "structures like Giratina Island are stitched from their "
+                 "grid pieces. In-world generation adds terrain around what "
+                 "you see here. Click any render for full size.</div>")
     body = "<div class='article' style='max-width:1180px'>" + "".join(parts) + "</div>"
     return page("Structures", "structures.html", body)
 
