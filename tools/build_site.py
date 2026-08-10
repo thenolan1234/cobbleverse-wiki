@@ -229,6 +229,16 @@ def build_payloads(d: dict, trainers_guide: dict | None = None):
             "src": sp.get("src"),
             "addon": bool(sp.get("addon")),
         }
+        # structured condition fields for the spawn-trap build checklist
+        for src_k, out_k in (("neededBaseBlocks", "base"),
+                             ("neededNearbyBlocks", "near")):
+            v = cond.get(src_k)
+            if v:
+                entry[out_k] = v
+        for k in ("minSkyLight", "maxSkyLight", "canSeeSky", "timeRange",
+                  "isRaining", "isThundering", "minY", "maxY"):
+            if k in cond:
+                entry[k] = cond[k]
         spawns_by.setdefault(sp["pokemon"], []).append(entry)
 
     evo_from: dict[str, list] = {}
@@ -280,12 +290,21 @@ def build_payloads(d: dict, trainers_guide: dict | None = None):
         "typeColors": TYPE_COLORS,
     }
 
+    used_block_tags: set[str] = set()
+    for entries in spawns_by.values():
+        for e in entries:
+            for k in ("base", "near"):
+                for b in e.get(k, []) or []:
+                    if isinstance(b, str) and b.startswith("#"):
+                        used_block_tags.add(b.lstrip("#"))
     spawnfinder_payload = {
         "species": {sid: {"name": s["name"], "dex": s.get("dex"),
                           "labels": s.get("labels", [])}
                     for sid, s in species.items()},
         "spawnsBy": spawns_by,
         "biomeTags": biome_tags,
+        "blockTags": {t: d.get("blockTags", {}).get(t, [])
+                      for t in used_block_tags},
         "presets": presets,
     }
 

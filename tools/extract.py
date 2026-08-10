@@ -52,6 +52,7 @@ _LANG_RE = re.compile(r"assets/([^/]+)/lang/en_us\.json$")
 _RECIPE_RE = re.compile(r"data/([^/]+)/recipes?/(.+)\.json$")
 _LOOT_RE = re.compile(r"data/([^/]+)/loot_tables?/(.+)\.json$")
 _ITEMTAG_RE = re.compile(r"data/([^/]+)/tags/items?/(.+)\.json$")
+_BLOCKTAG_RE = re.compile(r"data/([^/]+)/tags/blocks?/(.+)\.json$")
 _BIOMETAG_RE = re.compile(r"data/([^/]+)/tags/worldgen/biome/(.+)\.json$")
 _SPECIES_RE = re.compile(r"data/([^/]+)/species/(.+)\.json$")
 _SPECIES_ADD_RE = re.compile(r"data/([^/]+)/species_additions/(.+)\.json$")
@@ -82,6 +83,7 @@ class Store:
         self.tooltips: dict[str, str] = {}
         self.lang: dict[str, str] = {}
         self.item_tags: dict[str, list] = defaultdict(list)
+        self.block_tags: dict[str, list] = defaultdict(list)
         self.biome_tags: dict[str, list] = defaultdict(list)
         self.recipes_by_path: dict[str, dict] = {}
         self.addon_recipes: list[dict] = []
@@ -504,6 +506,14 @@ def ingest(store: Store, origin: str, path: str, blob: bytes, addon: bool) -> No
                 store.item_tags[tag_id].append(vid)
         return
 
+    if m := _BLOCKTAG_RE.search(path):
+        tag_id = f"{m.group(1)}:{m.group(2)}"
+        for v in raw.get("values", []) or []:
+            vid = v.get("id") if isinstance(v, dict) else v
+            if isinstance(vid, str):
+                store.block_tags[tag_id].append(vid)
+        return
+
     if m := _BIOMETAG_RE.search(path):
         tag_id = f"{m.group(1)}:{m.group(2)}"
         for v in raw.get("values", []) or []:
@@ -647,6 +657,7 @@ def main() -> None:
         "tooltips": store.tooltips,
         "lang": store.lang,
         "itemTags": resolve_tags(store.item_tags),
+        "blockTags": resolve_tags(store.block_tags),
         "biomeTags": resolve_tags(store.biome_tags),
         "recipes": store.all_recipes,
         "loot": [e for e in store.all_loot if e["e"] > 0],

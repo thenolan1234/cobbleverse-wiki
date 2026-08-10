@@ -543,6 +543,65 @@ function renderList(){
   }).join('') || '<p class="empty">No spawning species matches. Legendaries without natural spawns are summoned — see <a href="legendaries.html">Legendaries</a>.</p>';
 }
 
+function expandBlocks(refs){
+  const out = [];
+  for(const b of refs || []){
+    if(b.startsWith('#')){
+      const members = DATA.blockTags[b.slice(1)] || [];
+      if(members.length) out.push(...members.slice(0, 10).map(pretty));
+      else out.push(pretty(b.slice(1)) + ' (tag)');
+      if(members.length > 10) out.push('…+' + (members.length - 10) + ' more');
+    } else out.push(pretty(b));
+  }
+  return out;
+}
+
+function buildChecklist(s, r){
+  const items = [];
+  items.push(`<b>Location:</b> ${escHtml(pretty(r.biome))}` +
+    (r.biome.startsWith('terralith') ? ' <span class="meta">(Terralith biome)</span>' : '') +
+    ` — your best pool share (${r.share != null ? (r.share*100).toFixed(1) + '%' : '?'}` +
+    `, ${r.rivals} rival species)`);
+  const base = expandBlocks(r.base);
+  items.push(`<b>Platform surface:</b> ${base.length
+    ? escHtml(base.join(', '))
+    : 'any solid ground'} — spawns land on these blocks, so build a large flat platform of them and <b>remove or cover every other spawnable surface</b> nearby (slabs, glass or leaves over natural ground)`);
+  if(r.near && r.near.length)
+    items.push(`<b>Required nearby:</b> ${escHtml(expandBlocks(r.near).join(', '))} within a couple of blocks of the spawn spot`);
+  const pos = r.ctx || 'grounded';
+  if(pos !== 'grounded')
+    items.push(`<b>Position type:</b> ${escHtml(pos)} — ` +
+      (pos === 'surface' ? 'needs open water surface'
+       : pos === 'seafloor' ? 'spawns on the floor of water bodies'
+       : pos === 'submerged' ? 'spawns inside water — leave a deep pool'
+       : pos === 'lavafloor' ? 'spawns on lava floors'
+       : 'see conditions'));
+  const lightBits = [];
+  if(r.minSkyLight != null || r.maxSkyLight != null)
+    lightBits.push(`sky light ${r.minSkyLight ?? 0}–${r.maxSkyLight ?? 15}` +
+      ((r.maxSkyLight ?? 15) < 15 ? ' (needs partial cover — a roof with gaps)' : ' (keep it open to the sky)'));
+  if(r.canSeeSky === true) lightBits.push('must see the sky — no full roof');
+  if(r.canSeeSky === false) lightBits.push('must NOT see the sky — roof it fully');
+  if(lightBits.length) items.push(`<b>Light &amp; sky:</b> ${escHtml(lightBits.join(' · '))}`);
+  const when = [];
+  if(r.timeRange) when.push('time: ' + r.timeRange);
+  if(r.isRaining === true) when.push('only while raining');
+  if(r.isThundering === true) when.push('only in thunderstorms');
+  if(r.wmult) when.push(r.wmult + ' — camp then');
+  if(when.length) items.push(`<b>When:</b> ${escHtml(when.join(' · '))}`);
+  if(r.minY != null || r.maxY != null)
+    items.push(`<b>Height:</b> build between Y ${r.minY ?? 'any'} and Y ${r.maxY ?? 'any'}`);
+  items.push(`<b>Rarity:</b> <span class="badge b-${r.bucket}">${r.bucket}</span> bucket — AFK nearby and clear junk spawns fast; fewer valid spots for rivals = more rolls for your target`);
+  return `<section class="blk"><h3>Build checklist — spawn platform for ${escHtml(s.name)}</h3>
+    <div class="callout" style="display:block">
+    <ul style="margin:4px 0;padding-left:20px">` +
+    items.map(i => `<li style="margin:5px 0">${i}</li>`).join('') +
+    `</ul><p class="meta" style="margin:6px 0 0">Derived from this target's best spawn entry.
+    Full methodology, spawn-cycle mechanics and the community platform design:
+    <a href="mechanics.html#spawn-trapping-how-it-works">Spawn trapping</a>.</p>
+    </div></section>`;
+}
+
 function show(id){
   const s = DATA.species[id];
   if(!s) return;
@@ -563,6 +622,11 @@ function show(id){
         rivals: slot ? slot.species.size - 1 : 0,
         level: sp.level, cond: sp.cond, wmult: sp.wmult,
         presets: sp.presets, addon: sp.addon, src: sp.src,
+        base: sp.base, near: sp.near, ctx: sp.ctx,
+        minSkyLight: sp.minSkyLight, maxSkyLight: sp.maxSkyLight,
+        canSeeSky: sp.canSeeSky, timeRange: sp.timeRange,
+        isRaining: sp.isRaining, isThundering: sp.isThundering,
+        minY: sp.minY, maxY: sp.maxY,
       });
     }
   }
@@ -586,6 +650,7 @@ function show(id){
       <p class="hint">If this is a legendary, it's obtained another way — see
       <a href="legendaries.html">Legendaries</a>.</p>`;
   } else {
+    html += buildChecklist(s, sorted[0]);
     const topShare = sorted[0].share ?? 0;
     html += `<section class="blk"><h3>Where to hunt (${sorted.length} biome options)</h3>
       <table class="data"><tr><th>Biome</th><th>Rarity</th><th>Share of pool</th>
