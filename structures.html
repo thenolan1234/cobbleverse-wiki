@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Structures · COBBLEVERSE Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0b1a20; --shelf:#12262e; --reef:#1a3540; --deep:#081318;
+  --foam:#dcecef; --tide:#5ad1c8; --amber:#f0a840; --coral:#e8735c;
+  --silt:#7fa3ae; --moss:#8fd18b;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--reef) var(--abyss)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--abyss); color:var(--foam);
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600; letter-spacing:-.02em; margin:0;
+}
+a{color:var(--tide);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:1px 5px;font-size:12.5px}
+
+/* ---- top nav ---- */
+nav.top{
+  display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;
+  padding:10px 18px;border-bottom:1px solid var(--reef);
+  background:var(--deep);position:sticky;top:0;z-index:50;
+}
+nav.top .brand{
+  font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;
+  color:var(--amber);margin-right:14px;letter-spacing:.02em;
+}
+nav.top .brand small{color:var(--silt);font-weight:400;font-size:11px;margin-left:6px}
+nav.top a.item{
+  padding:4px 10px;border-radius:3px;font-size:12.5px;color:var(--foam);
+}
+nav.top a.item:hover{background:var(--shelf);text-decoration:none}
+nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+.navsearch{margin-left:auto;position:relative;min-width:180px;flex:0 1 260px}
+.navsearch input{
+  width:100%;padding:5px 10px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:12.5px;
+}
+.navsearch input:focus{outline:2px solid var(--tide);outline-offset:-1px}
+#gq-results{
+  position:absolute;top:110%;right:0;width:340px;max-width:92vw;max-height:60vh;
+  overflow-y:auto;background:var(--deep);border:1px solid var(--reef);
+  border-radius:4px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;
+}
+#gq-results .gr{
+  display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
+  font-size:13px;color:var(--foam);text-decoration:none;
+}
+#gq-results .gr:hover,#gq-results .gr.sel{background:var(--reef)}
+#gq-results .gr img{width:26px;height:26px;image-rendering:pixelated;flex-shrink:0}
+#gq-results .gr .gk{
+  margin-left:auto;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--silt);flex-shrink:0;
+}
+#gq-results .gempty{padding:10px 12px;color:var(--silt);font-size:12px}
+
+/* hover preview cards */
+.hovercard{
+  position:fixed;z-index:200;width:270px;pointer-events:none;
+  background:var(--deep);border:1px solid var(--reef);border-radius:5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.55);padding:11px 13px;
+  display:flex;gap:12px;align-items:center;
+}
+.hovercard img{width:74px;height:74px;image-rendering:pixelated;flex-shrink:0}
+.hovercard .hc-t{font-family:"Space Grotesk",sans-serif;font-weight:600;
+  font-size:14.5px;color:var(--foam);line-height:1.25}
+.hovercard .hc-m{font-size:11px;color:var(--tide);margin-top:3px;
+  text-transform:capitalize}
+.hovercard .hc-d{font-size:11px;color:var(--silt);margin-top:4px;
+  line-height:1.45;font-style:italic}
+
+/* ---- article pages ---- */
+.article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
+.article h1{font-size:30px;margin-bottom:6px}
+.article .sub{color:var(--silt);font-size:13px;margin-bottom:26px}
+.article section{margin:26px 0}
+.article h2{
+  font-size:19px;color:var(--amber);margin-bottom:10px;
+  border-bottom:1px solid var(--reef);padding-bottom:6px;
+}
+.article p{margin:9px 0}
+.article ul{margin:8px 0;padding-left:22px}
+.article li{margin:4px 0}
+.callout{
+  background:var(--shelf);border:1px solid var(--reef);
+  border-left:2px solid var(--tide);padding:12px 15px;border-radius:3px;
+  margin:14px 0;font-size:13.5px;
+}
+.callout.warn{border-left-color:var(--amber)}
+
+/* ---- home cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:4px;
+  padding:15px 16px;display:block;color:var(--foam);
+}
+.card:hover{border-color:var(--tide);text-decoration:none}
+.card h3{font-size:15px;color:var(--tide);margin-bottom:5px}
+.card p{margin:0;font-size:12.5px;color:var(--silt);line-height:1.5}
+.statrow{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0}
+.stat .n{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:600;color:var(--tide)}
+.stat .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--silt)}
+
+/* ---- browser (sidebar+detail) pages ---- */
+.wrap{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 45px)}
+@media(max-width:840px){.wrap{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--reef);display:flex;flex-direction:column;min-height:0}
+.padbox{padding:14px 16px 10px}
+.padbox h1{font-size:17px}
+.padbox p.note{margin:5px 0 0;color:var(--silt);font-size:11px;line-height:1.5}
+.searchbox{padding:0 16px 8px}
+input[type=search]{
+  width:100%;padding:8px 11px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:13px;
+}
+input[type=search]:focus,select:focus{outline:2px solid var(--tide);outline-offset:-1px}
+.filters{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap}
+.filters select,.filters label.chk{
+  background:var(--shelf);color:var(--foam);border:1px solid var(--reef);
+  border-radius:3px;font:inherit;font-size:11.5px;padding:4px 6px;
+}
+.filters label.chk{display:flex;align-items:center;gap:5px;cursor:pointer}
+#results{overflow-y:auto;flex:1;padding:0 8px 18px;min-height:0}
+.row{
+  padding:5px 10px;border-radius:3px;cursor:pointer;
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.row:hover{background:var(--shelf)}
+.row[aria-selected=true]{background:var(--reef)}
+.row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .ns{font-size:10px;color:var(--silt);flex-shrink:0}
+img.spr{image-rendering:pixelated;vertical-align:middle;flex-shrink:0}
+.chip img.spr{margin:-3px 3px -3px -2px}
+.mon img.spr{margin:-6px 2px -6px -4px}
+.empty{color:var(--silt);font-size:12px;padding:10px}
+main{overflow-y:auto;padding:24px 30px 70px;min-width:0}
+@media(max-width:840px){main{padding:18px 14px 60px}}
+.item-head{border-bottom:1px solid var(--reef);padding-bottom:14px;margin-bottom:20px}
+.item-head h2{font-size:26px}
+.id{color:var(--tide);font-size:12px;margin-top:4px;word-break:break-all}
+.tip{color:var(--silt);font-size:13px;margin-top:8px;font-style:italic}
+section.blk{margin-bottom:28px}
+section.blk>h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silt);margin-bottom:10px;
+}
+.splash{color:var(--silt);max-width:56ch;font-size:13.5px;line-height:1.8}
+.splash b{color:var(--foam);font-weight:400}
+
+/* chips */
+.chip{
+  display:inline-block;background:var(--deep);border:1px solid var(--reef);
+  border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer;color:var(--foam);
+  margin:0 4px 4px 0;
+}
+a.chip:hover{border-color:var(--tide);color:var(--tide);text-decoration:none}
+.chip.tag{border-style:dashed;color:var(--silt);cursor:default}
+.chip.plain{cursor:default}
+.src{font-size:10.5px;color:var(--silt);margin-top:6px}
+.badge{
+  display:inline-block;border-radius:3px;padding:1px 7px;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--reef);
+}
+.badge.addon{color:var(--amber);border-color:var(--amber)}
+.b-common{color:var(--silt)} .b-uncommon{color:var(--tide)}
+.b-rare{color:var(--amber)} .b-ultra-rare{color:var(--coral)}
+
+/* pokemon type chips: colored dot + text (identity never color-alone) */
+.type{
+  display:inline-flex;align-items:center;gap:6px;background:var(--deep);
+  border:1px solid var(--reef);border-radius:3px;padding:2px 9px 2px 7px;
+  font-size:12px;text-transform:capitalize;margin-right:5px;
+}
+.type i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* stat meters */
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;max-width:420px;align-items:center}
+.stats .k{font-size:11px;color:var(--silt);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stats .bar{height:6px;background:var(--reef);border-radius:3px;overflow:hidden}
+.stats .bar i{display:block;height:100%;background:var(--tide);border-radius:3px}
+.stats .v{font-size:12px;text-align:right;min-width:3ch}
+.stats .total .v,.stats .total .k{color:var(--amber)}
+
+/* generic data tables */
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+table.data th{
+  text-align:left;color:var(--silt);font-weight:400;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.1em;padding:5px 10px 5px 0;
+  border-bottom:1px solid var(--reef);
+}
+table.data td{padding:6px 10px 6px 0;border-bottom:1px solid var(--shelf);vertical-align:top}
+details.biomes{display:inline-block}
+details.biomes summary{cursor:pointer;color:var(--tide);font-size:12px;list-style:none}
+details.biomes summary::after{content:" \25be"}
+details.biomes[open] summary::after{content:" \25b4"}
+details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:4px 0}
+.meta{font-size:11.5px;color:var(--silt)}
+.bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tide)}
+.structgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin:14px 0}
+.structgrid figure{margin:0;background:var(--shelf);border:1px solid var(--reef);
+  border-radius:4px;padding:10px;text-align:center}
+.structgrid img{max-width:100%;max-height:240px;object-fit:contain;image-rendering:auto}
+.structgrid figcaption{font-size:12px;margin-top:7px;color:var(--foam)}
+.drop{
+  display:grid;grid-template-columns:1fr auto;gap:3px 16px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.drop .table{font-size:13px;word-break:break-all}
+.drop .runs{
+  font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;
+  color:var(--amber);white-space:nowrap;text-align:right;line-height:1.2;
+}
+.drop .runs small{display:block;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);font-weight:400}
+.drop .meta{grid-column:1/-1}
+.drop .bar{grid-column:1/-1;height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.drop .bar i{display:block;height:100%;background:var(--tide)}
+.planner{
+  background:var(--shelf);border:1px solid var(--reef);border-left:2px solid var(--amber);
+  padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;
+  gap:11px;flex-wrap:wrap;font-size:13px;
+}
+.planner input{
+  width:64px;padding:5px 7px;background:var(--abyss);color:var(--amber);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-weight:600;
+  text-align:center;
+}
+.planner .lbl{color:var(--silt)}
+.recipe{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:11px 14px;margin-bottom:8px;
+}
+.recipe .kind{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--silt)}
+.recipe .ing{margin-top:7px}
+.none{color:var(--coral);font-size:13px}
+.none b{color:var(--foam)}
+.hint{color:var(--silt);font-size:12px;margin-top:6px;line-height:1.6}
+
+/* trainer team cards */
+.mon{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:10px 13px;margin-bottom:8px;
+  display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;
+}
+.mon .sp{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600}
+.mon .lv{color:var(--amber);font-size:13px}
+.mon .kv{font-size:11.5px;color:var(--silt)}
+.mon .kv b{color:var(--foam);font-weight:400}
+.mon .moves{width:100%;font-size:11.5px;color:var(--silt)}
+.mon .moves code{margin-right:4px}
+
+/* milestone list (progression) */
+.mile{
+  display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.mile .kind{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--reef);border-radius:3px;height:fit-content;
+  white-space:nowrap;margin-top:2px;
+}
+.mile .kind.badge-k{color:var(--amber);border-color:var(--amber)}
+.mile .kind.elite-k{color:var(--coral)}
+.mile .kind.champion-k{color:var(--coral);border-color:var(--coral)}
+.mile .kind.legendary-k{color:var(--tide);border-color:var(--tide)}
+.mile .kind.item-k{color:var(--moss)}
+.mile h4{font-size:14.5px}
+.mile p{margin:2px 0 0;font-size:12.5px;color:var(--silt)}
+.mile .ico{font-size:11px;color:var(--silt)}
+footer.gen{
+  border-top:1px solid var(--reef);color:var(--silt);font-size:11px;
+  padding:14px 18px;text-align:center;
+}
+footer.gen a{color:var(--silt);text-decoration:underline}
+</style>
+</head><body>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="structures.html" aria-current="page">Structures</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a><div class="navsearch"><input id="gq" type="search" placeholder="Search everything…  Ctrl+K" autocomplete="off"><div id="gq-results"></div></div></nav>
+<div class='article' style='max-width:1180px'><h1>Structures</h1><p class='sub'>Isometric renders of the structures that generate in this pack, built block-for-block from the pack's own structure files — know what you're looking for before you go hunting.</p><section><h2 id='legendary-monuments'>Legendary monuments</h2><div class='structgrid'><figure><a href='renders/structures/newmoon-island.png' target='_blank' rel='noopener'><img src='renders/structures/newmoon-island.png' loading='lazy' alt='Newmoon Island'></a><figcaption><b>Newmoon Island</b><span class='meta'> · lumymon</span></figcaption></figure><figure><a href='renders/structures/stark-mountain.png' target='_blank' rel='noopener'><img src='renders/structures/stark-mountain.png' loading='lazy' alt='Stark Mountain'></a><figcaption><b>Stark Mountain</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/temple-of-sinnoh.png' target='_blank' rel='noopener'><img src='renders/structures/temple-of-sinnoh.png' loading='lazy' alt='Temple Of Sinnoh'></a><figcaption><b>Temple Of Sinnoh</b><span class='meta'> · lumymon</span></figcaption></figure><figure><a href='renders/structures/crown-spire.png' target='_blank' rel='noopener'><img src='renders/structures/crown-spire.png' loading='lazy' alt='Crown Spire'></a><figcaption><b>Crown Spire</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/legendary-moltres.png' target='_blank' rel='noopener'><img src='renders/structures/legendary-moltres.png' loading='lazy' alt='Moltres'></a><figcaption><b>Moltres</b><span class='meta'> · cobbleverse · <a href='spawns.html#moltres'>spawns</a> · <a href='pokedex.html#moltres'>dex</a></span></figcaption></figure><figure><a href='renders/structures/eternatus-cocoon.png' target='_blank' rel='noopener'><img src='renders/structures/eternatus-cocoon.png' loading='lazy' alt='Eternatus Cocoon'></a><figcaption><b>Eternatus Cocoon</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/legendary-zapdos.png' target='_blank' rel='noopener'><img src='renders/structures/legendary-zapdos.png' loading='lazy' alt='Zapdos'></a><figcaption><b>Zapdos</b><span class='meta'> · cobbleverse · <a href='spawns.html#zapdos'>spawns</a> · <a href='pokedex.html#zapdos'>dex</a></span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-4x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-4x2.png' loading='lazy' alt='4X2'></a><figcaption><b>4X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-3x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-3x3.png' loading='lazy' alt='3X3'></a><figcaption><b>3X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-2x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-2x4.png' loading='lazy' alt='2X4'></a><figcaption><b>2X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-4x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-4x4.png' loading='lazy' alt='4X4'></a><figcaption><b>4X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-4x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-4x2.png' loading='lazy' alt='4X2'></a><figcaption><b>4X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-3x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-3x3.png' loading='lazy' alt='3X3'></a><figcaption><b>3X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-2x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-2x4.png' loading='lazy' alt='2X4'></a><figcaption><b>2X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-4x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-4x4.png' loading='lazy' alt='4X4'></a><figcaption><b>4X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-4x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-4x4.png' loading='lazy' alt='4X4'></a><figcaption><b>4X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-2x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-2x4.png' loading='lazy' alt='2X4'></a><figcaption><b>2X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-4x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-4x2.png' loading='lazy' alt='4X2'></a><figcaption><b>4X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-2x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-2x2.png' loading='lazy' alt='2X2'></a><figcaption><b>2X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-2x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-2x3.png' loading='lazy' alt='2X3'></a><figcaption><b>2X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-3x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-3x3.png' loading='lazy' alt='3X3'></a><figcaption><b>3X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-2x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-2x3.png' loading='lazy' alt='2X3'></a><figcaption><b>2X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-2x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-2x2.png' loading='lazy' alt='2X2'></a><figcaption><b>2X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-2x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-2x2.png' loading='lazy' alt='2X2'></a><figcaption><b>2X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-4x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-4x3.png' loading='lazy' alt='4X3'></a><figcaption><b>4X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-2x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-2x3.png' loading='lazy' alt='2X3'></a><figcaption><b>2X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-3x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-3x4.png' loading='lazy' alt='3X4'></a><figcaption><b>3X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-4x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-4x3.png' loading='lazy' alt='4X3'></a><figcaption><b>4X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-3x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-3x4.png' loading='lazy' alt='3X4'></a><figcaption><b>3X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-3x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-3x2.png' loading='lazy' alt='3X2'></a><figcaption><b>3X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-3x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-3x4.png' loading='lazy' alt='3X4'></a><figcaption><b>3X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-3x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-3x2.png' loading='lazy' alt='3X2'></a><figcaption><b>3X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-3x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-3x2.png' loading='lazy' alt='3X2'></a><figcaption><b>3X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-4x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-4x3.png' loading='lazy' alt='4X3'></a><figcaption><b>4X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-3x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-3x1.png' loading='lazy' alt='3X1'></a><figcaption><b>3X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-5x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-5x3.png' loading='lazy' alt='5X3'></a><figcaption><b>5X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-1x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-1x3.png' loading='lazy' alt='1X3'></a><figcaption><b>1X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-5x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-5x3.png' loading='lazy' alt='5X3'></a><figcaption><b>5X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-3x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-3x1.png' loading='lazy' alt='3X1'></a><figcaption><b>3X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-5x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-5x3.png' loading='lazy' alt='5X3'></a><figcaption><b>5X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-1x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-1x3.png' loading='lazy' alt='1X3'></a><figcaption><b>1X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-3x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-3x1.png' loading='lazy' alt='3X1'></a><figcaption><b>3X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-3x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-3x5.png' loading='lazy' alt='3X5'></a><figcaption><b>3X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-3x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-3x5.png' loading='lazy' alt='3X5'></a><figcaption><b>3X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/legendary-articuno.png' target='_blank' rel='noopener'><img src='renders/structures/legendary-articuno.png' loading='lazy' alt='Articuno'></a><figcaption><b>Articuno</b><span class='meta'> · cobbleverse · <a href='spawns.html#articuno'>spawns</a> · <a href='pokedex.html#articuno'>dex</a></span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-3x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-3x5.png' loading='lazy' alt='3X5'></a><figcaption><b>3X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-1x3.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-1x3.png' loading='lazy' alt='1X3'></a><figcaption><b>1X3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-2x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-2x1.png' loading='lazy' alt='2X1'></a><figcaption><b>2X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-big-rooms-big-room-3.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-big-rooms-big-room-3.png' loading='lazy' alt='Big Room 3'></a><figcaption><b>Big Room 3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-5x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-5x2.png' loading='lazy' alt='5X2'></a><figcaption><b>5X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-big-rooms-big-room-2.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-big-rooms-big-room-2.png' loading='lazy' alt='Big Room 2'></a><figcaption><b>Big Room 2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-big-rooms-big-room-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-big-rooms-big-room-1.png' loading='lazy' alt='Big Room 1'></a><figcaption><b>Big Room 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-1x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-1x4.png' loading='lazy' alt='1X4'></a><figcaption><b>1X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-5x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-5x4.png' loading='lazy' alt='5X4'></a><figcaption><b>5X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-1x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-1x2.png' loading='lazy' alt='1X2'></a><figcaption><b>1X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-2x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-2x1.png' loading='lazy' alt='2X1'></a><figcaption><b>2X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-4x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-4x1.png' loading='lazy' alt='4X1'></a><figcaption><b>4X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-5x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-5x4.png' loading='lazy' alt='5X4'></a><figcaption><b>5X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-5x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-5x2.png' loading='lazy' alt='5X2'></a><figcaption><b>5X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-portal-room.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-portal-room.png' loading='lazy' alt='Portal Room'></a><figcaption><b>Portal Room</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-2x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-2x5.png' loading='lazy' alt='2X5'></a><figcaption><b>2X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-2x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-2x1.png' loading='lazy' alt='2X1'></a><figcaption><b>2X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-1x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-1x2.png' loading='lazy' alt='1X2'></a><figcaption><b>1X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-5x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-5x4.png' loading='lazy' alt='5X4'></a><figcaption><b>5X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-5x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-5x2.png' loading='lazy' alt='5X2'></a><figcaption><b>5X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-1x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-1x4.png' loading='lazy' alt='1X4'></a><figcaption><b>1X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-1x2.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-1x2.png' loading='lazy' alt='1X2'></a><figcaption><b>1X2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-1x4.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-1x4.png' loading='lazy' alt='1X4'></a><figcaption><b>1X4</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-4x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-4x1.png' loading='lazy' alt='4X1'></a><figcaption><b>4X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-2x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-2x5.png' loading='lazy' alt='2X5'></a><figcaption><b>2X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-valor-4x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-valor-4x5.png' loading='lazy' alt='4X5'></a><figcaption><b>4X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-4x1.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-4x1.png' loading='lazy' alt='4X1'></a><figcaption><b>4X1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-verity-4x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-verity-4x5.png' loading='lazy' alt='4X5'></a><figcaption><b>4X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-2x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-2x5.png' loading='lazy' alt='2X5'></a><figcaption><b>2X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/lake-guardians-lake-acuity-4x5.png' target='_blank' rel='noopener'><img src='renders/structures/lake-guardians-lake-acuity-4x5.png' loading='lazy' alt='4X5'></a><figcaption><b>4X5</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-big-rooms-corridor-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-big-rooms-corridor-1.png' loading='lazy' alt='Corridor 1'></a><figcaption><b>Corridor 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/outskirt-stand.png' target='_blank' rel='noopener'><img src='renders/structures/outskirt-stand.png' loading='lazy' alt='Outskirt Stand'></a><figcaption><b>Outskirt Stand</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-med-rooms-med-room-2.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-med-rooms-med-room-2.png' loading='lazy' alt='Med Room 2'></a><figcaption><b>Med Room 2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-med-rooms-med-room-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-med-rooms-med-room-1.png' loading='lazy' alt='Med Room 1'></a><figcaption><b>Med Room 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/icerend-shrine.png' target='_blank' rel='noopener'><img src='renders/structures/icerend-shrine.png' loading='lazy' alt='Icerend Shrine'></a><figcaption><b>Icerend Shrine</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/grasswither-shrine.png' target='_blank' rel='noopener'><img src='renders/structures/grasswither-shrine.png' loading='lazy' alt='Grasswither Shrine'></a><figcaption><b>Grasswither Shrine</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/groundblight-shrine.png' target='_blank' rel='noopener'><img src='renders/structures/groundblight-shrine.png' loading='lazy' alt='Groundblight Shrine'></a><figcaption><b>Groundblight Shrine</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/firescourge-shrine.png' target='_blank' rel='noopener'><img src='renders/structures/firescourge-shrine.png' loading='lazy' alt='Firescourge Shrine'></a><figcaption><b>Firescourge Shrine</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-small-rooms-small-room-3.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-small-rooms-small-room-3.png' loading='lazy' alt='Small Room 3'></a><figcaption><b>Small Room 3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-small-rooms-small-room-2.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-small-rooms-small-room-2.png' loading='lazy' alt='Small Room 2'></a><figcaption><b>Small Room 2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-small-rooms-small-room-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-small-rooms-small-room-1.png' loading='lazy' alt='Small Room 1'></a><figcaption><b>Small Room 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-junctions-junction-x.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-junctions-junction-x.png' loading='lazy' alt='Junction X'></a><figcaption><b>Junction X</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-junctions-junction-secret-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-junctions-junction-secret-1.png' loading='lazy' alt='Junction Secret 1'></a><figcaption><b>Junction Secret 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-stairs-spiral-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-stairs-spiral-1.png' loading='lazy' alt='Spiral 1'></a><figcaption><b>Spiral 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-stairs-spiral-2.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-stairs-spiral-2.png' loading='lazy' alt='Spiral 2'></a><figcaption><b>Spiral 2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-junctions-junction-t-3.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-junctions-junction-t-3.png' loading='lazy' alt='Junction T 3'></a><figcaption><b>Junction T 3</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-junctions-junction-t-2.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-junctions-junction-t-2.png' loading='lazy' alt='Junction T 2'></a><figcaption><b>Junction T 2</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-junctions-junction-t-1.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-junctions-junction-t-1.png' loading='lazy' alt='Junction T 1'></a><figcaption><b>Junction T 1</b><span class='meta'> · legendarymonuments</span></figcaption></figure><figure><a href='renders/structures/turnback-cave-junctions-junction-corner.png' target='_blank' rel='noopener'><img src='renders/structures/turnback-cave-junctions-junction-corner.png' loading='lazy' alt='Junction Corner'></a><figcaption><b>Junction Corner</b><span class='meta'> · legendarymonuments</span></figcaption></figure></div></section><section><h2 id='leagues-gyms'>Leagues &amp; gyms</h2><div class='structgrid'><figure><a href='renders/structures/kanto-league.png' target='_blank' rel='noopener'><img src='renders/structures/kanto-league.png' loading='lazy' alt='Kanto League'></a><figcaption><b>Kanto League</b><span class='meta'> · cobbleverse</span></figcaption></figure></div></section><section><h2 id='raid-dens'>Raid dens</h2><div class='structgrid'><figure><a href='renders/structures/raid-den-dynamax.png' target='_blank' rel='noopener'><img src='renders/structures/raid-den-dynamax.png' loading='lazy' alt='Dynamax'></a><figcaption><b>Dynamax</b><span class='meta'> · cobblemonraiddens</span></figcaption></figure><figure><a href='renders/structures/raid-den-basic.png' target='_blank' rel='noopener'><img src='renders/structures/raid-den-basic.png' loading='lazy' alt='Basic'></a><figcaption><b>Basic</b><span class='meta'> · cobblemonraiddens</span></figcaption></figure></div></section><section><h2 id='towns-centers-villages'>Towns, centers &amp; villages</h2><div class='structgrid'><figure><a href='renders/structures/default-centers-center-the-academy.png' target='_blank' rel='noopener'><img src='renders/structures/default-centers-center-the-academy.png' loading='lazy' alt='Center The Academy'></a><figcaption><b>Center The Academy</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-centers-center-wyrms-rest.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-centers-center-wyrms-rest.png' loading='lazy' alt='Center Wyrms Rest'></a><figcaption><b>Center Wyrms Rest</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-centers-center-department-store.png' target='_blank' rel='noopener'><img src='renders/structures/default-centers-center-department-store.png' loading='lazy' alt='Center Department Store'></a><figcaption><b>Center Department Store</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-one-off-the-lodge-fixed.png' target='_blank' rel='noopener'><img src='renders/structures/default-one-off-the-lodge-fixed.png' loading='lazy' alt='The Lodge Fixed'></a><figcaption><b>The Lodge Fixed</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-centers-center-the-farmers-market-fighting.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-centers-center-the-farmers-market-fighting.png' loading='lazy' alt='Center The Farmers Market Fighting'></a><figcaption><b>Center The Farmers Market Fighting</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-centers-center-the-farmers-market-dark.png' target='_blank' rel='noopener'><img src='renders/structures/dark-centers-center-the-farmers-market-dark.png' loading='lazy' alt='Center The Farmers Market Dark'></a><figcaption><b>Center The Farmers Market Dark</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-centers-center-the-marshlight-tavern.png' target='_blank' rel='noopener'><img src='renders/structures/dark-centers-center-the-marshlight-tavern.png' loading='lazy' alt='Center The Marshlight Tavern'></a><figcaption><b>Center The Marshlight Tavern</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-one-off-one-off-haunted-church.png' target='_blank' rel='noopener'><img src='renders/structures/dark-one-off-one-off-haunted-church.png' loading='lazy' alt='One Off Haunted Church'></a><figcaption><b>One Off Haunted Church</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-the-ginning-widow.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-the-ginning-widow.png' loading='lazy' alt='The Ginning Widow'></a><figcaption><b>The Ginning Widow</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/special-structures-swamp-witches-hut.png' target='_blank' rel='noopener'><img src='renders/structures/special-structures-swamp-witches-hut.png' loading='lazy' alt='Swamp Witches Hut'></a><figcaption><b>Swamp Witches Hut</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-dark-frogs-hollow.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-dark-frogs-hollow.png' loading='lazy' alt='Dark Frogs Hollow'></a><figcaption><b>Dark Frogs Hollow</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-runebrick-roost.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-runebrick-roost.png' loading='lazy' alt='Runebrick Roost'></a><figcaption><b>Runebrick Roost</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-the-wyrm-and-the-wisp.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-the-wyrm-and-the-wisp.png' loading='lazy' alt='The Wyrm And The Wisp'></a><figcaption><b>The Wyrm And The Wisp</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-dark-hollows-nest.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-dark-hollows-nest.png' loading='lazy' alt='Dark Hollows Nest'></a><figcaption><b>Dark Hollows Nest</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-terror-creek-haven.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-terror-creek-haven.png' loading='lazy' alt='Terror Creek Haven'></a><figcaption><b>Terror Creek Haven</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-stonethread-dwelling.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-stonethread-dwelling.png' loading='lazy' alt='Stonethread Dwelling'></a><figcaption><b>Stonethread Dwelling</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-thistlewood-nook.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-thistlewood-nook.png' loading='lazy' alt='Thistlewood Nook'></a><figcaption><b>Thistlewood Nook</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-the-moonlight-hollow-retreat.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-the-moonlight-hollow-retreat.png' loading='lazy' alt='The Moonlight Hollow Retreat'></a><figcaption><b>The Moonlight Hollow Retreat</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-oakstone-hearth.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-oakstone-hearth.png' loading='lazy' alt='Oakstone Hearth'></a><figcaption><b>Oakstone Hearth</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-the-oak-and-thistle-cottage.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-the-oak-and-thistle-cottage.png' loading='lazy' alt='The Oak And Thistle Cottage'></a><figcaption><b>The Oak And Thistle Cottage</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-ravenspire-manor.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-ravenspire-manor.png' loading='lazy' alt='Ravenspire Manor'></a><figcaption><b>Ravenspire Manor</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-terracreek-haven-plains.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-terracreek-haven-plains.png' loading='lazy' alt='Terracreek Haven Plains'></a><figcaption><b>Terracreek Haven Plains</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-ravenspire-manor.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-ravenspire-manor.png' loading='lazy' alt='Ravenspire Manor'></a><figcaption><b>Ravenspire Manor</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-terracreek-haven.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-terracreek-haven.png' loading='lazy' alt='Terracreek Haven'></a><figcaption><b>Terracreek Haven</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-miners-den.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-miners-den.png' loading='lazy' alt='The Miners Den'></a><figcaption><b>The Miners Den</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-miners-deep.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-miners-deep.png' loading='lazy' alt='Miners Deep'></a><figcaption><b>Miners Deep</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-the-miners-den-plains.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-the-miners-den-plains.png' loading='lazy' alt='The Miners Den Plains'></a><figcaption><b>The Miners Den Plains</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-mossy-meadow-home.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-mossy-meadow-home.png' loading='lazy' alt='Mossy Meadow Home'></a><figcaption><b>Mossy Meadow Home</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-winding-willow-house.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-winding-willow-house.png' loading='lazy' alt='Winding Willow House'></a><figcaption><b>Winding Willow House</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-summer-cottage.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-summer-cottage.png' loading='lazy' alt='The Summer Cottage'></a><figcaption><b>The Summer Cottage</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-the-summer-cottage-plains.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-the-summer-cottage-plains.png' loading='lazy' alt='The Summer Cottage Plains'></a><figcaption><b>The Summer Cottage Plains</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-sunflower-shack.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-sunflower-shack.png' loading='lazy' alt='Sunflower Shack'></a><figcaption><b>Sunflower Shack</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-one-off-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/default-one-off-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-the-daisy-barrow-plains.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-the-daisy-barrow-plains.png' loading='lazy' alt='The Daisy Barrow Plains'></a><figcaption><b>The Daisy Barrow Plains</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-chimney-loft.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-chimney-loft.png' loading='lazy' alt='The Chimney Loft'></a><figcaption><b>The Chimney Loft</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-the-chimney-loft-dark.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-the-chimney-loft-dark.png' loading='lazy' alt='The Chimney Loft Dark'></a><figcaption><b>The Chimney Loft Dark</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-the-chimney-loft-plains.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-the-chimney-loft-plains.png' loading='lazy' alt='The Chimney Loft Plains'></a><figcaption><b>The Chimney Loft Plains</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-one-off-structure-pokemart.png' target='_blank' rel='noopener'><img src='renders/structures/default-one-off-structure-pokemart.png' loading='lazy' alt='Structure Pokemart'></a><figcaption><b>Structure Pokemart</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-lanturn-lodge.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-lanturn-lodge.png' loading='lazy' alt='The Lanturn Lodge'></a><figcaption><b>The Lanturn Lodge</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-cozy-cranny.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-cozy-cranny.png' loading='lazy' alt='The Cozy Cranny'></a><figcaption><b>The Cozy Cranny</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-pebble-roof-manor.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-pebble-roof-manor.png' loading='lazy' alt='Pebble Roof Manor'></a><figcaption><b>Pebble Roof Manor</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-clover-cottage.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-clover-cottage.png' loading='lazy' alt='The Clover Cottage'></a><figcaption><b>The Clover Cottage</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-the-ivyclad-cottage.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-the-ivyclad-cottage.png' loading='lazy' alt='The Ivyclad Cottage'></a><figcaption><b>The Ivyclad Cottage</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-blossom-balcony.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-blossom-balcony.png' loading='lazy' alt='Blossom Balcony'></a><figcaption><b>Blossom Balcony</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-fern-and-flower-cottage.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-fern-and-flower-cottage.png' loading='lazy' alt='Fern And Flower Cottage'></a><figcaption><b>Fern And Flower Cottage</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-berrybush-bungalow.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-berrybush-bungalow.png' loading='lazy' alt='Berrybush Bungalow'></a><figcaption><b>Berrybush Bungalow</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-berrybush-bungalow.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-berrybush-bungalow.png' loading='lazy' alt='Berrybush Bungalow'></a><figcaption><b>Berrybush Bungalow</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-honeycomb-haven-apiary.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-honeycomb-haven-apiary.png' loading='lazy' alt='Honeycomb Haven Apiary'></a><figcaption><b>Honeycomb Haven Apiary</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/default-structures-snug-spruce-retreat.png' target='_blank' rel='noopener'><img src='renders/structures/default-structures-snug-spruce-retreat.png' loading='lazy' alt='Snug Spruce Retreat'></a><figcaption><b>Snug Spruce Retreat</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/fighting-structures-snug-spruce-retreat-plains.png' target='_blank' rel='noopener'><img src='renders/structures/fighting-structures-snug-spruce-retreat-plains.png' loading='lazy' alt='Snug Spruce Retreat Plains'></a><figcaption><b>Snug Spruce Retreat Plains</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/dark-structures-dark-spruce-retreat.png' target='_blank' rel='noopener'><img src='renders/structures/dark-structures-dark-spruce-retreat.png' loading='lazy' alt='Dark Spruce Retreat'></a><figcaption><b>Dark Spruce Retreat</b><span class='meta'> · bca</span></figcaption></figure><figure><a href='renders/structures/villages-cherry-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-cherry-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-mountains-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-mountains-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-giant-taiga-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-giant-taiga-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/village-taiga-village-taiga-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/village-taiga-village-taiga-pokecenter.png' loading='lazy' alt='Village Taiga Pokecenter'></a><figcaption><b>Village Taiga Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-swamp-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-swamp-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-mushroom-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-mushroom-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/village-snowy-village-snowy-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/village-snowy-village-snowy-pokecenter.png' loading='lazy' alt='Village Snowy Pokecenter'></a><figcaption><b>Village Snowy Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-badlands-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-badlands-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/village-desert-village-desert-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/village-desert-village-desert-pokecenter.png' loading='lazy' alt='Village Desert Pokecenter'></a><figcaption><b>Village Desert Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-dark-forest-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-dark-forest-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-birch-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-birch-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-warped-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-warped-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-crimson-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-crimson-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-oak-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-oak-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-ocean-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-ocean-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/village-plains-village-plains-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/village-plains-village-plains-pokecenter.png' loading='lazy' alt='Village Plains Pokecenter'></a><figcaption><b>Village Plains Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-jungle-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-jungle-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/villages-bamboo-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/villages-bamboo-pokecenter.png' loading='lazy' alt='Pokecenter'></a><figcaption><b>Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure><figure><a href='renders/structures/village-savanna-village-savanna-pokecenter.png' target='_blank' rel='noopener'><img src='renders/structures/village-savanna-village-savanna-pokecenter.png' loading='lazy' alt='Village Savanna Pokecenter'></a><figcaption><b>Village Savanna Pokecenter</b><span class='meta'> · cobblemon</span></figcaption></figure></div></section><section><h2 id='other-structures'>Other structures</h2><div class='structgrid'><figure><a href='renders/structures/crown-cemetery.png' target='_blank' rel='noopener'><img src='renders/structures/crown-cemetery.png' loading='lazy' alt='Crown Cemetery'></a><figcaption><b>Crown Cemetery</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/ash.png' target='_blank' rel='noopener'><img src='renders/structures/ash.png' loading='lazy' alt='Ash'></a><figcaption><b>Ash</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/team-rocket-tower-shiny.png' target='_blank' rel='noopener'><img src='renders/structures/team-rocket-tower-shiny.png' loading='lazy' alt='Team Rocket Tower Shiny'></a><figcaption><b>Team Rocket Tower Shiny</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/team-rocket-tower.png' target='_blank' rel='noopener'><img src='renders/structures/team-rocket-tower.png' loading='lazy' alt='Team Rocket Tower'></a><figcaption><b>Team Rocket Tower</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/mythical-mew.png' target='_blank' rel='noopener'><img src='renders/structures/mythical-mew.png' loading='lazy' alt='Mew'></a><figcaption><b>Mew</b><span class='meta'> · cobbleverse · <a href='spawns.html#mew'>spawns</a> · <a href='pokedex.html#mew'>dex</a></span></figcaption></figure><figure><a href='renders/structures/misty-shiny.png' target='_blank' rel='noopener'><img src='renders/structures/misty-shiny.png' loading='lazy' alt='Misty Shiny'></a><figcaption><b>Misty Shiny</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/misty.png' target='_blank' rel='noopener'><img src='renders/structures/misty.png' loading='lazy' alt='Misty'></a><figcaption><b>Misty</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/dawn-tower.png' target='_blank' rel='noopener'><img src='renders/structures/dawn-tower.png' loading='lazy' alt='Dawn Tower'></a><figcaption><b>Dawn Tower</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/dusk-tower.png' target='_blank' rel='noopener'><img src='renders/structures/dusk-tower.png' loading='lazy' alt='Dusk Tower'></a><figcaption><b>Dusk Tower</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/koga.png' target='_blank' rel='noopener'><img src='renders/structures/koga.png' loading='lazy' alt='Koga'></a><figcaption><b>Koga</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/brock.png' target='_blank' rel='noopener'><img src='renders/structures/brock.png' loading='lazy' alt='Brock'></a><figcaption><b>Brock</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/giovanni.png' target='_blank' rel='noopener'><img src='renders/structures/giovanni.png' loading='lazy' alt='Giovanni'></a><figcaption><b>Giovanni</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/sabrina-shiny.png' target='_blank' rel='noopener'><img src='renders/structures/sabrina-shiny.png' loading='lazy' alt='Sabrina Shiny'></a><figcaption><b>Sabrina Shiny</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/sabrina.png' target='_blank' rel='noopener'><img src='renders/structures/sabrina.png' loading='lazy' alt='Sabrina'></a><figcaption><b>Sabrina</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/erika.png' target='_blank' rel='noopener'><img src='renders/structures/erika.png' loading='lazy' alt='Erika'></a><figcaption><b>Erika</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/ltsurge.png' target='_blank' rel='noopener'><img src='renders/structures/ltsurge.png' loading='lazy' alt='Ltsurge'></a><figcaption><b>Ltsurge</b><span class='meta'> · cobbleverse</span></figcaption></figure><figure><a href='renders/structures/blaine.png' target='_blank' rel='noopener'><img src='renders/structures/blaine.png' loading='lazy' alt='Blaine'></a><figcaption><b>Blaine</b><span class='meta'> · cobbleverse</span></figcaption></figure></div></section><div class='callout'>Renders show every block in the structure file with hidden faces removed; multi-piece jigsaw assemblies (e.g. Giratina Island) aren't stitched yet, and in-world generation adds terrain around what you see here. Click any render for full size.</div></div>
+<footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
+<script defer src="searchindex.js"></script>
+<script defer src="hoverdata.js"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){
+(function(){
+  var inp = document.getElementById('gq');
+  var box = document.getElementById('gq-results');
+  if(!inp || !box) return;
+  var sel = -1, rows = [];
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function img(e){
+    if(e.k === 'pokemon') return '<img src="renders/' + e.i + '.png" alt="" loading="lazy" ' +
+      'onerror="if(this.dataset.f){this.style.visibility=\'hidden\'}else{this.dataset.f=1;this.src=\'sprites/' + (e.x || 0) + '.png\'}">';
+    if(e.k === 'item'){
+      var c = e.i.indexOf(':');
+      return '<img src="icons/' + e.i.slice(0, c) + '/' +
+        e.i.slice(c + 1).replace(/\//g, '__') + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    }
+    if(e.k === 'trainer')
+      return '<img src="renders/trainers/' + e.i + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    return '<span style="width:26px;flex-shrink:0"></span>';
+  }
+  function urlOf(e){
+    if(e.k === 'pokemon') return 'pokedex.html#' + e.i;
+    if(e.k === 'item') return 'items.html#' + encodeURIComponent(e.i);
+    if(e.k === 'trainer') return 'trainers.html#' + encodeURIComponent(e.i);
+    return e.i;   // pages & guide sections store their url directly
+  }
+  function render(hits){
+    rows = hits; sel = -1;
+    if(!hits.length){
+      box.innerHTML = '<div class="gempty">No match.</div>';
+    } else {
+      box.innerHTML = hits.map(function(e){
+        return '<a class="gr" href="' + esc(urlOf(e)) + '">' + img(e) +
+          '<span>' + esc(e.t) + '</span><span class="gk">' + esc(e.k) + '</span></a>';
+      }).join('');
+    }
+    box.style.display = 'block';
+  }
+  function search(q){
+    q = q.trim().toLowerCase();
+    if(q.length < 2){ box.style.display = 'none'; return; }
+    var starts = [], has = [];
+    for(var n = 0; n < SEARCH_INDEX.length; n++){
+      var e = SEARCH_INDEX[n];
+      var t = e.t.toLowerCase();
+      if(t.startsWith(q)) starts.push(e);
+      else if(t.indexOf(q) >= 0 || (e.i && e.i.indexOf(q) >= 0)) has.push(e);
+      if(starts.length >= 14) break;
+    }
+    render(starts.concat(has).slice(0, 14));
+  }
+  var t;
+  inp.addEventListener('input', function(){
+    clearTimeout(t); t = setTimeout(function(){ search(inp.value); }, 80);
+  });
+  inp.addEventListener('keydown', function(ev){
+    var links = box.querySelectorAll('.gr');
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sel = ev.key === 'ArrowDown' ? Math.min(sel + 1, links.length - 1)
+                                   : Math.max(sel - 1, 0);
+      links.forEach(function(l, n){ l.classList.toggle('sel', n === sel); });
+      if(links[sel]) links[sel].scrollIntoView({block: 'nearest'});
+    } else if(ev.key === 'Enter'){
+      var pick = links[sel >= 0 ? sel : 0];
+      if(pick) location.href = pick.getAttribute('href');
+    } else if(ev.key === 'Escape'){
+      box.style.display = 'none'; inp.blur();
+    }
+  });
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.navsearch')) box.style.display = 'none';
+  });
+  document.addEventListener('keydown', function(ev){
+    if((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k'){
+      ev.preventDefault(); inp.focus(); inp.select();
+    }
+  });
+})();
+
+
+(function(){
+  if(typeof HOVER_DATA === 'undefined') return;
+  var card = document.createElement('div');
+  card.className = 'hovercard';
+  card.style.display = 'none';
+  document.body.appendChild(card);
+  var timer = null;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function iconPath(id){
+    var c = id.indexOf(':');
+    if(c < 0) return null;
+    return 'icons/' + id.slice(0, c) + '/' + id.slice(c + 1).replace(/\//g, '__') + '.png';
+  }
+  function monImg(id, dex){
+    return '<img src="renders/' + esc(id) + '.png" alt="" ' +
+      'onerror="if(this.dataset.f||!' + (dex ? 'true' : 'false') +
+      '){this.style.display=\'none\'}else{this.dataset.f=1;this.src=\'sprites/' +
+      (dex || 0) + '.png\'}">';
+  }
+  function parse(el){
+    var go = el.getAttribute('data-go');
+    if(go) return go.indexOf(':') >= 0 ? {k: 'i', id: go} : {k: 'p', id: go};
+    var href = el.getAttribute('href') || '';
+    var m = href.match(/(?:^|\/)(pokedex|items|trainers|spawns)\.html#(.+)$/);
+    if(!m) return null;
+    var id = decodeURIComponent(m[2]);
+    if(m[1] === 'items') return {k: 'i', id: id};
+    if(m[1] === 'trainers') return {k: 't', id: id};
+    return {k: 'p', id: id};
+  }
+  function render(a, info, e){
+    var html = '';
+    if(info.k === 'p'){
+      html = monImg(info.id, e.d) + '<div>' +
+        '<div class="hc-t">' + (e.d ? '#' + String(e.d).padStart(3, '0') + ' ' : '') + esc(e.n) + '</div>' +
+        '<div class="hc-m">' + esc((e.ty || []).join(' / ')) + '</div>' +
+        '<div class="hc-d" style="font-style:normal">BST ' + esc(e.b) +
+        (e.c ? ' · catch rate ' + esc(e.c) : '') + '</div></div>';
+    } else if(info.k === 'i'){
+      var p = iconPath(info.id);
+      html = (p ? '<img src="' + esc(p) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        '<div class="hc-m" style="text-transform:none">' + esc(info.id) + '</div>' +
+        (e.tip ? '<div class="hc-d">' + esc(e.tip) + '</div>' : '') + '</div>';
+    } else {
+      var fb = e.ld ? 'renders/' + esc(e.ld) + '.png' : '';
+      html = '<img src="renders/trainers/' + esc(info.id) + '.png" alt="" ' +
+        'onerror="if(this.dataset.f||!this.dataset.fb){this.style.display=\'none\'}' +
+        'else{this.dataset.f=1;this.src=this.dataset.fb}" data-fb="' + fb + '">' +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        (e.s ? '<div class="hc-m">' + esc(e.s) + ' series</div>' : '') +
+        '<div class="hc-d" style="font-style:normal">' + esc(e.c) + ' Pokémon' +
+        (e.hi ? ' · Lv ' + esc(e.lo) + '–' + esc(e.hi) : '') + '</div></div>';
+    }
+    card.innerHTML = html;
+    card.style.visibility = 'hidden';
+    card.style.display = 'flex';
+    var r = a.getBoundingClientRect();
+    var ch = card.offsetHeight, cw = card.offsetWidth;
+    var left = Math.max(6, Math.min(r.left, window.innerWidth - cw - 10));
+    var top = r.bottom + 8;
+    if(top + ch > window.innerHeight - 8) top = r.top - ch - 8;
+    card.style.left = left + 'px';
+    card.style.top = Math.max(6, top) + 'px';
+    card.style.visibility = 'visible';
+  }
+  document.addEventListener('mouseover', function(ev){
+    var a = ev.target.closest ? ev.target.closest('a[href], [data-go]') : null;
+    clearTimeout(timer);
+    if(!a){ card.style.display = 'none'; return; }
+    var info = parse(a);
+    if(!info){ card.style.display = 'none'; return; }
+    var e = HOVER_DATA[info.k] && HOVER_DATA[info.k][info.id];
+    if(!e){ card.style.display = 'none'; return; }
+    timer = setTimeout(function(){ render(a, info, e); }, 160);
+  });
+  document.addEventListener('mouseout', function(ev){
+    if(ev.target.closest && ev.target.closest('a[href], [data-go]')){
+      clearTimeout(timer);
+      card.style.display = 'none';
+    }
+  });
+  window.addEventListener('scroll', function(){
+    clearTimeout(timer); card.style.display = 'none';
+  }, true);
+})();
+});</script>
+</body></html>

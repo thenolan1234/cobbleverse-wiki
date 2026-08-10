@@ -180,6 +180,70 @@ def build_videos(content: dict | None) -> str:
     return page("Community Guides", "videos.html", body)
 
 
+# ---------------------------------------------------------------- structures
+
+_STRUCT_CATS = [
+    ("Legendary monuments", lambda e: e["ns"] == "legendarymonuments"
+        or "legendary/" in e["rel"] or e["slug"] in
+        ("newmoon-island", "temple-of-sinnoh", "crown-spire")),
+    ("Leagues & gyms", lambda e: any(w in e["rel"] for w in
+        ("league", "gym", "elite"))),
+    ("Raid dens", lambda e: e["ns"] == "cobblemonraiddens"),
+    ("Towns, centers & villages", lambda e: e["ns"] in ("bca", "cobblemon")
+        or "center" in e["rel"] or "village" in e["rel"]),
+    ("Other structures", lambda e: True),
+]
+
+
+def build_structures(inv: list, have: set, species: dict) -> str:
+    cats: dict[str, list] = {}
+    for e in inv:
+        if e["slug"] not in have:
+            continue
+        for cname, pred in _STRUCT_CATS:
+            if pred(e):
+                cats.setdefault(cname, []).append(e)
+                break
+    parts = ["<h1>Structures</h1>",
+             "<p class='sub'>Isometric renders of the structures that "
+             "generate in this pack, built block-for-block from the pack's "
+             "own structure files — know what you're looking for before you "
+             "go hunting.</p>"]
+    for cname, _ in _STRUCT_CATS:
+        entries = cats.get(cname)
+        if not entries:
+            continue
+        entries.sort(key=lambda e: -e["size"])
+        parts.append(f"<section><h2 id='{slugify(cname)}'>{esc(cname)}</h2>"
+                     "<div class='structgrid'>")
+        for e in entries:
+            name = e["rel"].split("/")[-1].replace("_", " ").replace("-", " ").title()
+            links = ""
+            base = e["slug"].split("-")[-1]
+            for cand in (e["slug"].replace("-", ""), base,
+                         e["slug"].split("/")[-1].replace("-", "")):
+                if cand in species:
+                    links = (f" · <a href='spawns.html#{esc(cand)}'>spawns</a>"
+                             f" · <a href='pokedex.html#{esc(cand)}'>dex</a>")
+                    break
+            parts.append(
+                f"<figure><a href='renders/structures/{esc(e['slug'])}.png' "
+                f"target='_blank' rel='noopener'>"
+                f"<img src='renders/structures/{esc(e['slug'])}.png' "
+                f"loading='lazy' alt='{esc(name)}'></a>"
+                f"<figcaption><b>{esc(name)}</b>"
+                f"<span class='meta'> · {esc(e['ns'])}{links}</span>"
+                f"</figcaption></figure>")
+        parts.append("</div></section>")
+    parts.append("<div class='callout'>Renders show every block in the "
+                 "structure file with hidden faces removed; multi-piece "
+                 "jigsaw assemblies (e.g. Giratina Island) aren't stitched "
+                 "yet, and in-world generation adds terrain around what you "
+                 "see here. Click any render for full size.</div>")
+    body = "<div class='article' style='max-width:1180px'>" + "".join(parts) + "</div>"
+    return page("Structures", "structures.html", body)
+
+
 # ---------------------------------------------------------------- home
 
 def build_home(counts: dict, contents: dict) -> str:

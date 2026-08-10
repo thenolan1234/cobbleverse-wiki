@@ -17,6 +17,7 @@ NAV_ITEMS = [
     ("legendaries.html", "Legendaries"),
     ("mechanics.html", "Mechanics"),
     ("world.html", "World"),
+    ("structures.html", "Structures"),
     ("key-items.html", "Key Items"),
     ("tips.html", "Tips"),
     ("mods.html", "Mods"),
@@ -233,6 +234,11 @@ details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:
 .meta{font-size:11.5px;color:var(--silt)}
 .bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--tide)}
+.structgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin:14px 0}
+.structgrid figure{margin:0;background:var(--shelf);border:1px solid var(--reef);
+  border-radius:4px;padding:10px;text-align:center}
+.structgrid img{max-width:100%;max-height:240px;object-fit:contain;image-rendering:auto}
+.structgrid figcaption{font-size:12px;margin-top:7px;color:var(--foam)}
 .drop{
   display:grid;grid-template-columns:1fr auto;gap:3px 16px;
   padding:10px 0;border-bottom:1px solid var(--shelf);

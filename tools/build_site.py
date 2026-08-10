@@ -17,7 +17,8 @@ from templates import TYPE_COLORS, NAV_ITEMS, slugify
 from pages_apps import (build_pokedex, build_items, build_trainers,
                         build_spawnfinder)
 from pages_articles import (build_guide, build_progression, build_legendaries,
-                            build_mods, build_home, build_videos)
+                            build_mods, build_home, build_videos,
+                            build_structures)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
@@ -461,6 +462,14 @@ def main() -> None:
                                  "videos, checked against the pack data"),
     }
 
+    struct_inv = load_json(os.path.join(ROOT, "data", "structures.json")) or []
+    struct_dir = os.path.join(ROOT, "renders", "structures")
+    have = ({f[:-4] for f in os.listdir(struct_dir) if f.endswith(".png")}
+            if os.path.isdir(struct_dir) else set())
+    if struct_inv and have:
+        pages["structures.html"] = build_structures(struct_inv, have,
+                                                    d["species"])
+
     # ---- global search index (shared by every page's nav search bar)
     idx = []
     for sid, s in d["species"].items():
@@ -487,6 +496,10 @@ def main() -> None:
             if leg.get("name"):
                 idx.append({"t": leg["name"], "k": "guide",
                             "i": f"legendaries.html#{slugify(leg['name'])}"})
+    for e in (load_json(os.path.join(ROOT, "data", "structures.json")) or []):
+        nm = e["rel"].split("/")[-1].replace("_", " ").title()
+        idx.append({"t": nm + " (structure)", "k": "guide",
+                    "i": "structures.html"})
     with open(os.path.join(ROOT, "searchindex.js"), "w",
               encoding="utf-8") as fh:
         fh.write("const SEARCH_INDEX=" +

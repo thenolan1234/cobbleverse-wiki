@@ -45,6 +45,10 @@ Images come from three generated folders, all offline:
   skins (shipped in the pack's RCT resource pack) by
   `tools/render_trainers.py`, shown on trainer pages, gym tables, search
   results and hover cards.
+- `renders/structures/` — isometric renders of the pack's structure NBT
+  files (legendary monuments, leagues, raid dens, centers) by
+  `tools/render_structures.py` (needs `nbtlib`), shown on the Structures
+  page.
 - `sprites/` (+ `sprites/shiny/`) — 96×96 official 2D game sprites from the
   PokéAPI sprites repository, used as small inline images and as the fallback
   for species Cobblemon has no model for. Pokémon © Nintendo / Game Freak.
