@@ -68,6 +68,8 @@ nav.top a.item{
 }
 nav.top a.item:hover{background:var(--shelf);text-decoration:none}
 nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+/* anchor jumps must clear the sticky nav (height measured into --navh) */
+[id]{scroll-margin-top:calc(var(--navh, 52px) + 12px)}
 .navsearch{margin-left:auto;position:relative;min-width:180px;flex:0 1 260px}
 .navsearch input{
   width:100%;padding:5px 10px;background:var(--shelf);color:var(--foam);
@@ -377,6 +379,25 @@ def icon_img(item_id: str, size: int) -> str:
 
 
 GLOBAL_SEARCH_JS = r"""
+(function(){
+  var nav = document.querySelector('nav.top');
+  function setNavH(){
+    if(nav) document.documentElement.style.setProperty(
+      '--navh', nav.offsetHeight + 'px');
+  }
+  setNavH();
+  window.addEventListener('resize', setNavH);
+  // lazy images can shift layout after the initial anchor jump - re-align
+  if(location.hash){
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var t = document.getElementById(
+          decodeURIComponent(location.hash.slice(1)));
+        if(t && t.scrollIntoView) t.scrollIntoView();
+      }, 250);
+    });
+  }
+})();
 (function(){
   var inp = document.getElementById('gq');
   var box = document.getElementById('gq-results');
