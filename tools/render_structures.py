@@ -41,11 +41,13 @@ STRUCT_SOURCES = [
     os.path.join(PACK, "mods", "LumyMon-0.6.6.jar"),
     os.path.join(PACK, "datapacks", "PokeCenterPCs-DP.zip"),
     os.path.join(PACK, "mods", "Cobblemon-fabric-1.7.3+1.21.1.jar"),
+    os.path.join(PACK, "mods", "cobblemon-additions-4.1.6.jar"),
+    os.path.join(PACK, "mods", "mega_showdown-fabric-1.8.4+1.7.3+1.21.1.jar"),
+    os.path.join(PACK, "mods", "VanillaBackport-fabric-1.21.1-1.1.7.10.jar"),
 ]
-# folders with dozens of tiny variants that would flood the gallery, and
-# jigsaw piece sets that are shown assembled instead
-_STANDALONE_EXCLUDE = ("/ruins/", "/fossils/", "/decorations/",
-                       "/shipwreck_coves/", "/turnback_cave/")
+# scatter-prop folders and jigsaw piece sets that are shown assembled instead
+_STANDALONE_EXCLUDE = ("/decorations/", "/shipwreck_coves/",
+                       "/turnback_cave/")
 
 _SKIP = ("air", "structure_void", "structure_block", "jigsaw", "barrier",
          "light", "command_block")

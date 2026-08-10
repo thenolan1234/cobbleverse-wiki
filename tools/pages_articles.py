@@ -62,7 +62,8 @@ def build_progression(content: dict | None, names: dict) -> str:
     if content.get("levelCapNote"):
         parts.append(f"<div class='callout'>{_safe(content['levelCapNote'])}</div>")
     for region in content.get("regions", []):
-        parts.append(f"<section><h2>{esc(region.get('title'))}</h2>")
+        parts.append(f"<section><h2 id='{slugify(region.get('title', ''))}'>"
+                     f"{esc(region.get('title'))}</h2>")
         if region.get("note"):
             parts.append(_safe(region["note"]))
         for m in region.get("milestones", []):
@@ -190,13 +191,74 @@ _STRUCT_CATS = [
         ("league", "gym", "elite"))),
     ("Raid dens", lambda e: e["ns"] == "cobblemonraiddens"),
     ("Caves & coves", lambda e: "cove" in e["slug"] or "cave" in e["slug"]),
+    ("Ruins & fossil sites", lambda e: e["rel"].startswith(("ruins/",
+                                                            "fossils/"))),
     ("Towns, centers & villages", lambda e: e["ns"] in ("bca", "cobblemon")
         or "center" in e["rel"] or "village" in e["rel"]),
     ("Other structures", lambda e: True),
 ]
 
 
-def build_structures(inv: list, have: set, species: dict) -> str:
+_GYMS = {"brock", "misty", "ltsurge", "erika", "koga", "sabrina", "blaine",
+         "giovanni"}
+_STRUCT_GUIDE = {
+    "stark-mountain": "legendaries.html#heatran",
+    "eternatus-cocoon": "legendaries.html#eternatus",
+    "firescourge-shrine": "legendaries.html#treasures-of-ruin",
+    "grasswither-shrine": "legendaries.html#treasures-of-ruin",
+    "groundblight-shrine": "legendaries.html#treasures-of-ruin",
+    "icerend-shrine": "legendaries.html#treasures-of-ruin",
+    "giratina-island": "legendaries.html#giratina",
+    "turnback-cave-example": "legendaries.html#giratina",
+    "newmoon-island": "legendaries.html#darkrai",
+    "temple-of-sinnoh": "legendaries.html#dialga-palkia",
+    "crown-spire": "legendaries.html#calyrex-glastrier-spectrier",
+    "crown-cemetery": "legendaries.html#calyrex-glastrier-spectrier",
+    "dawn-tower": "legendaries.html#cresselia",
+    "dusk-tower": "legendaries.html#darkrai",
+    "team-rocket-tower": "legendaries.html#mewtwo",
+    "team-rocket-tower-shiny": "legendaries.html#mewtwo",
+    "mythical-mew": "legendaries.html#mew",
+    "ash": "legendaries.html#finding-kanto-legendary-structures",
+    "kanto-league": "progression.html#gen-1-kanto",
+    "mega-site": "mechanics.html#mega-evolution-mega-showdown",
+    "megaroid": "mechanics.html#mega-evolution-mega-showdown",
+}
+
+
+def _guide_url(e, leg_anchors):
+    slug = e["slug"]
+    if slug in _STRUCT_GUIDE:
+        return _STRUCT_GUIDE[slug]
+    base = slug.replace("-shiny", "")
+    if base in _GYMS:
+        return f"trainers.html#kanto_{base}"
+    toks = slug.split("-")
+    for tok in toks:
+        if tok in leg_anchors:
+            return f"legendaries.html#{tok}"
+    for anchor in leg_anchors:
+        if any(tok in anchor.split("-") for tok in toks if len(tok) > 3):
+            return f"legendaries.html#{anchor}"
+    if "raid" in slug:
+        return "mechanics.html#raid-dens"
+    if slug.startswith("fossils"):
+        return "mechanics.html#fossils-and-resurrection"
+    if "fishing" in slug:
+        return "mechanics.html#fishing-with-pok-rods"
+    if "cove" in slug or slug.startswith("ruins"):
+        return "world.html"
+    if any(w in slug for w in ("village", "center", "pokecenter", "store",
+                               "market", "lodge", "pokemart")) \
+            or e["ns"] == "bca":
+        return "world.html"
+    return None
+
+
+def build_structures(inv: list, have: set, species: dict,
+                     legendaries: dict | None = None) -> str:
+    leg_anchors = {slugify(l["name"]) for l in
+                   (legendaries or {}).get("legendaries", []) if l.get("name")}
     cats: dict[str, list] = {}
     for e in inv:
         if e["slug"] not in have:
@@ -226,14 +288,18 @@ def build_structures(inv: list, have: set, species: dict) -> str:
                     links = (f" · <a href='spawns.html#{esc(cand)}'>spawns</a>"
                              f" · <a href='pokedex.html#{esc(cand)}'>dex</a>")
                     break
+            full = f"renders/structures/{esc(e['slug'])}.png"
+            guide = _guide_url(e, leg_anchors)
+            click = esc(guide) if guide else full
+            target = "" if guide else " target='_blank' rel='noopener'"
+            glink = (f" · <a href='{esc(guide)}'>guide</a>" if guide else "")
             parts.append(
-                f"<figure><a href='renders/structures/{esc(e['slug'])}.png' "
-                f"target='_blank' rel='noopener'>"
-                f"<img src='renders/structures/{esc(e['slug'])}.png' "
-                f"loading='lazy' alt='{esc(name)}'></a>"
+                f"<figure><a href='{click}'{target}>"
+                f"<img src='{full}' loading='lazy' alt='{esc(name)}'></a>"
                 f"<figcaption><b>{esc(name)}</b>"
-                f"<span class='meta'> · {esc(e['ns'])}{links}</span>"
-                f"</figcaption></figure>")
+                f"<span class='meta'> · {esc(e['ns'])}{glink}{links}"
+                f" · <a href='{full}' target='_blank' rel='noopener'>full "
+                f"size</a></span></figcaption></figure>")
         parts.append("</div></section>")
     parts.append("<div class='callout'>Renders show every block in the "
                  "structure files with hidden faces removed — multi-piece "

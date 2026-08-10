@@ -468,7 +468,8 @@ def main() -> None:
             if os.path.isdir(struct_dir) else set())
     if struct_inv and have:
         pages["structures.html"] = build_structures(struct_inv, have,
-                                                    d["species"])
+                                                    d["species"],
+                                                    content["legendaries"])
 
     # ---- global search index (shared by every page's nav search bar)
     idx = []
