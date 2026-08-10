@@ -45,6 +45,28 @@ nav.top a.item{
 }
 nav.top a.item:hover{background:var(--shelf);text-decoration:none}
 nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+.navsearch{margin-left:auto;position:relative;min-width:180px;flex:0 1 260px}
+.navsearch input{
+  width:100%;padding:5px 10px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:12.5px;
+}
+.navsearch input:focus{outline:2px solid var(--tide);outline-offset:-1px}
+#gq-results{
+  position:absolute;top:110%;right:0;width:340px;max-width:92vw;max-height:60vh;
+  overflow-y:auto;background:var(--deep);border:1px solid var(--reef);
+  border-radius:4px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;
+}
+#gq-results .gr{
+  display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
+  font-size:13px;color:var(--foam);text-decoration:none;
+}
+#gq-results .gr:hover,#gq-results .gr.sel{background:var(--reef)}
+#gq-results .gr img{width:26px;height:26px;image-rendering:pixelated;flex-shrink:0}
+#gq-results .gr .gk{
+  margin-left:auto;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--silt);flex-shrink:0;
+}
+#gq-results .gempty{padding:10px 12px;color:var(--silt);font-size:12px}
 
 /* ---- article pages ---- */
 .article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
@@ -247,7 +269,7 @@ footer.gen{
 footer.gen a{color:var(--silt);text-decoration:underline}
 </style>
 </head><body>
-<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html" aria-current="page">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a></nav>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html" aria-current="page">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a><div class="navsearch"><input id="gq" type="search" placeholder="Search everything…  Ctrl+K" autocomplete="off"><div id="gq-results"></div></div></nav>
 <div class='article'><h1>Progression Guide — Your Road to Champion</h1><p class="sub">Badges, regions and the road to champion — reconstructed from the pack’s advancement and trainer data</p><p>COBBLEVERSE turns survival Minecraft into a full Pokémon league challenge. The moment you join, the pack's root advancement — <b>COBBLEVERSE: Press C to Start!</b> — asks you to choose your first Pokémon and begin your adventure. From there the loop is simple: train under your current level cap, hunt down the next key trainer, earn the badge, and watch the cap rise. Keep a <b>Trainer Card</b> in your inventory — wild trainers only spawn naturally around players carrying one.</p><p>Four regions are playable, each as its own RCT trainer series with its own gym circuit, Elite Four, Champion and legendary postgame: <b>Kanto</b> (active by default, difficulty 7/10), then the add-on regions <b>Johto</b> (8/10), <b>Hoenn</b> (8/10) and <b>Sinnoh</b> (9/10). Key trainers must be beaten in strict order — each gym leader only starts spawning once you have defeated the previous one — and every victory is tracked by an advancement, so your advancement screen doubles as a quest log.</p><p>Beyond the league lines, the Mega Showdown mod ships its own advancement tree covering Mega Evolution and bond content (34 advancements under its own tab). For full gym leader teams and spawn locations see <a href="trainers.html">Trainers</a>; for where to catch everything, see the <a href="pokedex.html">Pokédex</a>.</p><div class='callout'><p>COBBLEVERSE uses Radical Cobblemon Trainers (RCT) to pace your journey. Your Pokémon <b>stop gaining experience at the level cap</b> (over-leveling is disabled in the pack config), and the cap climbs only as you defeat the key trainers of your active series.</p><ul><li><b>Starting cap:</b> effectively <b>25</b> — the cap always tracks the next required key trainer (their ace's level + 5), which for Brock means 20 + 5. The configured <code>initialLevelCap = 20</code> is a floor that never binds in Kanto.</li><li><b>How it rises:</b> your cap always tracks the <b>next required key trainer</b> in your series — the level of their strongest Pokémon plus <code>relativeLevelCap = 5</code>. In Kanto that means roughly: Brock 25, Misty 30, Lt. Surge 40, Erika 45, Koga 55, Sabrina 60, Blaine 65, Giovanni 75, then the Elite Four at 80/85/90/95 and a full cap of 100 for the Champion.</li><li><b>Strict order:</b> each gym leader, Elite Four member and Champion only spawns after the previous key trainer in the chain is beaten.</li><li><b>Trainer Card:</b> <code>spawningRequiresTrainerCard = true</code> — no card in your inventory, no wild trainers.</li><li><b>Matchmaking:</b> <code>maxLevelDiff = 10</code> keeps naturally spawning trainers within roughly ten levels of your team (key trainers are exempt).</li><li><b>Freeroam:</b> after completing any series you can switch to <b>freeroam</b> at a Trainer Association clerk, which grants a flat level cap of 100 while pausing series progression.</li></ul></div><section><h2>Gen 1: Kanto</h2><p>Kanto is where every player starts: the <code>COBBLEVERSE-DP-v31</code> datapack ships active in the <code>datapacks</code> folder, and the RCT config places new players in the <b>Kanto</b> series (difficulty 7/10) automatically. The <b>Gen 1: Kanto</b> advancement — <i>"Embark on a journey through the region where it all began"</i> — opens the tree.</p><p>The eight gym leaders roam specific overworld biomes and must be beaten in order. Once Giovanni falls, the <b>Elite Four and Champion Blue spawn in the End dimension</b> — bring an End-ready team. The Legendary Birds and the Mew/Mewtwo questline round out the postgame.</p><div class="mile"><span class='kind badge-k'>badge</span>
   <div><h4><a href='trainers.html#kanto_brock'>Boulder Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_boulder_badge'><img class="spr" src="icons/cobbleversebadges/kanto_boulder_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Boulder Badge (Brock)</a></h4><p>Defeat Leader Brock, the first gym of the Kanto circuit. His team tops out at a Lv. 20 Onix.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
   <div><h4><a href='trainers.html#kanto_misty'>Cascade Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_cascade_badge'><img class="spr" src="icons/cobbleversebadges/kanto_cascade_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Cascade Badge (Misty)</a></h4><p>Defeat Leader Misty. Her ace is Lv. 25; she spawns in ocean biomes once Brock is beaten.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
@@ -346,4 +368,84 @@ footer.gen a{color:var(--silt);text-decoration:underline}
   <div><h4>Pallet Town Legacy <a class='ico' href='items.html#lumymon:prof_oak_letter'><img class="spr" src="icons/lumymon/prof_oak_letter.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Professor Oak&#x27;s Letter</a></h4><p>Assemble the five first companions of Kanto to earn Professor Oak&#x27;s Letter.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
   <div><h4>Gratitude Bloom <a class='ico' href='items.html#mega_showdown:gracidea_flower'><img class="spr" src="icons/mega_showdown/gracidea_flower.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Gracidea Flower</a></h4><p>Catch Shaymin, the Pokémon that transforms ruined lands into flower fields.</p></div></div></section></div>
 <footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
+<script defer src="searchindex.js"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){
+(function(){
+  var inp = document.getElementById('gq');
+  var box = document.getElementById('gq-results');
+  if(!inp || !box) return;
+  var sel = -1, rows = [];
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function img(e){
+    if(e.k === 'pokemon') return '<img src="renders/' + e.i + '.png" alt="" loading="lazy" ' +
+      'onerror="if(this.dataset.f){this.style.visibility=\'hidden\'}else{this.dataset.f=1;this.src=\'sprites/' + (e.x || 0) + '.png\'}">';
+    if(e.k === 'item'){
+      var c = e.i.indexOf(':');
+      return '<img src="icons/' + e.i.slice(0, c) + '/' +
+        e.i.slice(c + 1).replace(/\//g, '__') + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    }
+    return '<span style="width:26px;flex-shrink:0"></span>';
+  }
+  function urlOf(e){
+    if(e.k === 'pokemon') return 'pokedex.html#' + e.i;
+    if(e.k === 'item') return 'items.html#' + encodeURIComponent(e.i);
+    if(e.k === 'trainer') return 'trainers.html#' + encodeURIComponent(e.i);
+    return e.i;   // pages & guide sections store their url directly
+  }
+  function render(hits){
+    rows = hits; sel = -1;
+    if(!hits.length){
+      box.innerHTML = '<div class="gempty">No match.</div>';
+    } else {
+      box.innerHTML = hits.map(function(e){
+        return '<a class="gr" href="' + esc(urlOf(e)) + '">' + img(e) +
+          '<span>' + esc(e.t) + '</span><span class="gk">' + esc(e.k) + '</span></a>';
+      }).join('');
+    }
+    box.style.display = 'block';
+  }
+  function search(q){
+    q = q.trim().toLowerCase();
+    if(q.length < 2){ box.style.display = 'none'; return; }
+    var starts = [], has = [];
+    for(var n = 0; n < SEARCH_INDEX.length; n++){
+      var e = SEARCH_INDEX[n];
+      var t = e.t.toLowerCase();
+      if(t.startsWith(q)) starts.push(e);
+      else if(t.indexOf(q) >= 0 || (e.i && e.i.indexOf(q) >= 0)) has.push(e);
+      if(starts.length >= 14) break;
+    }
+    render(starts.concat(has).slice(0, 14));
+  }
+  var t;
+  inp.addEventListener('input', function(){
+    clearTimeout(t); t = setTimeout(function(){ search(inp.value); }, 80);
+  });
+  inp.addEventListener('keydown', function(ev){
+    var links = box.querySelectorAll('.gr');
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sel = ev.key === 'ArrowDown' ? Math.min(sel + 1, links.length - 1)
+                                   : Math.max(sel - 1, 0);
+      links.forEach(function(l, n){ l.classList.toggle('sel', n === sel); });
+      if(links[sel]) links[sel].scrollIntoView({block: 'nearest'});
+    } else if(ev.key === 'Enter'){
+      var pick = links[sel >= 0 ? sel : 0];
+      if(pick) location.href = pick.getAttribute('href');
+    } else if(ev.key === 'Escape'){
+      box.style.display = 'none'; inp.blur();
+    }
+  });
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.navsearch')) box.style.display = 'none';
+  });
+  document.addEventListener('keydown', function(ev){
+    if((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k'){
+      ev.preventDefault(); inp.focus(); inp.select();
+    }
+  });
+})();
+});</script>
 </body></html>

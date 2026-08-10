@@ -67,6 +67,28 @@ nav.top a.item{
 }
 nav.top a.item:hover{background:var(--shelf);text-decoration:none}
 nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+.navsearch{margin-left:auto;position:relative;min-width:180px;flex:0 1 260px}
+.navsearch input{
+  width:100%;padding:5px 10px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:12.5px;
+}
+.navsearch input:focus{outline:2px solid var(--tide);outline-offset:-1px}
+#gq-results{
+  position:absolute;top:110%;right:0;width:340px;max-width:92vw;max-height:60vh;
+  overflow-y:auto;background:var(--deep);border:1px solid var(--reef);
+  border-radius:4px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;
+}
+#gq-results .gr{
+  display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
+  font-size:13px;color:var(--foam);text-decoration:none;
+}
+#gq-results .gr:hover,#gq-results .gr.sel{background:var(--reef)}
+#gq-results .gr img{width:26px;height:26px;image-rendering:pixelated;flex-shrink:0}
+#gq-results .gr .gk{
+  margin-left:auto;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--silt);flex-shrink:0;
+}
+#gq-results .gempty{padding:10px 12px;color:var(--silt);font-size:12px}
 
 /* ---- article pages ---- */
 .article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
@@ -333,12 +355,102 @@ def icon_img(item_id: str, size: int) -> str:
             f'onerror="this.remove()">')
 
 
+GLOBAL_SEARCH_JS = r"""
+(function(){
+  var inp = document.getElementById('gq');
+  var box = document.getElementById('gq-results');
+  if(!inp || !box) return;
+  var sel = -1, rows = [];
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function img(e){
+    if(e.k === 'pokemon') return '<img src="renders/' + e.i + '.png" alt="" loading="lazy" ' +
+      'onerror="if(this.dataset.f){this.style.visibility=\'hidden\'}else{this.dataset.f=1;this.src=\'sprites/' + (e.x || 0) + '.png\'}">';
+    if(e.k === 'item'){
+      var c = e.i.indexOf(':');
+      return '<img src="icons/' + e.i.slice(0, c) + '/' +
+        e.i.slice(c + 1).replace(/\//g, '__') + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    }
+    return '<span style="width:26px;flex-shrink:0"></span>';
+  }
+  function urlOf(e){
+    if(e.k === 'pokemon') return 'pokedex.html#' + e.i;
+    if(e.k === 'item') return 'items.html#' + encodeURIComponent(e.i);
+    if(e.k === 'trainer') return 'trainers.html#' + encodeURIComponent(e.i);
+    return e.i;   // pages & guide sections store their url directly
+  }
+  function render(hits){
+    rows = hits; sel = -1;
+    if(!hits.length){
+      box.innerHTML = '<div class="gempty">No match.</div>';
+    } else {
+      box.innerHTML = hits.map(function(e){
+        return '<a class="gr" href="' + esc(urlOf(e)) + '">' + img(e) +
+          '<span>' + esc(e.t) + '</span><span class="gk">' + esc(e.k) + '</span></a>';
+      }).join('');
+    }
+    box.style.display = 'block';
+  }
+  function search(q){
+    q = q.trim().toLowerCase();
+    if(q.length < 2){ box.style.display = 'none'; return; }
+    var starts = [], has = [];
+    for(var n = 0; n < SEARCH_INDEX.length; n++){
+      var e = SEARCH_INDEX[n];
+      var t = e.t.toLowerCase();
+      if(t.startsWith(q)) starts.push(e);
+      else if(t.indexOf(q) >= 0 || (e.i && e.i.indexOf(q) >= 0)) has.push(e);
+      if(starts.length >= 14) break;
+    }
+    render(starts.concat(has).slice(0, 14));
+  }
+  var t;
+  inp.addEventListener('input', function(){
+    clearTimeout(t); t = setTimeout(function(){ search(inp.value); }, 80);
+  });
+  inp.addEventListener('keydown', function(ev){
+    var links = box.querySelectorAll('.gr');
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sel = ev.key === 'ArrowDown' ? Math.min(sel + 1, links.length - 1)
+                                   : Math.max(sel - 1, 0);
+      links.forEach(function(l, n){ l.classList.toggle('sel', n === sel); });
+      if(links[sel]) links[sel].scrollIntoView({block: 'nearest'});
+    } else if(ev.key === 'Enter'){
+      var pick = links[sel >= 0 ? sel : 0];
+      if(pick) location.href = pick.getAttribute('href');
+    } else if(ev.key === 'Escape'){
+      box.style.display = 'none'; inp.blur();
+    }
+  });
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.navsearch')) box.style.display = 'none';
+  });
+  document.addEventListener('keydown', function(ev){
+    if((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k'){
+      ev.preventDefault(); inp.focus(); inp.select();
+    }
+  });
+})();
+"""
+
+
+def slugify(text: str) -> str:
+    import re as _re
+    return _re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")[:60]
+
+
 def page(title: str, active: str, body: str, extra_head: str = "",
          subtitle: str = "", full_height: bool = False) -> str:
     nav = []
     for href, label in NAV_ITEMS:
         cur = ' aria-current="page"' if href == active else ""
         nav.append(f'<a class="item" href="{href}"{cur}>{label}</a>')
+    nav.append(
+        '<div class="navsearch">'
+        '<input id="gq" type="search" placeholder="Search everything…  Ctrl+K"'
+        ' autocomplete="off"><div id="gq-results"></div></div>')
     footer = "" if full_height else (
         '<footer class="gen">Generated from the pack’s own data files by '
         '<code>tools/</code> in this folder · COBBLEVERSE · '
@@ -356,4 +468,6 @@ def page(title: str, active: str, body: str, extra_head: str = "",
 <nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span>{''.join(nav)}</nav>
 {body}
 {footer}
+<script defer src="searchindex.js"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){{{GLOBAL_SEARCH_JS}}});</script>
 </body></html>"""

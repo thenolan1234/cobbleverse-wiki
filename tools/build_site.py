@@ -13,7 +13,7 @@ from __future__ import annotations
 import json
 import os
 
-from templates import TYPE_COLORS
+from templates import TYPE_COLORS, NAV_ITEMS, slugify
 from pages_apps import (build_pokedex, build_items, build_trainers,
                         build_spawnfinder)
 from pages_articles import (build_guide, build_progression, build_legendaries,
@@ -460,6 +460,39 @@ def main() -> None:
                                  "Distilled from the community's best guide "
                                  "videos, checked against the pack data"),
     }
+
+    # ---- global search index (shared by every page's nav search bar)
+    idx = []
+    for sid, s in d["species"].items():
+        idx.append({"t": s["name"], "k": "pokemon", "i": sid,
+                    "x": s.get("dex")})
+    for iid, nm in d["names"].items():
+        idx.append({"t": nm, "k": "item", "i": iid})
+    for tid, t in d["trainers"].items():
+        idx.append({"t": t["name"], "k": "trainer", "i": tid})
+    for href, label in NAV_ITEMS:
+        idx.append({"t": label, "k": "page", "i": href})
+    guide_pages = [("mechanics", "mechanics.html"), ("regions", "world.html"),
+                   ("items_notable", "key-items.html"), ("tips", "tips.html"),
+                   ("legendaries", "legendaries.html"),
+                   ("videos", "videos.html")]
+    for key, href in guide_pages:
+        c = content.get(key) or {}
+        for s in c.get("sections", []) or []:
+            h = s.get("heading")
+            if h:
+                idx.append({"t": h, "k": "guide",
+                            "i": f"{href}#{slugify(h)}"})
+        for leg in c.get("legendaries", []) or []:
+            if leg.get("name"):
+                idx.append({"t": leg["name"], "k": "guide",
+                            "i": f"legendaries.html#{slugify(leg['name'])}"})
+    with open(os.path.join(ROOT, "searchindex.js"), "w",
+              encoding="utf-8") as fh:
+        fh.write("const SEARCH_INDEX=" +
+                 json.dumps(idx, separators=(",", ":"), ensure_ascii=False)
+                 .replace("</", "<\\/") + ";")
+    print(f"  {os.path.getsize(os.path.join(ROOT, 'searchindex.js')) / 1_000_000:5.1f} MB  searchindex.js ({len(idx):,} entries)")
 
     for fname, html in pages.items():
         path = os.path.join(ROOT, fname)

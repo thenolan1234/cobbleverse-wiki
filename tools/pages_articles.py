@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from templates import page, esc, icon_img
+from templates import page, esc, icon_img, slugify
 
 _SCRIPT_RE = re.compile(r"<\s*/?\s*script[^>]*>", re.I)
 _EVENT_RE = re.compile(r"\son\w+\s*=", re.I)
@@ -20,7 +20,8 @@ def _safe(body: str) -> str:
 def _sections_html(content: dict) -> str:
     out = []
     for s in content.get("sections", []):
-        out.append(f"<section><h2>{esc(s.get('heading'))}</h2>"
+        out.append(f"<section><h2 id='{slugify(s.get('heading', ''))}'>"
+                   f"{esc(s.get('heading'))}</h2>"
                    f"{_safe(s.get('body', ''))}</section>")
     return "".join(out)
 
@@ -103,7 +104,8 @@ def build_legendaries(content: dict | None, species: dict) -> str:
         title = esc(name)
         if sp and sp in species:
             title = f"<a href='pokedex.html#{esc(sp)}'>{title}</a>"
-        parts.append(f"<section><h2>{title}</h2>{_safe(leg.get('method', ''))}")
+        parts.append(f"<section><h2 id='{slugify(name)}'>{title}</h2>"
+                     f"{_safe(leg.get('method', ''))}")
         items = leg.get("keyItems") or []
         if items:
             chips = " ".join(
@@ -112,6 +114,7 @@ def build_legendaries(content: dict | None, species: dict) -> str:
                 for i in items)
             parts.append(f"<p>Key items: {chips}</p>")
         parts.append("</section>")
+    parts.append(_sections_html(content))    # appended guide sections, if any
     body = "<div class='article'>" + "".join(parts) + "</div>"
     return page("Legendaries", "legendaries.html", body)
 
