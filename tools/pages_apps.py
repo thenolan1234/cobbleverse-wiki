@@ -543,14 +543,24 @@ function renderList(){
   }).join('') || '<p class="empty">No spawning species matches. Legendaries without natural spawns are summoned — see <a href="legendaries.html">Legendaries</a>.</p>';
 }
 
+const COMMON_BLOCKS = ['grass_block', 'dirt', 'sand', 'stone', 'gravel',
+  'snow_block', 'coarse_dirt', 'podzol', 'moss_block', 'netherrack',
+  'end_stone', 'mud', 'clay'];
 function expandBlocks(refs){
   const out = [];
   for(const b of refs || []){
     if(b.startsWith('#')){
-      const members = DATA.blockTags[b.slice(1)] || [];
-      if(members.length) out.push(...members.slice(0, 10).map(pretty));
-      else out.push(pretty(b.slice(1)) + ' (tag)');
-      if(members.length > 10) out.push('…+' + (members.length - 10) + ' more');
+      let members = (DATA.blockTags[b.slice(1)] || []).slice();
+      if(members.length){
+        // easy-to-build blocks first
+        members.sort((x, y) => {
+          const xi = COMMON_BLOCKS.indexOf(x.split(':').pop());
+          const yi = COMMON_BLOCKS.indexOf(y.split(':').pop());
+          return (xi < 0 ? 99 : xi) - (yi < 0 ? 99 : yi);
+        });
+        out.push(...members.slice(0, 8).map(pretty));
+        if(members.length > 8) out.push('…+' + (members.length - 8) + ' more');
+      } else out.push(pretty(b.slice(1)) + ' (tag)');
     } else out.push(pretty(b));
   }
   return out;
