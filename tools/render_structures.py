@@ -265,11 +265,15 @@ def render_piece_grid(zf: zipfile.ZipFile, pieces: list[tuple[str, str]],
     Digit order is [x][y][z]; strides accumulate actual piece sizes."""
     loaded = []
     for digits, path in pieces:
-        if not re.fullmatch(r"\d{3}", digits):
+        if re.fullmatch(r"\d{3}", digits):
+            coord = tuple(int(c) - 1 for c in digits)      # [x][y][z]
+        elif re.fullmatch(r"\d+x\d+", digits):
+            a, b = (int(v) - 1 for v in digits.split("x"))
+            coord = (a, 0, b)                              # flat 2D grid
+        else:
             return None
         nbt = load_nbt(zf.read(path))
         size = [int(v) for v in nbt["size"]]
-        coord = tuple(int(c) - 1 for c in digits)
         loaded.append((coord, size, nbt))
     # cumulative offsets per axis from the max size at each grid index
     strides = []
@@ -306,7 +310,8 @@ def inventory():
             n = info.filename
             if not n.endswith(".nbt") or "/structure" not in n:
                 continue
-            gm = re.match(r"data/([^/]+)/structures?/(.+?)(?:/main)?/(\d{3})\.nbt$", n)
+            gm = re.match(r"data/([^/]+)/structures?/(.+?)(?:/main)?"
+                          r"/(\d{3}|\d+x\d+)\.nbt$", n)
             if gm:
                 groups.setdefault((arc, gm.group(1), gm.group(2)), []).append(
                     (gm.group(3), n, info.file_size))
