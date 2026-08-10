@@ -189,6 +189,7 @@ _STRUCT_CATS = [
     ("Leagues & gyms", lambda e: any(w in e["rel"] for w in
         ("league", "gym", "elite"))),
     ("Raid dens", lambda e: e["ns"] == "cobblemonraiddens"),
+    ("Caves & coves", lambda e: "cove" in e["slug"] or "cave" in e["slug"]),
     ("Towns, centers & villages", lambda e: e["ns"] in ("bca", "cobblemon")
         or "center" in e["rel"] or "village" in e["rel"]),
     ("Other structures", lambda e: True),

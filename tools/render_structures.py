@@ -40,7 +40,12 @@ STRUCT_SOURCES = [
     os.path.join(PACK, "mods", "LegendaryMonuments-Cobbleverse.jar"),
     os.path.join(PACK, "mods", "LumyMon-0.6.6.jar"),
     os.path.join(PACK, "datapacks", "PokeCenterPCs-DP.zip"),
+    os.path.join(PACK, "mods", "Cobblemon-fabric-1.7.3+1.21.1.jar"),
 ]
+# folders with dozens of tiny variants that would flood the gallery, and
+# jigsaw piece sets that are shown assembled instead
+_STANDALONE_EXCLUDE = ("/ruins/", "/fossils/", "/decorations/",
+                       "/shipwreck_coves/", "/turnback_cave/")
 
 _SKIP = ("air", "structure_void", "structure_block", "jigsaw", "barrier",
          "light", "command_block")
@@ -184,11 +189,27 @@ def load_nbt(blob: bytes):
     return nbtlib.File.load(io.BytesIO(blob), gzipped=blob[:2] == b"\x1f\x8b")
 
 
-def _collect(nbt, offset, name_index, keep, occupied):
-    """Append one structure's blocks (with offset) into a shared block list,
-    remapping palette indices into the shared name table."""
+def _rot_pos(x, z, sx, sz, rot):
+    """Rotate a local position clockwise within an sx*sz footprint."""
+    if rot == 0:
+        return x, z
+    if rot == 1:
+        return sz - 1 - z, x
+    if rot == 2:
+        return sx - 1 - x, sz - 1 - z
+    return z, sx - 1 - x
+
+
+def _rot_dims(sx, sz, rot):
+    return (sz, sx) if rot % 2 else (sx, sz)
+
+
+def _collect(nbt, offset, name_index, keep, occupied, rot=0):
+    """Append one structure's blocks (with offset and rotation) into a shared
+    block list, remapping palette indices into the shared name table."""
     palette = nbt.get("palette") or (nbt.get("palettes") or [[]])[0]
     local = [str(p["Name"]) for p in palette]
+    size = [int(v) for v in nbt["size"]]
     remap = []
     for nm in local:
         if nm not in name_index:
@@ -200,21 +221,33 @@ def _collect(nbt, offset, name_index, keep, occupied):
         if st >= len(local) or is_skipped(local[st]):
             continue
         x, y, z = (int(v) for v in b["pos"])
-        pos = (x + ox, y + oy, z + oz)
+        rx, rz = _rot_pos(x, z, size[0], size[2], rot)
+        pos = (rx + ox, y + oy, rz + oz)
         keep.append((pos[0], pos[1], pos[2], remap[st]))
         if not is_clear(local[st]):
             occupied.add(pos)
 
 
-def render_parts(parts, idx: AssetIndex) -> Image.Image | None:
-    """parts: [(nbt, (ox, oy, oz)), ...] - render one or many pieces."""
+def render_parts(parts, idx: AssetIndex,
+                 y_clip_frac: float | None = None) -> Image.Image | None:
+    """parts: [(nbt, (ox, oy, oz)[, rot]), ...] - render one or many pieces.
+    y_clip_frac removes the top of the build for a cutaway interior view."""
     keep: list = []
     occupied: set = set()
     name_index: dict[str, int] = {}
-    for nbt, offset in parts:
-        _collect(nbt, offset, name_index, keep, occupied)
+    for part in parts:
+        nbt, offset = part[0], part[1]
+        rot = part[2] if len(part) > 2 else 0
+        _collect(nbt, offset, name_index, keep, occupied, rot)
     if not keep:
         return None
+    if y_clip_frac is not None:
+        ys = [k[1] for k in keep]
+        clip = min(ys) + int((max(ys) - min(ys)) * y_clip_frac)
+        keep = [k for k in keep if k[1] <= clip]
+        occupied = {p for p in occupied if p[1] <= clip}
+        if not keep:
+            return None
     names = [None] * len(name_index)
     for nm, i in name_index.items():
         names[i] = nm
@@ -292,6 +325,203 @@ def render_piece_grid(zf: zipfile.ZipFile, pieces: list[tuple[str, str]],
     return render_parts(parts, idx)
 
 
+# ---------------------------------------------------------------- jigsaw
+
+_DIRS = {"north": (0, 0, -1), "south": (0, 0, 1),
+         "east": (1, 0, 0), "west": (-1, 0, 0),
+         "up": (0, 1, 0), "down": (0, -1, 0)}
+_OPP = {"north": "south", "south": "north", "east": "west", "west": "east",
+        "up": "down", "down": "up"}
+_ROT_DIR = {"north": ["north", "east", "south", "west"],
+            "east": ["east", "south", "west", "north"],
+            "south": ["south", "west", "north", "east"],
+            "west": ["west", "north", "east", "south"]}
+
+
+def _rot_facing(facing, rot):
+    if facing in ("up", "down"):
+        return facing
+    return _ROT_DIR[facing][rot]
+
+
+class Jigsaw:
+    """A jigsaw assembler good enough for one illustrative layout."""
+
+    def __init__(self, arcs, seed=1337, max_pieces=70, max_depth=7):
+        import random
+        self.zips = {a: zipfile.ZipFile(a) for a in arcs if os.path.exists(a)}
+        self.rng = random.Random(seed)
+        self.max_pieces = max_pieces
+        self.max_depth = max_depth
+        self.nbt_cache: dict[str, object] = {}
+        self.jig_cache: dict[str, list] = {}
+
+    def _read(self, path):
+        for zf in self.zips.values():
+            try:
+                return zf.read(path)
+            except KeyError:
+                continue
+        return None
+
+    def read_json_rl(self, kind, rl):
+        ns, rest = rl.split(":", 1)
+        blob = self._read(f"data/{ns}/worldgen/{kind}/{rest}.json")
+        return json.loads(blob.decode("utf-8-sig")) if blob else None
+
+    def load_nbt_rl(self, rl):
+        if rl in self.nbt_cache:
+            return self.nbt_cache[rl]
+        ns, rest = rl.split(":", 1)
+        blob = (self._read(f"data/{ns}/structures/{rest}.nbt")
+                or self._read(f"data/{ns}/structure/{rest}.nbt"))
+        nbt = load_nbt(blob) if blob else None
+        self.nbt_cache[rl] = nbt
+        return nbt
+
+    def jigsaw_blocks(self, rl):
+        """[(pos, facing, name, target, pool)] for a piece."""
+        if rl in self.jig_cache:
+            return self.jig_cache[rl]
+        out = []
+        nbt = self.load_nbt_rl(rl)
+        if nbt is not None:
+            palette = nbt.get("palette") or (nbt.get("palettes") or [[]])[0]
+            jig_states = {}
+            for i, p in enumerate(palette):
+                if str(p["Name"]) == "minecraft:jigsaw":
+                    ori = str((p.get("Properties") or {}).get(
+                        "orientation", "north_up"))
+                    jig_states[i] = ori.split("_")[0]
+            for b in nbt.get("blocks") or []:
+                st = int(b["state"])
+                if st not in jig_states:
+                    continue
+                bn = b.get("nbt") or {}
+                out.append((tuple(int(v) for v in b["pos"]), jig_states[st],
+                            str(bn.get("name", "")), str(bn.get("target", "")),
+                            str(bn.get("pool", ""))))
+        self.jig_cache[rl] = out
+        return out
+
+    def pool_elements(self, pool_rl):
+        pj = self.read_json_rl("template_pool", pool_rl)
+        if not pj:
+            return [], None
+        els = []
+        for e in pj.get("elements", []):
+            loc = (e.get("element") or {}).get("location")
+            if loc:
+                els += [loc] * max(1, int(e.get("weight", 1)))
+        return els, pj.get("fallback")
+
+    def assemble(self, start_pool):
+        els, _ = self.pool_elements(start_pool)
+        if not els:
+            return []
+        start = self.rng.choice(els)
+        nbt = self.load_nbt_rl(start)
+        if nbt is None:
+            return []
+        size = [int(v) for v in nbt["size"]]
+        placed = [(start, (0, 0, 0), 0)]
+        boxes = [((0, 0, 0), (size[0], size[1], size[2]))]
+        queue = [(start, (0, 0, 0), 0, 0)]     # rl, offset, rot, depth
+        while queue and len(placed) < self.max_pieces:
+            rl, off, rot, depth = queue.pop(0)
+            src_nbt = self.load_nbt_rl(rl)
+            ssize = [int(v) for v in src_nbt["size"]]
+            for jpos, jfac, jname, jtarget, jpool in self.jigsaw_blocks(rl):
+                if not jpool or jpool.endswith("empty"):
+                    continue
+                rx, rz = _rot_pos(jpos[0], jpos[2], ssize[0], ssize[2], rot)
+                wpos = (rx + off[0], jpos[1] + off[1], rz + off[2])
+                wfac = _rot_facing(jfac, rot)
+                d = _DIRS[wfac]
+                anchor = (wpos[0] + d[0], wpos[1] + d[1], wpos[2] + d[2])
+                pools = [jpool]
+                _, fb = self.pool_elements(jpool)
+                if fb:
+                    pools.append(fb)
+                if depth + 1 >= self.max_depth and fb:
+                    pools = [fb]
+                done = False
+                for pool_rl in pools:
+                    if done:
+                        break
+                    cands, _ = self.pool_elements(pool_rl)
+                    self.rng.shuffle(cands)
+                    for cand in cands:
+                        if done:
+                            break
+                        cnbt = self.load_nbt_rl(cand)
+                        if cnbt is None:
+                            continue
+                        csize = [int(v) for v in cnbt["size"]]
+                        cjigs = [j for j in self.jigsaw_blocks(cand)
+                                 if j[2] == jtarget or j[3] == jname]
+                        if not cjigs:
+                            cjigs = [j for j in self.jigsaw_blocks(cand)]
+                        for cpos, cfac, _, _, _ in cjigs:
+                            for crot in range(4):
+                                if _rot_facing(cfac, crot) != _OPP[wfac]:
+                                    continue
+                                ccx, ccz = _rot_pos(cpos[0], cpos[2],
+                                                    csize[0], csize[2], crot)
+                                coff = (anchor[0] - ccx, anchor[1] - cpos[1],
+                                        anchor[2] - ccz)
+                                w, dpt = _rot_dims(csize[0], csize[2], crot)
+                                box = (coff, (w, csize[1], dpt))
+                                if any(_overlap(box, b, shrink=1)
+                                       for b in boxes):
+                                    continue
+                                placed.append((cand, coff, crot))
+                                boxes.append(box)
+                                queue.append((cand, coff, crot, depth + 1))
+                                done = True
+                                break
+                            if done:
+                                break
+        return placed
+
+    def parts(self, start_pool):
+        return [(self.load_nbt_rl(rl), off, rot)
+                for rl, off, rot in self.assemble(start_pool)]
+
+
+def _overlap(a, b, shrink=0):
+    (ax, ay, az), (aw, ah, ad) = a
+    (bx, by, bz), (bw, bh, bd) = b
+    return (ax + shrink < bx + bw and bx + shrink < ax + aw and
+            ay + shrink < by + bh and by + shrink < ay + ah and
+            az + shrink < bz + bd and bz + shrink < az + ad)
+
+
+# slug, ns, worldgen/structure resource location, seed, max pieces, cutaway
+JIGSAW_EXAMPLES = [
+    ("turnback-cave-example", "legendarymonuments",
+     "legendarymonuments:turnback_cave", 7, 60, 0.55),
+    ("lush-shipwreck-cove", "cobblemon",
+     "cobblemon:shipwreck_coves/lush_shipwreck_cove", 7, 40, 0.45),
+    ("submerged-shipwreck-cove", "cobblemon",
+     "cobblemon:shipwreck_coves/submerged_shipwreck_cove", 7, 40, 0.45),
+]
+
+
+def render_jigsaw_example(slug, struct_rl, seed, max_pieces, idx,
+                          cutaway=None):
+    jig = Jigsaw(STRUCT_SOURCES, seed=seed, max_pieces=max_pieces)
+    sj = jig.read_json_rl("structure", struct_rl)
+    if not sj or "start_pool" not in sj:
+        return None
+    jig.max_depth = min(int(sj.get("size", 6)) + 1, 9)
+    parts = jig.parts(sj["start_pool"])
+    if not parts:
+        return None
+    print(f"  {slug}: assembled {len(parts)} pieces")
+    return render_parts(parts, idx, y_clip_frac=cutaway)
+
+
 # ---------------------------------------------------------------- inventory
 
 _PIECE_RE = re.compile(r"/\d{1,4}\.nbt$")
@@ -318,6 +548,8 @@ def inventory():
                 continue
             if _PIECE_RE.search(n):
                 continue                    # other numeric pieces - skip
+            if any(w in n for w in _STANDALONE_EXCLUDE):
+                continue
             if info.file_size < 2500:
                 continue
             m = re.match(r"data/([^/]+)/structures?/(.+)\.nbt$", n)
@@ -382,6 +614,26 @@ def main() -> None:
                 print(f"  {e['slug']}: {type(ex).__name__}: {ex}")
         if i % 25 == 0:
             print(f"  ... {i}/{len(todo)}")
+
+    for slug, ns, struct_rl, seed, max_pieces, cut in JIGSAW_EXAMPLES:
+        if only is not None and only not in slug:
+            continue
+        out_path = os.path.join(OUT, f"{slug}.png")
+        if not os.path.exists(out_path) or only is not None:
+            try:
+                img = render_jigsaw_example(slug, struct_rl, seed,
+                                            max_pieces, idx, cut)
+                if img is not None:
+                    img.save(out_path)
+                    ok += 1
+            except Exception as ex:
+                err += 1
+                print(f"  {slug}: {type(ex).__name__}: {ex}")
+    for slug, ns, struct_rl, seed, max_pieces, cut in JIGSAW_EXAMPLES:
+        if os.path.exists(os.path.join(OUT, f"{slug}.png")):
+            inv.append({"slug": slug, "ns": ns, "arc": "",
+                        "rel": slug.replace("-", "_") + " (example layout)",
+                        "size": 999_000})
 
     with open(os.path.join(ROOT, "data", "structures.json"), "w",
               encoding="utf-8") as fh:
