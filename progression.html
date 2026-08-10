@@ -402,6 +402,9 @@ footer.gen a{color:var(--silt);text-decoration:underline}
         e.i.slice(c + 1).replace(/\//g, '__') + '.png" alt="" loading="lazy" ' +
         'onerror="this.style.visibility=\'hidden\'">';
     }
+    if(e.k === 'trainer')
+      return '<img src="renders/trainers/' + e.i + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
     return '<span style="width:26px;flex-shrink:0"></span>';
   }
   function urlOf(e){
@@ -511,7 +514,10 @@ footer.gen a{color:var(--silt);text-decoration:underline}
         '<div class="hc-m" style="text-transform:none">' + esc(info.id) + '</div>' +
         (e.tip ? '<div class="hc-d">' + esc(e.tip) + '</div>' : '') + '</div>';
     } else {
-      html = (e.ld ? monImg(e.ld, e.ldx) : '') +
+      var fb = e.ld ? 'renders/' + esc(e.ld) + '.png' : '';
+      html = '<img src="renders/trainers/' + esc(info.id) + '.png" alt="" ' +
+        'onerror="if(this.dataset.f||!this.dataset.fb){this.style.display=\'none\'}' +
+        'else{this.dataset.f=1;this.src=this.dataset.fb}" data-fb="' + fb + '">' +
         '<div><div class="hc-t">' + esc(e.n) + '</div>' +
         (e.s ? '<div class="hc-m">' + esc(e.s) + ' series</div>' : '') +
         '<div class="hc-d" style="font-style:normal">' + esc(e.c) + ' Pokémon' +

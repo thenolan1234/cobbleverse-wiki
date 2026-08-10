@@ -718,6 +718,8 @@ function renderList(){
     const lv = t.team.length ? Math.max(...t.team.map(m => m.level || 0)) : '';
     return `<div class="row" role="option" data-id="${escHtml(id)}"
        aria-selected="${id === current}" tabindex="0">
+      <img class="spr" src="renders/trainers/${escHtml(id)}.png" style="width:26px;height:26px"
+        alt="" loading="lazy" onerror="this.remove()">
       <span class="nm">${escHtml(t.name)}</span>
       <span class="ns">${t.team.length}× lv≤${lv}</span>
     </div>`;
@@ -732,10 +734,14 @@ function show(id){
   renderList();
   const mob = DATA.mobs[id];
 
-  let html = `<div class="item-head"><h2>${escHtml(t.name)}</h2>
+  let html = `<div class="item-head" style="display:flex;gap:18px;align-items:center">
+    <img class="spr" src="renders/trainers/${escHtml(id)}.png" style="width:110px;height:110px"
+      alt="" onerror="this.remove()">
+    <div><h2>${escHtml(t.name)}</h2>
     <div class="id">${escHtml(id)}</div>
     <div style="margin-top:8px">${seriesOf(id).map(s =>
       `<span class="badge">${escHtml((DATA.series[s] || {}).title || s)}</span> `).join('')}</div>
+    </div>
   </div>`;
 
   if(mob){
@@ -832,7 +838,11 @@ def _trainers_guide_html(guide: dict | None, names: dict) -> str:
                     b.split(":")[-1].replace("_", " ").title()
                     for b in (g.get("biomes") or [])) or "—"
                 out.append(
-                    f'<tr><td><a href="#{esc(g["trainerId"])}">{esc(g["name"])}</a></td>'
+                    f'<tr><td><img class="spr" src="renders/trainers/'
+                    f'{esc(g["trainerId"])}.png" style="width:30px;height:30px;'
+                    f'margin:-6px 6px -6px 0" alt="" loading="lazy" '
+                    f'onerror="this.remove()">'
+                    f'<a href="#{esc(g["trainerId"])}">{esc(g["name"])}</a></td>'
                     f'<td>{esc(g.get("levels") or "?")}</td>'
                     f'<td>{badge_cell}</td><td>{sig_cell}</td>'
                     f'<td class="meta">{esc(biomes)}</td></tr>')

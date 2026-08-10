@@ -41,6 +41,10 @@ Images come from three generated folders, all offline:
   own Bedrock models and textures** by `tools/render_models.py`, posed with
   each species' idle animation. These are the hero images on Pokédex pages
   and trainer team cards.
+- `renders/trainers/` — trainer NPC portraits rendered from their Minecraft
+  skins (shipped in the pack's RCT resource pack) by
+  `tools/render_trainers.py`, shown on trainer pages, gym tables, search
+  results and hover cards.
 - `sprites/` (+ `sprites/shiny/`) — 96×96 official 2D game sprites from the
   PokéAPI sprites repository, used as small inline images and as the fallback
   for species Cobblemon has no model for. Pokémon © Nintendo / Game Freak.
