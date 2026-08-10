@@ -1,0 +1,764 @@
+{
+ "title": "Progression Guide — Your Road to Champion",
+ "intro": "<p>COBBLEVERSE turns survival Minecraft into a full Pokémon league challenge. The moment you join, the pack's root advancement — <b>COBBLEVERSE: Press C to Start!</b> — asks you to choose your first Pokémon and begin your adventure. From there the loop is simple: train under your current level cap, hunt down the next key trainer, earn the badge, and watch the cap rise. Keep a <b>Trainer Card</b> in your inventory — wild trainers only spawn naturally around players carrying one.</p><p>Four regions are playable, each as its own RCT trainer series with its own gym circuit, Elite Four, Champion and legendary postgame: <b>Kanto</b> (active by default, difficulty 7/10), then the add-on regions <b>Johto</b> (8/10), <b>Hoenn</b> (8/10) and <b>Sinnoh</b> (9/10). Key trainers must be beaten in strict order — each gym leader only starts spawning once you have defeated the previous one — and every victory is tracked by an advancement, so your advancement screen doubles as a quest log.</p><p>Beyond the league lines, the Mega Showdown mod ships its own advancement tree covering Mega Evolution and bond content (34 advancements under its own tab). For full gym leader teams and spawn locations see <a href=\"trainers.html\">Trainers</a>; for where to catch everything, see the <a href=\"pokedex.html\">Pokédex</a>.</p>",
+ "levelCapNote": "<p>COBBLEVERSE uses Radical Cobblemon Trainers (RCT) to pace your journey. Your Pokémon <b>stop gaining experience at the level cap</b> (over-leveling is disabled in the pack config), and the cap climbs only as you defeat the key trainers of your active series.</p><ul><li><b>Starting cap:</b> effectively <b>25</b> — the cap always tracks the next required key trainer (their ace's level + 5), which for Brock means 20 + 5. The configured <code>initialLevelCap = 20</code> is a floor that never binds in Kanto.</li><li><b>How it rises:</b> your cap always tracks the <b>next required key trainer</b> in your series — the level of their strongest Pokémon plus <code>relativeLevelCap = 5</code>. In Kanto that means roughly: Brock 25, Misty 30, Lt. Surge 40, Erika 45, Koga 55, Sabrina 60, Blaine 65, Giovanni 75, then the Elite Four at 80/85/90/95 and a full cap of 100 for the Champion.</li><li><b>Strict order:</b> each gym leader, Elite Four member and Champion only spawns after the previous key trainer in the chain is beaten.</li><li><b>Trainer Card:</b> <code>spawningRequiresTrainerCard = true</code> — no card in your inventory, no wild trainers.</li><li><b>Matchmaking:</b> <code>maxLevelDiff = 10</code> keeps naturally spawning trainers within roughly ten levels of your team (key trainers are exempt).</li><li><b>Freeroam:</b> after completing any series you can switch to <b>freeroam</b> at a Trainer Association clerk, which grants a flat level cap of 100 while pausing series progression.</li></ul>",
+ "regions": [
+  {
+   "id": "kanto",
+   "title": "Gen 1: Kanto",
+   "note": "<p>Kanto is where every player starts: the <code>COBBLEVERSE-DP-v31</code> datapack ships active in the <code>datapacks</code> folder, and the RCT config places new players in the <b>Kanto</b> series (difficulty 7/10) automatically. The <b>Gen 1: Kanto</b> advancement — <i>\"Embark on a journey through the region where it all began\"</i> — opens the tree.</p><p>The eight gym leaders roam specific overworld biomes and must be beaten in order. Once Giovanni falls, the <b>Elite Four and Champion Blue spawn in the End dimension</b> — bring an End-ready team. The Legendary Birds and the Mew/Mewtwo questline round out the postgame.</p>",
+   "milestones": [
+    {
+     "title": "Boulder Badge",
+     "desc": "Defeat Leader Brock, the first gym of the Kanto circuit. His team tops out at a Lv. 20 Onix.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_brock",
+     "trainerId": "kanto_brock",
+     "icon": "cobbleversebadges:kanto_boulder_badge"
+    },
+    {
+     "title": "Cascade Badge",
+     "desc": "Defeat Leader Misty. Her ace is Lv. 25; she spawns in ocean biomes once Brock is beaten.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_misty",
+     "trainerId": "kanto_misty",
+     "icon": "cobbleversebadges:kanto_cascade_badge"
+    },
+    {
+     "title": "Thunder Badge",
+     "desc": "Defeat Leader Lt. Surge, whose team peaks at Lv. 35.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_ltsurge",
+     "trainerId": "kanto_ltsurge",
+     "icon": "cobbleversebadges:kanto_thunder_badge"
+    },
+    {
+     "title": "Rainbow Badge",
+     "desc": "Defeat Leader Erika, whose team peaks at Lv. 40.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_erika",
+     "trainerId": "kanto_erika",
+     "icon": "cobbleversebadges:kanto_rainbow_badge"
+    },
+    {
+     "title": "Soul Badge",
+     "desc": "Defeat Leader Koga, whose team peaks at Lv. 50.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_koga",
+     "trainerId": "kanto_koga",
+     "icon": "cobbleversebadges:kanto_soul_badge"
+    },
+    {
+     "title": "Marsh Badge",
+     "desc": "Defeat Leader Sabrina, whose team peaks at Lv. 55.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_sabrina",
+     "trainerId": "kanto_sabrina",
+     "icon": "cobbleversebadges:kanto_marsh_badge"
+    },
+    {
+     "title": "Volcano Badge",
+     "desc": "Defeat Leader Blaine, whose team peaks at Lv. 60.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_blaine",
+     "trainerId": "kanto_blaine",
+     "icon": "cobbleversebadges:kanto_volcano_badge"
+    },
+    {
+     "title": "Earth Badge",
+     "desc": "Defeat Leader Giovanni for Kanto's final badge. He hides in Deep Dark biomes where Ancient Cities generate, with a team up to Lv. 70.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/kanto/defeat_giovanni",
+     "trainerId": "kanto_giovanni",
+     "icon": "cobbleversebadges:kanto_earth_badge"
+    },
+    {
+     "title": "Road to Victory",
+     "desc": "Defeat Elite Four Lorelei (ace Lv. 75), the first of the four masters awaiting you in the End.",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/kanto/defeat_elite_lorelei",
+     "trainerId": "kanto_league_lorelei",
+     "icon": "cobblemon:never_melt_ice"
+    },
+    {
+     "title": "Unyielding Strength",
+     "desc": "Defeat Elite Four Bruno (ace Lv. 80).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/kanto/defeat_elite_bruno",
+     "trainerId": "kanto_league_bruno",
+     "icon": "cobblemon:punching_glove"
+    },
+    {
+     "title": "Shadows before Triumph",
+     "desc": "Defeat Elite Four Agatha (ace Lv. 85).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/kanto/defeat_elite_agatha",
+     "trainerId": "kanto_league_agatha",
+     "icon": "cobblemon:spell_tag"
+    },
+    {
+     "title": "The Indigo Legend",
+     "desc": "Defeat Elite Four Lance (ace Lv. 90), the last gate before the Champion.",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/kanto/defeat_elite_lance",
+     "trainerId": "kanto_league_lance",
+     "icon": "cobblemon:dragon_scale"
+    },
+    {
+     "title": "Champion of Kanto",
+     "desc": "Defeat Blue and become the new Champion. He fields a full Lv. 100 team led by all three Legendary Birds.",
+     "kind": "champion",
+     "advId": "cobbleverse:trainer/kanto/defeat_champion_blue",
+     "trainerId": "kanto_champion_blue",
+     "icon": "cobbleversebadges:kanto_league_trophy"
+    },
+    {
+     "title": "Arctic Spirit",
+     "desc": "Catch Articuno, the Legendary Ice Bird.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_articuno",
+     "icon": "lumymon:glacier_feather"
+    },
+    {
+     "title": "Electric Storm",
+     "desc": "Catch Zapdos, the Legendary Thunder Bird.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_zapdos",
+     "icon": "lumymon:thunder_feather"
+    },
+    {
+     "title": "Scarlet Phoenix",
+     "desc": "Catch Moltres, the Legendary Fire Bird.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_moltres",
+     "icon": "lumymon:ember_feather"
+    },
+    {
+     "title": "Ancestor's Legacy",
+     "desc": "After earning the Earth Badge, claim Mew's DNA — the essence of the Ancestor of all Pokémon.",
+     "kind": "item",
+     "advId": "cobbleverse:item/obtain_mew_dna",
+     "icon": "lumymon:ancient_dna"
+    },
+    {
+     "title": "Project: Resurrection",
+     "desc": "Insert Mew's DNA and a Cloning Catalyst into the Resurrection Machine to give life to Mewtwo.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/revive_mewtwo",
+     "icon": "lumymon:cloning_catalyst"
+    },
+    {
+     "title": "Ancient's Imprint",
+     "desc": "After beating Champion Blue, craft the mysterious Origin Fossil.",
+     "kind": "item",
+     "advId": "cobbleverse:item/craft_origin_fossil",
+     "icon": "cobblemon:ancient_origin_ball"
+    },
+    {
+     "title": "Whisper of the Myth",
+     "desc": "Awaken Mew at its shrine with the Origin Fossil and catch it.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_mew",
+     "icon": "lumymon:origin_fossil"
+    }
+   ]
+  },
+  {
+   "id": "johto",
+   "title": "Gen 2: Johto",
+   "note": "<p>Johto is an optional add-on: its datapack ships at <code>datapacks/extra/COBBLEVERSE-Johto-DP.zip</code> and is <b>not active</b> until you move the zip into the profile's <code>datapacks</code> folder (game closed, then relaunch — see <a href=\"world.html\">World &amp; Regions</a> for the exact steps). It adds the <b>Gen 2: Johto</b> advancement line — <i>\"Discover ancient wonders and the legacies of its past\"</i> — and the <b>Johto</b> trainer series (difficulty 8/10), which you activate at a Trainer Association clerk.</p><p>Eight new gym leaders await, and as in Kanto the <b>Elite Four and Champion Lance spawn in the End</b>. The postgame chases the Tower Duo, Celebi, and an exclusive Armored Mewtwo questline.</p>",
+   "milestones": [
+    {
+     "title": "Zephyr Badge",
+     "desc": "Defeat Leader Valerio, Johto's first gym leader (ace Lv. 20).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_valerio",
+     "trainerId": "johto_valerio",
+     "icon": "cobbleversebadges:johto_zephyr_badge"
+    },
+    {
+     "title": "Hive Badge",
+     "desc": "Defeat Leader Raffaello (ace Lv. 30).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_raffaello",
+     "trainerId": "johto_raffaello",
+     "icon": "cobbleversebadges:johto_hive_badge"
+    },
+    {
+     "title": "Plain Badge",
+     "desc": "Defeat Leader Chiara (ace Lv. 35).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_chiara",
+     "trainerId": "johto_chiara",
+     "icon": "cobbleversebadges:johto_plain_badge"
+    },
+    {
+     "title": "Fog Badge",
+     "desc": "Defeat Leader Angelo (ace Lv. 45).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_angelo",
+     "trainerId": "johto_angelo",
+     "icon": "cobbleversebadges:johto_fog_badge"
+    },
+    {
+     "title": "Storm Badge",
+     "desc": "Defeat Leader Furio (ace Lv. 50).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_furio",
+     "trainerId": "johto_furio",
+     "icon": "cobbleversebadges:johto_storm_badge"
+    },
+    {
+     "title": "Mineral Badge",
+     "desc": "Defeat Leader Jasmine (ace Lv. 60).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_jasmine",
+     "trainerId": "johto_jasmine",
+     "icon": "cobbleversebadges:johto_mineral_badge"
+    },
+    {
+     "title": "Glacier Badge",
+     "desc": "Defeat Leader Alfredo (ace Lv. 65).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_alfredo",
+     "trainerId": "johto_alfredo",
+     "icon": "cobbleversebadges:johto_glacier_badge"
+    },
+    {
+     "title": "Rising Badge",
+     "desc": "Defeat Leader Sandra, Johto's final gym leader (ace Lv. 70).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/johto/defeat_sandra",
+     "trainerId": "johto_sandra",
+     "icon": "cobbleversebadges:johto_rising_badge"
+    },
+    {
+     "title": "No Turning Back",
+     "desc": "Defeat Elite Four Pino (ace Lv. 75), first of the Johto League in the End.",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/johto/defeat_elite_pino",
+     "trainerId": "johto_league_pino",
+     "icon": "cobblemon:power_lens"
+    },
+    {
+     "title": "Toxic Tenacity",
+     "desc": "Defeat Elite Four Koga (ace Lv. 80).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/johto/defeat_elite_koga",
+     "trainerId": "johto_league_koga",
+     "icon": "cobblemon:loaded_dice"
+    },
+    {
+     "title": "Iron Will",
+     "desc": "Defeat Elite Four Bruno (ace Lv. 85).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/johto/defeat_elite_bruno",
+     "trainerId": "johto_league_bruno",
+     "icon": "cobblemon:muscle_band"
+    },
+    {
+     "title": "Embrace the Shadows",
+     "desc": "Defeat Elite Four Karen (ace Lv. 90).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/johto/defeat_elite_karen",
+     "trainerId": "johto_league_karen",
+     "icon": "cobblemon:razor_claw"
+    },
+    {
+     "title": "Master of the Twin Regions",
+     "desc": "Defeat Lance and his Lv. 100 team to become the new Champion of Johto.",
+     "kind": "champion",
+     "advId": "cobbleverse:trainer/johto/defeat_champion_lance",
+     "trainerId": "johto_champion_lance",
+     "icon": "cobbleversebadges:johto_league_trophy"
+    },
+    {
+     "title": "Protector of the Depths",
+     "desc": "After earning the Rising Badge, catch Lugia, the Guardian of the Seas.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_lugia",
+     "icon": "lumymon:silver_wing"
+    },
+    {
+     "title": "Prismatic Glory",
+     "desc": "Catch Ho-Oh, the Guardian of the Skies.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_hooh",
+     "icon": "lumymon:rainbow_wing"
+    },
+    {
+     "title": "Voice of the Forest",
+     "desc": "Acquire the GS Ball from the legendary trainer Red — whose Lv. 100 team includes all three Kanto starters — and summon Celebi.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_celebi",
+     "trainerId": "rival_red",
+     "icon": "lumymon:gs_ball"
+    },
+    {
+     "title": "Rocket Plating",
+     "desc": "Forge the formidable Rocket Armor at a Smithing Table (unlocked deep in the Mewtwo questline).",
+     "kind": "item",
+     "advId": "cobbleverse:item/forge_rocket_armor",
+     "icon": "lumymon:rocket_armor"
+    },
+    {
+     "title": "Unleash Armored Form",
+     "desc": "Equip the Rocket Armor and witness Mewtwo's transformation into its ultimate armored state.",
+     "kind": "other",
+     "advId": "cobbleverse:pokemon/equip_armored_mewtwo",
+     "icon": "lumymon:synthetic_matrix"
+    }
+   ]
+  },
+  {
+   "id": "hoenn",
+   "title": "Gen 3: Hoenn",
+   "note": "<p>Hoenn is an optional add-on: move <code>datapacks/extra/COBBLEVERSE-Hoenn-DP.zip</code> into the profile's <code>datapacks</code> folder (game closed, then relaunch — see <a href=\"world.html\">World &amp; Regions</a> for the exact steps) to activate it, then start the <b>Hoenn</b> series (difficulty 8/10) at a Trainer Association clerk. The <b>Gen 3: Hoenn</b> advancement line invites you to <i>\"explore new vibrant lands and confront the raw power of nature\"</i>.</p><p>Unlike the first two regions, the Hoenn Elite Four and Champion Rocco spawn in <b>Steppe</b> biomes in the overworld. The postgame is the pack's weather-trio spectacle: Kyogre, Groudon and Mega Rayquaza atop the Sky Pillar, plus the Regi golems, the Eon duo, Jirachi and Deoxys.</p> <b>Requires Terralith:</b> this region's gyms and league generate in Terralith biomes — enable <code>Terralith-DP.zip</code> as well.",
+   "milestones": [
+    {
+     "title": "Stone Badge",
+     "desc": "Defeat Leader Petra, Hoenn's first gym leader (ace Lv. 21).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_petra",
+     "trainerId": "hoenn_petra",
+     "icon": "cobbleversebadges:hoenn_stone_badge"
+    },
+    {
+     "title": "Knuckle Badge",
+     "desc": "Defeat Leader Rudi (ace Lv. 30).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_rudi",
+     "trainerId": "hoenn_rudi",
+     "icon": "cobbleversebadges:hoenn_knuckle_badge"
+    },
+    {
+     "title": "Dynamo Badge",
+     "desc": "Defeat Leader Walter (ace Lv. 36).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_walter",
+     "trainerId": "hoenn_walter",
+     "icon": "cobbleversebadges:hoenn_dynamo_badge"
+    },
+    {
+     "title": "Heat Badge",
+     "desc": "Defeat Leader Fiammetta (ace Lv. 42).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_fiammetta",
+     "trainerId": "hoenn_fiammetta",
+     "icon": "cobbleversebadges:hoenn_heat_badge"
+    },
+    {
+     "title": "Balance Badge",
+     "desc": "Defeat Leader Norman (ace Lv. 50).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_norman",
+     "trainerId": "hoenn_norman",
+     "icon": "cobbleversebadges:hoenn_balance_badge"
+    },
+    {
+     "title": "Feather Badge",
+     "desc": "Defeat Leader Alice (ace Lv. 56).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_alice",
+     "trainerId": "hoenn_alice",
+     "icon": "cobbleversebadges:hoenn_feather_badge"
+    },
+    {
+     "title": "Mind Badge",
+     "desc": "Defeat Leaders Tell & Pat, the twin psychics (ace Lv. 62).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_tell",
+     "trainerId": "hoenn_tell",
+     "icon": "cobbleversebadges:hoenn_mind_badge"
+    },
+    {
+     "title": "Rain Badge",
+     "desc": "Defeat Leader Adriano, Hoenn's final gym leader (ace Lv. 70); he spawns in cold ocean waters.",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/hoenn/defeat_adriano",
+     "trainerId": "hoenn_adriano",
+     "icon": "cobbleversebadges:hoenn_rain_badge"
+    },
+    {
+     "title": "Shadow's End",
+     "desc": "Defeat Elite Four Fosco (ace Lv. 77), first of the Hoenn League.",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/hoenn/defeat_elite_fosco",
+     "trainerId": "hoenn_league_fosco",
+     "icon": "lumymon:dark_bass"
+    },
+    {
+     "title": "Spirit's Rest",
+     "desc": "Defeat Elite Four Ester (ace Lv. 82).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/hoenn/defeat_elite_ester",
+     "trainerId": "hoenn_league_ester",
+     "icon": "lumymon:ghost_bloom"
+    },
+    {
+     "title": "Winter's Demise",
+     "desc": "Defeat Elite Four Frida (ace Lv. 86).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/hoenn/defeat_elite_frida",
+     "trainerId": "hoenn_league_frida",
+     "icon": "lumymon:ice_necklace"
+    },
+    {
+     "title": "Dragon's Roar",
+     "desc": "Defeat Elite Four Drake (ace Lv. 91).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/hoenn/defeat_elite_drake",
+     "trainerId": "hoenn_league_drake",
+     "icon": "lumymon:dragon_cap"
+    },
+    {
+     "title": "Hoenn's Ultimate Master",
+     "desc": "Defeat Rocco and his Lv. 100 team to become the new Champion of Hoenn.",
+     "kind": "champion",
+     "advId": "cobbleverse:trainer/hoenn/defeat_champion_rocco",
+     "trainerId": "hoenn_champion_rocco",
+     "icon": "cobbleversebadges:hoenn_league_trophy"
+    },
+    {
+     "title": "Stone Colossus",
+     "desc": "Catch Regirock, the Rock Peak Pokémon — the first of the Regi golems, available as soon as you start Gen 3.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_regirock",
+     "icon": "lumymon:pebble_relic"
+    },
+    {
+     "title": "Glacial Guardian",
+     "desc": "Catch Regice, the Iceberg Pokémon.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_regice",
+     "icon": "lumymon:cryo_relic"
+    },
+    {
+     "title": "Iron Bastion",
+     "desc": "Catch Registeel, the Iron Pokémon.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_registeel",
+     "icon": "lumymon:metal_relic"
+    },
+    {
+     "title": "Oceanic Sapphire",
+     "desc": "After earning the Rain Badge, catch Kyogre, the Creator of Oceans.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_kyogre",
+     "icon": "lumymon:ocean_core"
+    },
+    {
+     "title": "Volcanic Ruby",
+     "desc": "Catch Groudon, the Creator of Continents.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_groudon",
+     "icon": "lumymon:earth_core"
+    },
+    {
+     "title": "Celestial Emerald",
+     "desc": "Catch Mega Rayquaza at the top of the Sky Pillar.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_rayquaza_mega",
+     "icon": "lumymon:emerald_emblem"
+    },
+    {
+     "title": "Crimson Comet",
+     "desc": "After becoming Champion, catch Latias, the female Eon Pokémon.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_latias",
+     "icon": "lumymon:ruby_dew"
+    },
+    {
+     "title": "Azure Jet",
+     "desc": "Catch Latios, the male Eon Pokémon.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_latios",
+     "icon": "lumymon:sapphire_dew"
+    },
+    {
+     "title": "Wishful Star",
+     "desc": "Summon Jirachi at its shrine with the Melodic Tape (Vol. 1) and catch it.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_jirachi",
+     "icon": "lumymon:melodic_tape_vol_1"
+    },
+    {
+     "title": "Cosmic Virus",
+     "desc": "Find Deoxys's Meteorite and catch the DNA Pokémon.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_deoxys",
+     "icon": "lumymon:meteorite_crystal"
+    }
+   ]
+  },
+  {
+   "id": "sinnoh",
+   "title": "Gen 4: Sinnoh",
+   "note": "<p>Sinnoh is the hardest and most content-dense region: move <code>datapacks/extra/COBBLEVERSE-Sinnoh-DP.zip</code> into the profile's <code>datapacks</code> folder (game closed, then relaunch — see <a href=\"world.html\">World &amp; Regions</a> for the exact steps) to activate it, then start the <b>Sinnoh</b> series (difficulty 9/10) at a Trainer Association clerk. The <b>Gen 4: Sinnoh</b> line asks you to <i>\"seek the ancient myths of time and space\"</i>.</p><p>Sinnoh runs <b>two storylines in parallel</b>: the eight-badge gym circuit (League in Desert Oasis biomes), and the Team Galactic questline — Commanders Mars, Jupiter and Saturn each guard a Lake Proof, and defeating Cyrus wins the Red Chain. Both roads converge on the creation trio and, ultimately, Arceus at the Temple of Sinnoh. The Sinnoh postgame also continues the Regi saga begun in Hoenn and ends with Manaphy, Shaymin and more.</p> <b>Requires Terralith:</b> this region's gyms and league generate in Terralith biomes — enable <code>Terralith-DP.zip</code> as well.",
+   "milestones": [
+    {
+     "title": "Coal Badge",
+     "desc": "Defeat Leader Pedro, Sinnoh's first gym leader (ace Lv. 30).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_pedro",
+     "trainerId": "sinnoh_pedro",
+     "icon": "cobbleversebadges:sinnoh_coal_badge"
+    },
+    {
+     "title": "Forest Badge",
+     "desc": "Defeat Leader Gardenia (ace Lv. 36).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_gardenia",
+     "trainerId": "sinnoh_gardenia",
+     "icon": "cobbleversebadges:sinnoh_forest_badge"
+    },
+    {
+     "title": "Cobble Badge",
+     "desc": "Defeat Leader Marzia (ace Lv. 43).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_marzia",
+     "trainerId": "sinnoh_marzia",
+     "icon": "cobbleversebadges:sinnoh_cobble_badge"
+    },
+    {
+     "title": "Fen Badge",
+     "desc": "Defeat Leader Omar (ace Lv. 49).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_omar",
+     "trainerId": "sinnoh_omar",
+     "icon": "cobbleversebadges:sinnoh_fen_badge"
+    },
+    {
+     "title": "Relic Badge",
+     "desc": "Defeat Leader Fannie (ace Lv. 55).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_fannie",
+     "trainerId": "sinnoh_fannie",
+     "icon": "cobbleversebadges:sinnoh_relic_badge"
+    },
+    {
+     "title": "Mine Badge",
+     "desc": "Defeat Leader Ferruccio (ace Lv. 60).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_ferruccio",
+     "trainerId": "sinnoh_ferruccio",
+     "icon": "cobbleversebadges:sinnoh_mine_badge"
+    },
+    {
+     "title": "Icicle Badge",
+     "desc": "Defeat Leader Bianca (ace Lv. 67).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_bianca",
+     "trainerId": "sinnoh_bianca",
+     "icon": "cobbleversebadges:sinnoh_icicle_badge"
+    },
+    {
+     "title": "Beacon Badge",
+     "desc": "Defeat Leader Corrado, Sinnoh's final gym leader (ace Lv. 75).",
+     "kind": "badge",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_corrado",
+     "trainerId": "sinnoh_corrado",
+     "icon": "cobbleversebadges:sinnoh_beacon_badge"
+    },
+    {
+     "title": "Windy Confrontation",
+     "desc": "Defeat Commander Mars at the Wind Plant to secure the first Lake Proof.",
+     "kind": "other",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_commander_mars",
+     "trainerId": "team_galactic_commander_mars",
+     "icon": "lumymon:verity_proof"
+    },
+    {
+     "title": "Eternal Disputation",
+     "desc": "Defeat Commander Jupiter in the Eterna Building to obtain a Lake Proof.",
+     "kind": "other",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_commander_jupiter",
+     "trainerId": "team_galactic_commander_jupiter",
+     "icon": "lumymon:acuity_proof"
+    },
+    {
+     "title": "Headquarters Infiltration",
+     "desc": "Defeat Commander Saturn in the Galactic HQ tower and claim the final Lake Proof.",
+     "kind": "other",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_commander_saturn",
+     "trainerId": "team_galactic_commander_saturn",
+     "icon": "lumymon:valor_proof"
+    },
+    {
+     "title": "New World Order",
+     "desc": "Defeat Cyrus at the Galactic HQ (team up to Lv. 88) and seize the Red Chain before he can rewrite the laws of the universe.",
+     "kind": "other",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_boss_cyrus",
+     "trainerId": "team_galactic_cyrus",
+     "icon": "lumymon:red_chain"
+    },
+    {
+     "title": "The Buzz Stops Here",
+     "desc": "Defeat Elite Four Aaron (ace Lv. 82), first of the Sinnoh League.",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_elite_aaron",
+     "trainerId": "sinnoh_league_aaron",
+     "icon": "lumymon:bug_net"
+    },
+    {
+     "title": "The Quake is Over",
+     "desc": "Defeat Elite Four Terrie (ace Lv. 84).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_elite_terrie",
+     "trainerId": "sinnoh_league_terrie",
+     "icon": "lumymon:ground_shawl"
+    },
+    {
+     "title": "Volcanic Ashes",
+     "desc": "Defeat Elite Four Vulcano (ace Lv. 86).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_elite_vulcano",
+     "trainerId": "sinnoh_league_vulcano",
+     "icon": "lumymon:fire_flint"
+    },
+    {
+     "title": "Knowledge Supremacy",
+     "desc": "Defeat Elite Four Luciano (ace Lv. 90).",
+     "kind": "elite",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_elite_luciano",
+     "trainerId": "sinnoh_league_luciano",
+     "icon": "lumymon:psychic_volume"
+    },
+    {
+     "title": "The Queen's Gambit",
+     "desc": "Defeat Camilla and her Lv. 100 team to become the new Champion of Sinnoh.",
+     "kind": "champion",
+     "advId": "cobbleverse:trainer/sinnoh/defeat_champion_camilla",
+     "trainerId": "sinnoh_champion_camilla",
+     "icon": "cobbleversebadges:sinnoh_league_trophy"
+    },
+    {
+     "title": "The Knowledge Bringer",
+     "desc": "After defeating Cyrus, catch Uxie, the Being of Knowledge from Lake Acuity.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_uxie",
+     "icon": "lumymon:uxie_claw"
+    },
+    {
+     "title": "The Emotion Spirit",
+     "desc": "Catch Mesprit, the Being of Emotion from Lake Verity.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_mesprit",
+     "icon": "lumymon:mesprit_plume"
+    },
+    {
+     "title": "The Willpower Guardian",
+     "desc": "Catch Azelf, the Being of Willpower from Lake Valor.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_azelf",
+     "icon": "lumymon:azelf_fang"
+    },
+    {
+     "title": "Ruler of Time",
+     "desc": "Catch Dialga, the Legendary Pokémon that governs the flow of time.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_dialga",
+     "icon": "mega_showdown:adamant_orb"
+    },
+    {
+     "title": "Master of Space",
+     "desc": "Catch Palkia, the Legendary Pokémon that sustains spatial dimensions.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_palkia",
+     "icon": "mega_showdown:lustrous_orb"
+    },
+    {
+     "title": "Shadow of the Distortion",
+     "desc": "Catch Giratina, the banished overlord of the Distortion World.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_giratina",
+     "icon": "mega_showdown:griseous_orb"
+    },
+    {
+     "title": "The Echo of Creation",
+     "desc": "Forge the Azure Flute to transcend time and reach the Temple of Sinnoh.",
+     "kind": "item",
+     "advId": "cobbleverse:item/craft_azure_flute",
+     "icon": "lumymon:azure_flute"
+    },
+    {
+     "title": "The Original One",
+     "desc": "Catch Arceus, the Alpha Pokémon that shaped the entire universe — the summit of COBBLEVERSE's progression.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_arceus",
+     "icon": "mega_showdown:legend_plate"
+    },
+    {
+     "title": "Lava Dome Sentinel",
+     "desc": "After earning the Beacon Badge, catch Heatran, the embodiment of the planet's boiling core.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_heatran",
+     "icon": "lumymon:magmatic_cluster"
+    },
+    {
+     "title": "Lunar Grace",
+     "desc": "Catch Cresselia, the Pokémon that dispels nightmares with its light.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_cresselia",
+     "icon": "lumymon:dream_catcher"
+    },
+    {
+     "title": "Nightmare Embodiment",
+     "desc": "Confront and catch Darkrai, the master of eternal shadows.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_darkrai",
+     "icon": "lumymon:nightmare_weaver"
+    },
+    {
+     "title": "Everlasting Spark",
+     "desc": "Continue the Regi saga from Hoenn: catch Regieleki, the golem with the greatest electrical power.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_regieleki",
+     "icon": "lumymon:spark_relic"
+    },
+    {
+     "title": "Dragon Maw",
+     "desc": "Catch Regidrago, the golem made of concentrated dragon energy.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_regidrago",
+     "icon": "lumymon:draco_relic"
+    },
+    {
+     "title": "Titan of the Ages",
+     "desc": "Awaken and catch Regigigas, the creator of the colossal golems.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_regigigas",
+     "icon": "lumymon:titan_relic"
+    },
+    {
+     "title": "Prince of the Sea",
+     "desc": "After becoming Champion, obtain the rare Manaphy Egg, a treasure from the ocean's depths.",
+     "kind": "item",
+     "advId": "cobbleverse:item/obtain_manaphy_egg",
+     "icon": "cobbreeding:manaphy_egg"
+    },
+    {
+     "title": "Drifting Seed of the Sea",
+     "desc": "Hatch Phione from an egg and welcome it to your team.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/hatch_phione",
+     "icon": "minecraft:heart_of_the_sea"
+    },
+    {
+     "title": "Pallet Town Legacy",
+     "desc": "Assemble the five first companions of Kanto to earn Professor Oak's Letter.",
+     "kind": "item",
+     "advId": "cobbleverse:item/obtain_prof_oak_letter",
+     "icon": "lumymon:prof_oak_letter"
+    },
+    {
+     "title": "Gratitude Bloom",
+     "desc": "Catch Shaymin, the Pokémon that transforms ruined lands into flower fields.",
+     "kind": "legendary",
+     "advId": "cobbleverse:pokemon/catch_shaymin",
+     "icon": "mega_showdown:gracidea_flower"
+    }
+   ]
+  }
+ ]
+}

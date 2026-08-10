@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Progression · COBBLEVERSE Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0b1a20; --shelf:#12262e; --reef:#1a3540; --deep:#081318;
+  --foam:#dcecef; --tide:#5ad1c8; --amber:#f0a840; --coral:#e8735c;
+  --silt:#7fa3ae; --moss:#8fd18b;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--reef) var(--abyss)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--abyss); color:var(--foam);
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600; letter-spacing:-.02em; margin:0;
+}
+a{color:var(--tide);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:1px 5px;font-size:12.5px}
+
+/* ---- top nav ---- */
+nav.top{
+  display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;
+  padding:10px 18px;border-bottom:1px solid var(--reef);
+  background:var(--deep);position:sticky;top:0;z-index:50;
+}
+nav.top .brand{
+  font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;
+  color:var(--amber);margin-right:14px;letter-spacing:.02em;
+}
+nav.top .brand small{color:var(--silt);font-weight:400;font-size:11px;margin-left:6px}
+nav.top a.item{
+  padding:4px 10px;border-radius:3px;font-size:12.5px;color:var(--foam);
+}
+nav.top a.item:hover{background:var(--shelf);text-decoration:none}
+nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+
+/* ---- article pages ---- */
+.article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
+.article h1{font-size:30px;margin-bottom:6px}
+.article .sub{color:var(--silt);font-size:13px;margin-bottom:26px}
+.article section{margin:26px 0}
+.article h2{
+  font-size:19px;color:var(--amber);margin-bottom:10px;
+  border-bottom:1px solid var(--reef);padding-bottom:6px;
+}
+.article p{margin:9px 0}
+.article ul{margin:8px 0;padding-left:22px}
+.article li{margin:4px 0}
+.callout{
+  background:var(--shelf);border:1px solid var(--reef);
+  border-left:2px solid var(--tide);padding:12px 15px;border-radius:3px;
+  margin:14px 0;font-size:13.5px;
+}
+.callout.warn{border-left-color:var(--amber)}
+
+/* ---- home cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:4px;
+  padding:15px 16px;display:block;color:var(--foam);
+}
+.card:hover{border-color:var(--tide);text-decoration:none}
+.card h3{font-size:15px;color:var(--tide);margin-bottom:5px}
+.card p{margin:0;font-size:12.5px;color:var(--silt);line-height:1.5}
+.statrow{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0}
+.stat .n{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:600;color:var(--tide)}
+.stat .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--silt)}
+
+/* ---- browser (sidebar+detail) pages ---- */
+.wrap{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 45px)}
+@media(max-width:840px){.wrap{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--reef);display:flex;flex-direction:column;min-height:0}
+.padbox{padding:14px 16px 10px}
+.padbox h1{font-size:17px}
+.padbox p.note{margin:5px 0 0;color:var(--silt);font-size:11px;line-height:1.5}
+.searchbox{padding:0 16px 8px}
+input[type=search]{
+  width:100%;padding:8px 11px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:13px;
+}
+input[type=search]:focus,select:focus{outline:2px solid var(--tide);outline-offset:-1px}
+.filters{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap}
+.filters select,.filters label.chk{
+  background:var(--shelf);color:var(--foam);border:1px solid var(--reef);
+  border-radius:3px;font:inherit;font-size:11.5px;padding:4px 6px;
+}
+.filters label.chk{display:flex;align-items:center;gap:5px;cursor:pointer}
+#results{overflow-y:auto;flex:1;padding:0 8px 18px;min-height:0}
+.row{
+  padding:5px 10px;border-radius:3px;cursor:pointer;
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.row:hover{background:var(--shelf)}
+.row[aria-selected=true]{background:var(--reef)}
+.row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .ns{font-size:10px;color:var(--silt);flex-shrink:0}
+img.spr{image-rendering:pixelated;vertical-align:middle;flex-shrink:0}
+.chip img.spr{margin:-3px 3px -3px -2px}
+.mon img.spr{margin:-6px 2px -6px -4px}
+.empty{color:var(--silt);font-size:12px;padding:10px}
+main{overflow-y:auto;padding:24px 30px 70px;min-width:0}
+@media(max-width:840px){main{padding:18px 14px 60px}}
+.item-head{border-bottom:1px solid var(--reef);padding-bottom:14px;margin-bottom:20px}
+.item-head h2{font-size:26px}
+.id{color:var(--tide);font-size:12px;margin-top:4px;word-break:break-all}
+.tip{color:var(--silt);font-size:13px;margin-top:8px;font-style:italic}
+section.blk{margin-bottom:28px}
+section.blk>h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silt);margin-bottom:10px;
+}
+.splash{color:var(--silt);max-width:56ch;font-size:13.5px;line-height:1.8}
+.splash b{color:var(--foam);font-weight:400}
+
+/* chips */
+.chip{
+  display:inline-block;background:var(--deep);border:1px solid var(--reef);
+  border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer;color:var(--foam);
+  margin:0 4px 4px 0;
+}
+a.chip:hover{border-color:var(--tide);color:var(--tide);text-decoration:none}
+.chip.tag{border-style:dashed;color:var(--silt);cursor:default}
+.chip.plain{cursor:default}
+.src{font-size:10.5px;color:var(--silt);margin-top:6px}
+.badge{
+  display:inline-block;border-radius:3px;padding:1px 7px;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--reef);
+}
+.badge.addon{color:var(--amber);border-color:var(--amber)}
+.b-common{color:var(--silt)} .b-uncommon{color:var(--tide)}
+.b-rare{color:var(--amber)} .b-ultra-rare{color:var(--coral)}
+
+/* pokemon type chips: colored dot + text (identity never color-alone) */
+.type{
+  display:inline-flex;align-items:center;gap:6px;background:var(--deep);
+  border:1px solid var(--reef);border-radius:3px;padding:2px 9px 2px 7px;
+  font-size:12px;text-transform:capitalize;margin-right:5px;
+}
+.type i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* stat meters */
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;max-width:420px;align-items:center}
+.stats .k{font-size:11px;color:var(--silt);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stats .bar{height:6px;background:var(--reef);border-radius:3px;overflow:hidden}
+.stats .bar i{display:block;height:100%;background:var(--tide);border-radius:3px}
+.stats .v{font-size:12px;text-align:right;min-width:3ch}
+.stats .total .v,.stats .total .k{color:var(--amber)}
+
+/* generic data tables */
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+table.data th{
+  text-align:left;color:var(--silt);font-weight:400;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.1em;padding:5px 10px 5px 0;
+  border-bottom:1px solid var(--reef);
+}
+table.data td{padding:6px 10px 6px 0;border-bottom:1px solid var(--shelf);vertical-align:top}
+details.biomes{display:inline-block}
+details.biomes summary{cursor:pointer;color:var(--tide);font-size:12px;list-style:none}
+details.biomes summary::after{content:" \25be"}
+details.biomes[open] summary::after{content:" \25b4"}
+details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:4px 0}
+.meta{font-size:11.5px;color:var(--silt)}
+.bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tide)}
+.drop{
+  display:grid;grid-template-columns:1fr auto;gap:3px 16px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.drop .table{font-size:13px;word-break:break-all}
+.drop .runs{
+  font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;
+  color:var(--amber);white-space:nowrap;text-align:right;line-height:1.2;
+}
+.drop .runs small{display:block;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);font-weight:400}
+.drop .meta{grid-column:1/-1}
+.drop .bar{grid-column:1/-1;height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.drop .bar i{display:block;height:100%;background:var(--tide)}
+.planner{
+  background:var(--shelf);border:1px solid var(--reef);border-left:2px solid var(--amber);
+  padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;
+  gap:11px;flex-wrap:wrap;font-size:13px;
+}
+.planner input{
+  width:64px;padding:5px 7px;background:var(--abyss);color:var(--amber);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-weight:600;
+  text-align:center;
+}
+.planner .lbl{color:var(--silt)}
+.recipe{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:11px 14px;margin-bottom:8px;
+}
+.recipe .kind{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--silt)}
+.recipe .ing{margin-top:7px}
+.none{color:var(--coral);font-size:13px}
+.none b{color:var(--foam)}
+.hint{color:var(--silt);font-size:12px;margin-top:6px;line-height:1.6}
+
+/* trainer team cards */
+.mon{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:10px 13px;margin-bottom:8px;
+  display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;
+}
+.mon .sp{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600}
+.mon .lv{color:var(--amber);font-size:13px}
+.mon .kv{font-size:11.5px;color:var(--silt)}
+.mon .kv b{color:var(--foam);font-weight:400}
+.mon .moves{width:100%;font-size:11.5px;color:var(--silt)}
+.mon .moves code{margin-right:4px}
+
+/* milestone list (progression) */
+.mile{
+  display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.mile .kind{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--reef);border-radius:3px;height:fit-content;
+  white-space:nowrap;margin-top:2px;
+}
+.mile .kind.badge-k{color:var(--amber);border-color:var(--amber)}
+.mile .kind.elite-k{color:var(--coral)}
+.mile .kind.champion-k{color:var(--coral);border-color:var(--coral)}
+.mile .kind.legendary-k{color:var(--tide);border-color:var(--tide)}
+.mile .kind.item-k{color:var(--moss)}
+.mile h4{font-size:14.5px}
+.mile p{margin:2px 0 0;font-size:12.5px;color:var(--silt)}
+.mile .ico{font-size:11px;color:var(--silt)}
+footer.gen{
+  border-top:1px solid var(--reef);color:var(--silt);font-size:11px;
+  padding:14px 18px;text-align:center;
+}
+footer.gen a{color:var(--silt);text-decoration:underline}
+</style>
+</head><body>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html" aria-current="page">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a></nav>
+<div class='article'><h1>Progression Guide — Your Road to Champion</h1><p class="sub">Badges, regions and the road to champion — reconstructed from the pack’s advancement and trainer data</p><p>COBBLEVERSE turns survival Minecraft into a full Pokémon league challenge. The moment you join, the pack's root advancement — <b>COBBLEVERSE: Press C to Start!</b> — asks you to choose your first Pokémon and begin your adventure. From there the loop is simple: train under your current level cap, hunt down the next key trainer, earn the badge, and watch the cap rise. Keep a <b>Trainer Card</b> in your inventory — wild trainers only spawn naturally around players carrying one.</p><p>Four regions are playable, each as its own RCT trainer series with its own gym circuit, Elite Four, Champion and legendary postgame: <b>Kanto</b> (active by default, difficulty 7/10), then the add-on regions <b>Johto</b> (8/10), <b>Hoenn</b> (8/10) and <b>Sinnoh</b> (9/10). Key trainers must be beaten in strict order — each gym leader only starts spawning once you have defeated the previous one — and every victory is tracked by an advancement, so your advancement screen doubles as a quest log.</p><p>Beyond the league lines, the Mega Showdown mod ships its own advancement tree covering Mega Evolution and bond content (34 advancements under its own tab). For full gym leader teams and spawn locations see <a href="trainers.html">Trainers</a>; for where to catch everything, see the <a href="pokedex.html">Pokédex</a>.</p><div class='callout'><p>COBBLEVERSE uses Radical Cobblemon Trainers (RCT) to pace your journey. Your Pokémon <b>stop gaining experience at the level cap</b> (over-leveling is disabled in the pack config), and the cap climbs only as you defeat the key trainers of your active series.</p><ul><li><b>Starting cap:</b> effectively <b>25</b> — the cap always tracks the next required key trainer (their ace's level + 5), which for Brock means 20 + 5. The configured <code>initialLevelCap = 20</code> is a floor that never binds in Kanto.</li><li><b>How it rises:</b> your cap always tracks the <b>next required key trainer</b> in your series — the level of their strongest Pokémon plus <code>relativeLevelCap = 5</code>. In Kanto that means roughly: Brock 25, Misty 30, Lt. Surge 40, Erika 45, Koga 55, Sabrina 60, Blaine 65, Giovanni 75, then the Elite Four at 80/85/90/95 and a full cap of 100 for the Champion.</li><li><b>Strict order:</b> each gym leader, Elite Four member and Champion only spawns after the previous key trainer in the chain is beaten.</li><li><b>Trainer Card:</b> <code>spawningRequiresTrainerCard = true</code> — no card in your inventory, no wild trainers.</li><li><b>Matchmaking:</b> <code>maxLevelDiff = 10</code> keeps naturally spawning trainers within roughly ten levels of your team (key trainers are exempt).</li><li><b>Freeroam:</b> after completing any series you can switch to <b>freeroam</b> at a Trainer Association clerk, which grants a flat level cap of 100 while pausing series progression.</li></ul></div><section><h2>Gen 1: Kanto</h2><p>Kanto is where every player starts: the <code>COBBLEVERSE-DP-v31</code> datapack ships active in the <code>datapacks</code> folder, and the RCT config places new players in the <b>Kanto</b> series (difficulty 7/10) automatically. The <b>Gen 1: Kanto</b> advancement — <i>"Embark on a journey through the region where it all began"</i> — opens the tree.</p><p>The eight gym leaders roam specific overworld biomes and must be beaten in order. Once Giovanni falls, the <b>Elite Four and Champion Blue spawn in the End dimension</b> — bring an End-ready team. The Legendary Birds and the Mew/Mewtwo questline round out the postgame.</p><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_brock'>Boulder Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_boulder_badge'><img class="spr" src="icons/cobbleversebadges/kanto_boulder_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Boulder Badge (Brock)</a></h4><p>Defeat Leader Brock, the first gym of the Kanto circuit. His team tops out at a Lv. 20 Onix.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_misty'>Cascade Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_cascade_badge'><img class="spr" src="icons/cobbleversebadges/kanto_cascade_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Cascade Badge (Misty)</a></h4><p>Defeat Leader Misty. Her ace is Lv. 25; she spawns in ocean biomes once Brock is beaten.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_ltsurge'>Thunder Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_thunder_badge'><img class="spr" src="icons/cobbleversebadges/kanto_thunder_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Thunder Badge (Lt. Surge)</a></h4><p>Defeat Leader Lt. Surge, whose team peaks at Lv. 35.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_erika'>Rainbow Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_rainbow_badge'><img class="spr" src="icons/cobbleversebadges/kanto_rainbow_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Rainbow Badge (Erika)</a></h4><p>Defeat Leader Erika, whose team peaks at Lv. 40.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_koga'>Soul Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_soul_badge'><img class="spr" src="icons/cobbleversebadges/kanto_soul_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Soul Badge (Koga)</a></h4><p>Defeat Leader Koga, whose team peaks at Lv. 50.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_sabrina'>Marsh Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_marsh_badge'><img class="spr" src="icons/cobbleversebadges/kanto_marsh_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Marsh Badge (Sabrina)</a></h4><p>Defeat Leader Sabrina, whose team peaks at Lv. 55.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_blaine'>Volcano Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_volcano_badge'><img class="spr" src="icons/cobbleversebadges/kanto_volcano_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Volcano Badge (Blaine)</a></h4><p>Defeat Leader Blaine, whose team peaks at Lv. 60.</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#kanto_giovanni'>Earth Badge</a> <a class='ico' href='items.html#cobbleversebadges:kanto_earth_badge'><img class="spr" src="icons/cobbleversebadges/kanto_earth_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Earth Badge (Giovanni)</a></h4><p>Defeat Leader Giovanni for Kanto&#x27;s final badge. He hides in Deep Dark biomes where Ancient Cities generate, with a team up to Lv. 70.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#kanto_league_lorelei'>Road to Victory</a> <a class='ico' href='items.html#cobblemon:never_melt_ice'><img class="spr" src="icons/cobblemon/never_melt_ice.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Never-Melt Ice</a></h4><p>Defeat Elite Four Lorelei (ace Lv. 75), the first of the four masters awaiting you in the End.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#kanto_league_bruno'>Unyielding Strength</a> <a class='ico' href='items.html#cobblemon:punching_glove'><img class="spr" src="icons/cobblemon/punching_glove.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Punching Glove</a></h4><p>Defeat Elite Four Bruno (ace Lv. 80).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#kanto_league_agatha'>Shadows before Triumph</a> <a class='ico' href='items.html#cobblemon:spell_tag'><img class="spr" src="icons/cobblemon/spell_tag.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Spell Tag</a></h4><p>Defeat Elite Four Agatha (ace Lv. 85).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#kanto_league_lance'>The Indigo Legend</a> <a class='ico' href='items.html#cobblemon:dragon_scale'><img class="spr" src="icons/cobblemon/dragon_scale.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Dragon Scale</a></h4><p>Defeat Elite Four Lance (ace Lv. 90), the last gate before the Champion.</p></div></div><div class="mile"><span class='kind champion-k'>champion</span>
+  <div><h4><a href='trainers.html#kanto_champion_blue'>Champion of Kanto</a> <a class='ico' href='items.html#cobbleversebadges:kanto_league_trophy'><img class="spr" src="icons/cobbleversebadges/kanto_league_trophy.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Kanto League Trophy</a></h4><p>Defeat Blue and become the new Champion. He fields a full Lv. 100 team led by all three Legendary Birds.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Arctic Spirit <a class='ico' href='items.html#lumymon:glacier_feather'><img class="spr" src="icons/lumymon/glacier_feather.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Glacier Feather</a></h4><p>Catch Articuno, the Legendary Ice Bird.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Electric Storm <a class='ico' href='items.html#lumymon:thunder_feather'><img class="spr" src="icons/lumymon/thunder_feather.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Thunder Feather</a></h4><p>Catch Zapdos, the Legendary Thunder Bird.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Scarlet Phoenix <a class='ico' href='items.html#lumymon:ember_feather'><img class="spr" src="icons/lumymon/ember_feather.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ember Feather</a></h4><p>Catch Moltres, the Legendary Fire Bird.</p></div></div><div class="mile"><span class='kind item-k'>item</span>
+  <div><h4>Ancestor&#x27;s Legacy <a class='ico' href='items.html#lumymon:ancient_dna'><img class="spr" src="icons/lumymon/ancient_dna.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ancient DNA</a></h4><p>After earning the Earth Badge, claim Mew&#x27;s DNA — the essence of the Ancestor of all Pokémon.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Project: Resurrection <a class='ico' href='items.html#lumymon:cloning_catalyst'><img class="spr" src="icons/lumymon/cloning_catalyst.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Cloning Catalyst</a></h4><p>Insert Mew&#x27;s DNA and a Cloning Catalyst into the Resurrection Machine to give life to Mewtwo.</p></div></div><div class="mile"><span class='kind item-k'>item</span>
+  <div><h4>Ancient&#x27;s Imprint <a class='ico' href='items.html#cobblemon:ancient_origin_ball'><img class="spr" src="icons/cobblemon/ancient_origin_ball.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ancient Origin Ball</a></h4><p>After beating Champion Blue, craft the mysterious Origin Fossil.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Whisper of the Myth <a class='ico' href='items.html#lumymon:origin_fossil'><img class="spr" src="icons/lumymon/origin_fossil.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Origin Fossil</a></h4><p>Awaken Mew at its shrine with the Origin Fossil and catch it.</p></div></div></section><section><h2>Gen 2: Johto</h2><p>Johto is an optional add-on: its datapack ships at <code>datapacks/extra/COBBLEVERSE-Johto-DP.zip</code> and is <b>not active</b> until you move the zip into the profile's <code>datapacks</code> folder (game closed, then relaunch — see <a href="world.html">World &amp; Regions</a> for the exact steps). It adds the <b>Gen 2: Johto</b> advancement line — <i>"Discover ancient wonders and the legacies of its past"</i> — and the <b>Johto</b> trainer series (difficulty 8/10), which you activate at a Trainer Association clerk.</p><p>Eight new gym leaders await, and as in Kanto the <b>Elite Four and Champion Lance spawn in the End</b>. The postgame chases the Tower Duo, Celebi, and an exclusive Armored Mewtwo questline.</p><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_valerio'>Zephyr Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_zephyr_badge'><img class="spr" src="icons/cobbleversebadges/johto_zephyr_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Zephyr Badge (Valerio)</a></h4><p>Defeat Leader Valerio, Johto&#x27;s first gym leader (ace Lv. 20).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_raffaello'>Hive Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_hive_badge'><img class="spr" src="icons/cobbleversebadges/johto_hive_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Hive Badge (Raffaello)</a></h4><p>Defeat Leader Raffaello (ace Lv. 30).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_chiara'>Plain Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_plain_badge'><img class="spr" src="icons/cobbleversebadges/johto_plain_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Plain Badge (Chiara)</a></h4><p>Defeat Leader Chiara (ace Lv. 35).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_angelo'>Fog Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_fog_badge'><img class="spr" src="icons/cobbleversebadges/johto_fog_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Fog Badge (Angelo)</a></h4><p>Defeat Leader Angelo (ace Lv. 45).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_furio'>Storm Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_storm_badge'><img class="spr" src="icons/cobbleversebadges/johto_storm_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Storm Badge (Furio)</a></h4><p>Defeat Leader Furio (ace Lv. 50).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_jasmine'>Mineral Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_mineral_badge'><img class="spr" src="icons/cobbleversebadges/johto_mineral_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Mineral Badge (Jasmine)</a></h4><p>Defeat Leader Jasmine (ace Lv. 60).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_alfredo'>Glacier Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_glacier_badge'><img class="spr" src="icons/cobbleversebadges/johto_glacier_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Glacier Badge (Alfredo)</a></h4><p>Defeat Leader Alfredo (ace Lv. 65).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#johto_sandra'>Rising Badge</a> <a class='ico' href='items.html#cobbleversebadges:johto_rising_badge'><img class="spr" src="icons/cobbleversebadges/johto_rising_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Rising Badge (Sandra)</a></h4><p>Defeat Leader Sandra, Johto&#x27;s final gym leader (ace Lv. 70).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#johto_league_pino'>No Turning Back</a> <a class='ico' href='items.html#cobblemon:power_lens'><img class="spr" src="icons/cobblemon/power_lens.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Power Lens</a></h4><p>Defeat Elite Four Pino (ace Lv. 75), first of the Johto League in the End.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#johto_league_koga'>Toxic Tenacity</a> <a class='ico' href='items.html#cobblemon:loaded_dice'><img class="spr" src="icons/cobblemon/loaded_dice.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Loaded Dice</a></h4><p>Defeat Elite Four Koga (ace Lv. 80).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#johto_league_bruno'>Iron Will</a> <a class='ico' href='items.html#cobblemon:muscle_band'><img class="spr" src="icons/cobblemon/muscle_band.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Muscle Band</a></h4><p>Defeat Elite Four Bruno (ace Lv. 85).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#johto_league_karen'>Embrace the Shadows</a> <a class='ico' href='items.html#cobblemon:razor_claw'><img class="spr" src="icons/cobblemon/razor_claw.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Razor Claw</a></h4><p>Defeat Elite Four Karen (ace Lv. 90).</p></div></div><div class="mile"><span class='kind champion-k'>champion</span>
+  <div><h4><a href='trainers.html#johto_champion_lance'>Master of the Twin Regions</a> <a class='ico' href='items.html#cobbleversebadges:johto_league_trophy'><img class="spr" src="icons/cobbleversebadges/johto_league_trophy.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Johto League Trophy</a></h4><p>Defeat Lance and his Lv. 100 team to become the new Champion of Johto.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Protector of the Depths <a class='ico' href='items.html#lumymon:silver_wing'><img class="spr" src="icons/lumymon/silver_wing.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Silver Wing</a></h4><p>After earning the Rising Badge, catch Lugia, the Guardian of the Seas.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Prismatic Glory <a class='ico' href='items.html#lumymon:rainbow_wing'><img class="spr" src="icons/lumymon/rainbow_wing.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Rainbow Wing</a></h4><p>Catch Ho-Oh, the Guardian of the Skies.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4><a href='trainers.html#rival_red'>Voice of the Forest</a> <a class='ico' href='items.html#lumymon:gs_ball'><img class="spr" src="icons/lumymon/gs_ball.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> GS Ball</a></h4><p>Acquire the GS Ball from the legendary trainer Red — whose Lv. 100 team includes all three Kanto starters — and summon Celebi.</p></div></div><div class="mile"><span class='kind item-k'>item</span>
+  <div><h4>Rocket Plating <a class='ico' href='items.html#lumymon:rocket_armor'><img class="spr" src="icons/lumymon/rocket_armor.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Rocket Armor</a></h4><p>Forge the formidable Rocket Armor at a Smithing Table (unlocked deep in the Mewtwo questline).</p></div></div><div class="mile"><span class='kind other-k'>other</span>
+  <div><h4>Unleash Armored Form <a class='ico' href='items.html#lumymon:synthetic_matrix'><img class="spr" src="icons/lumymon/synthetic_matrix.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Synthetic Matrix</a></h4><p>Equip the Rocket Armor and witness Mewtwo&#x27;s transformation into its ultimate armored state.</p></div></div></section><section><h2>Gen 3: Hoenn</h2><p>Hoenn is an optional add-on: move <code>datapacks/extra/COBBLEVERSE-Hoenn-DP.zip</code> into the profile's <code>datapacks</code> folder (game closed, then relaunch — see <a href="world.html">World &amp; Regions</a> for the exact steps) to activate it, then start the <b>Hoenn</b> series (difficulty 8/10) at a Trainer Association clerk. The <b>Gen 3: Hoenn</b> advancement line invites you to <i>"explore new vibrant lands and confront the raw power of nature"</i>.</p><p>Unlike the first two regions, the Hoenn Elite Four and Champion Rocco spawn in <b>Steppe</b> biomes in the overworld. The postgame is the pack's weather-trio spectacle: Kyogre, Groudon and Mega Rayquaza atop the Sky Pillar, plus the Regi golems, the Eon duo, Jirachi and Deoxys.</p> <b>Requires Terralith:</b> this region's gyms and league generate in Terralith biomes — enable <code>Terralith-DP.zip</code> as well.<div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_petra'>Stone Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_stone_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_stone_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Stone Badge (Petra)</a></h4><p>Defeat Leader Petra, Hoenn&#x27;s first gym leader (ace Lv. 21).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_rudi'>Knuckle Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_knuckle_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_knuckle_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Knuckle Badge (Rudi)</a></h4><p>Defeat Leader Rudi (ace Lv. 30).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_walter'>Dynamo Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_dynamo_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_dynamo_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Dynamo Badge (Walter)</a></h4><p>Defeat Leader Walter (ace Lv. 36).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_fiammetta'>Heat Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_heat_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_heat_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Heat Badge (Fiammetta)</a></h4><p>Defeat Leader Fiammetta (ace Lv. 42).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_norman'>Balance Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_balance_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_balance_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Balance Badge (Norman)</a></h4><p>Defeat Leader Norman (ace Lv. 50).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_alice'>Feather Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_feather_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_feather_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Feather Badge (Alice)</a></h4><p>Defeat Leader Alice (ace Lv. 56).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_tell'>Mind Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_mind_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_mind_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Mind Badge (Tell &amp; Pat)</a></h4><p>Defeat Leaders Tell &amp; Pat, the twin psychics (ace Lv. 62).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#hoenn_adriano'>Rain Badge</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_rain_badge'><img class="spr" src="icons/cobbleversebadges/hoenn_rain_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Rain Badge (Adriano)</a></h4><p>Defeat Leader Adriano, Hoenn&#x27;s final gym leader (ace Lv. 70); he spawns in cold ocean waters.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#hoenn_league_fosco'>Shadow&#x27;s End</a> <a class='ico' href='items.html#lumymon:dark_bass'><img class="spr" src="icons/lumymon/dark_bass.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Dark Bass</a></h4><p>Defeat Elite Four Fosco (ace Lv. 77), first of the Hoenn League.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#hoenn_league_ester'>Spirit&#x27;s Rest</a> <a class='ico' href='items.html#lumymon:ghost_bloom'><img class="spr" src="icons/lumymon/ghost_bloom.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ghost Bloom</a></h4><p>Defeat Elite Four Ester (ace Lv. 82).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#hoenn_league_frida'>Winter&#x27;s Demise</a> <a class='ico' href='items.html#lumymon:ice_necklace'><img class="spr" src="icons/lumymon/ice_necklace.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ice Necklace</a></h4><p>Defeat Elite Four Frida (ace Lv. 86).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#hoenn_league_drake'>Dragon&#x27;s Roar</a> <a class='ico' href='items.html#lumymon:dragon_cap'><img class="spr" src="icons/lumymon/dragon_cap.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Dragon Cap</a></h4><p>Defeat Elite Four Drake (ace Lv. 91).</p></div></div><div class="mile"><span class='kind champion-k'>champion</span>
+  <div><h4><a href='trainers.html#hoenn_champion_rocco'>Hoenn&#x27;s Ultimate Master</a> <a class='ico' href='items.html#cobbleversebadges:hoenn_league_trophy'><img class="spr" src="icons/cobbleversebadges/hoenn_league_trophy.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Hoenn League Trophy</a></h4><p>Defeat Rocco and his Lv. 100 team to become the new Champion of Hoenn.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Stone Colossus <a class='ico' href='items.html#lumymon:pebble_relic'><img class="spr" src="icons/lumymon/pebble_relic.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Pebble Relic</a></h4><p>Catch Regirock, the Rock Peak Pokémon — the first of the Regi golems, available as soon as you start Gen 3.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Glacial Guardian <a class='ico' href='items.html#lumymon:cryo_relic'><img class="spr" src="icons/lumymon/cryo_relic.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Cryo Relic</a></h4><p>Catch Regice, the Iceberg Pokémon.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Iron Bastion <a class='ico' href='items.html#lumymon:metal_relic'><img class="spr" src="icons/lumymon/metal_relic.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Metal Relic</a></h4><p>Catch Registeel, the Iron Pokémon.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Oceanic Sapphire <a class='ico' href='items.html#lumymon:ocean_core'><img class="spr" src="icons/lumymon/ocean_core.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ocean Core</a></h4><p>After earning the Rain Badge, catch Kyogre, the Creator of Oceans.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Volcanic Ruby <a class='ico' href='items.html#lumymon:earth_core'><img class="spr" src="icons/lumymon/earth_core.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Earth Core</a></h4><p>Catch Groudon, the Creator of Continents.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Celestial Emerald <a class='ico' href='items.html#lumymon:emerald_emblem'><img class="spr" src="icons/lumymon/emerald_emblem.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Emerald Emblem</a></h4><p>Catch Mega Rayquaza at the top of the Sky Pillar.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Crimson Comet <a class='ico' href='items.html#lumymon:ruby_dew'><img class="spr" src="icons/lumymon/ruby_dew.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ruby Dew</a></h4><p>After becoming Champion, catch Latias, the female Eon Pokémon.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Azure Jet <a class='ico' href='items.html#lumymon:sapphire_dew'><img class="spr" src="icons/lumymon/sapphire_dew.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Sapphire Dew</a></h4><p>Catch Latios, the male Eon Pokémon.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Wishful Star <a class='ico' href='items.html#lumymon:melodic_tape_vol_1'><img class="spr" src="icons/lumymon/melodic_tape_vol_1.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Melodic Tape (Vol.1)</a></h4><p>Summon Jirachi at its shrine with the Melodic Tape (Vol. 1) and catch it.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Cosmic Virus <a class='ico' href='items.html#lumymon:meteorite_crystal'><img class="spr" src="icons/lumymon/meteorite_crystal.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Meteorite Crystal</a></h4><p>Find Deoxys&#x27;s Meteorite and catch the DNA Pokémon.</p></div></div></section><section><h2>Gen 4: Sinnoh</h2><p>Sinnoh is the hardest and most content-dense region: move <code>datapacks/extra/COBBLEVERSE-Sinnoh-DP.zip</code> into the profile's <code>datapacks</code> folder (game closed, then relaunch — see <a href="world.html">World &amp; Regions</a> for the exact steps) to activate it, then start the <b>Sinnoh</b> series (difficulty 9/10) at a Trainer Association clerk. The <b>Gen 4: Sinnoh</b> line asks you to <i>"seek the ancient myths of time and space"</i>.</p><p>Sinnoh runs <b>two storylines in parallel</b>: the eight-badge gym circuit (League in Desert Oasis biomes), and the Team Galactic questline — Commanders Mars, Jupiter and Saturn each guard a Lake Proof, and defeating Cyrus wins the Red Chain. Both roads converge on the creation trio and, ultimately, Arceus at the Temple of Sinnoh. The Sinnoh postgame also continues the Regi saga begun in Hoenn and ends with Manaphy, Shaymin and more.</p> <b>Requires Terralith:</b> this region's gyms and league generate in Terralith biomes — enable <code>Terralith-DP.zip</code> as well.<div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_pedro'>Coal Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_coal_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_coal_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Coal Badge (Pedro)</a></h4><p>Defeat Leader Pedro, Sinnoh&#x27;s first gym leader (ace Lv. 30).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_gardenia'>Forest Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_forest_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_forest_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Forest Badge (Gardenia)</a></h4><p>Defeat Leader Gardenia (ace Lv. 36).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_marzia'>Cobble Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_cobble_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_cobble_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Cobble Badge (Marzia)</a></h4><p>Defeat Leader Marzia (ace Lv. 43).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_omar'>Fen Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_fen_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_fen_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Fen Badge (Omar)</a></h4><p>Defeat Leader Omar (ace Lv. 49).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_fannie'>Relic Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_relic_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_relic_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Relic Badge (Fannie)</a></h4><p>Defeat Leader Fannie (ace Lv. 55).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_ferruccio'>Mine Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_mine_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_mine_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Mine Badge (Ferruccio)</a></h4><p>Defeat Leader Ferruccio (ace Lv. 60).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_bianca'>Icicle Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_icicle_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_icicle_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Icicle Badge (Bianca)</a></h4><p>Defeat Leader Bianca (ace Lv. 67).</p></div></div><div class="mile"><span class='kind badge-k'>badge</span>
+  <div><h4><a href='trainers.html#sinnoh_corrado'>Beacon Badge</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_beacon_badge'><img class="spr" src="icons/cobbleversebadges/sinnoh_beacon_badge.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Beacon Badge (Corrado)</a></h4><p>Defeat Leader Corrado, Sinnoh&#x27;s final gym leader (ace Lv. 75).</p></div></div><div class="mile"><span class='kind other-k'>other</span>
+  <div><h4><a href='trainers.html#team_galactic_commander_mars'>Windy Confrontation</a> <a class='ico' href='items.html#lumymon:verity_proof'><img class="spr" src="icons/lumymon/verity_proof.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Verity Proof</a></h4><p>Defeat Commander Mars at the Wind Plant to secure the first Lake Proof.</p></div></div><div class="mile"><span class='kind other-k'>other</span>
+  <div><h4><a href='trainers.html#team_galactic_commander_jupiter'>Eternal Disputation</a> <a class='ico' href='items.html#lumymon:acuity_proof'><img class="spr" src="icons/lumymon/acuity_proof.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Acuity Proof</a></h4><p>Defeat Commander Jupiter in the Eterna Building to obtain a Lake Proof.</p></div></div><div class="mile"><span class='kind other-k'>other</span>
+  <div><h4><a href='trainers.html#team_galactic_commander_saturn'>Headquarters Infiltration</a> <a class='ico' href='items.html#lumymon:valor_proof'><img class="spr" src="icons/lumymon/valor_proof.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Valor Proof</a></h4><p>Defeat Commander Saturn in the Galactic HQ tower and claim the final Lake Proof.</p></div></div><div class="mile"><span class='kind other-k'>other</span>
+  <div><h4><a href='trainers.html#team_galactic_cyrus'>New World Order</a> <a class='ico' href='items.html#lumymon:red_chain'><img class="spr" src="icons/lumymon/red_chain.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Red Chain</a></h4><p>Defeat Cyrus at the Galactic HQ (team up to Lv. 88) and seize the Red Chain before he can rewrite the laws of the universe.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#sinnoh_league_aaron'>The Buzz Stops Here</a> <a class='ico' href='items.html#lumymon:bug_net'><img class="spr" src="icons/lumymon/bug_net.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Bug Net</a></h4><p>Defeat Elite Four Aaron (ace Lv. 82), first of the Sinnoh League.</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#sinnoh_league_terrie'>The Quake is Over</a> <a class='ico' href='items.html#lumymon:ground_shawl'><img class="spr" src="icons/lumymon/ground_shawl.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Ground Shawl</a></h4><p>Defeat Elite Four Terrie (ace Lv. 84).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#sinnoh_league_vulcano'>Volcanic Ashes</a> <a class='ico' href='items.html#lumymon:fire_flint'><img class="spr" src="icons/lumymon/fire_flint.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Fire Flint</a></h4><p>Defeat Elite Four Vulcano (ace Lv. 86).</p></div></div><div class="mile"><span class='kind elite-k'>elite</span>
+  <div><h4><a href='trainers.html#sinnoh_league_luciano'>Knowledge Supremacy</a> <a class='ico' href='items.html#lumymon:psychic_volume'><img class="spr" src="icons/lumymon/psychic_volume.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Psychic Volume</a></h4><p>Defeat Elite Four Luciano (ace Lv. 90).</p></div></div><div class="mile"><span class='kind champion-k'>champion</span>
+  <div><h4><a href='trainers.html#sinnoh_champion_camilla'>The Queen&#x27;s Gambit</a> <a class='ico' href='items.html#cobbleversebadges:sinnoh_league_trophy'><img class="spr" src="icons/cobbleversebadges/sinnoh_league_trophy.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Sinnoh League Trophy</a></h4><p>Defeat Camilla and her Lv. 100 team to become the new Champion of Sinnoh.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>The Knowledge Bringer <a class='ico' href='items.html#lumymon:uxie_claw'><img class="spr" src="icons/lumymon/uxie_claw.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Uxie Claw</a></h4><p>After defeating Cyrus, catch Uxie, the Being of Knowledge from Lake Acuity.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>The Emotion Spirit <a class='ico' href='items.html#lumymon:mesprit_plume'><img class="spr" src="icons/lumymon/mesprit_plume.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Mesprit Plume</a></h4><p>Catch Mesprit, the Being of Emotion from Lake Verity.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>The Willpower Guardian <a class='ico' href='items.html#lumymon:azelf_fang'><img class="spr" src="icons/lumymon/azelf_fang.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Azelf Fang</a></h4><p>Catch Azelf, the Being of Willpower from Lake Valor.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Ruler of Time <a class='ico' href='items.html#mega_showdown:adamant_orb'><img class="spr" src="icons/mega_showdown/adamant_orb.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Adamant Orb</a></h4><p>Catch Dialga, the Legendary Pokémon that governs the flow of time.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Master of Space <a class='ico' href='items.html#mega_showdown:lustrous_orb'><img class="spr" src="icons/mega_showdown/lustrous_orb.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Lustrous Orb</a></h4><p>Catch Palkia, the Legendary Pokémon that sustains spatial dimensions.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Shadow of the Distortion <a class='ico' href='items.html#mega_showdown:griseous_orb'><img class="spr" src="icons/mega_showdown/griseous_orb.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Griseous Orb</a></h4><p>Catch Giratina, the banished overlord of the Distortion World.</p></div></div><div class="mile"><span class='kind item-k'>item</span>
+  <div><h4>The Echo of Creation <a class='ico' href='items.html#lumymon:azure_flute'><img class="spr" src="icons/lumymon/azure_flute.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Azure Flute</a></h4><p>Forge the Azure Flute to transcend time and reach the Temple of Sinnoh.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>The Original One <a class='ico' href='items.html#mega_showdown:legend_plate'><img class="spr" src="icons/mega_showdown/legend_plate.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Legend Plate</a></h4><p>Catch Arceus, the Alpha Pokémon that shaped the entire universe — the summit of COBBLEVERSE&#x27;s progression.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Lava Dome Sentinel <a class='ico' href='items.html#lumymon:magmatic_cluster'><img class="spr" src="icons/lumymon/magmatic_cluster.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Magmatic Cluster</a></h4><p>After earning the Beacon Badge, catch Heatran, the embodiment of the planet&#x27;s boiling core.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Lunar Grace <a class='ico' href='items.html#lumymon:dream_catcher'><img class="spr" src="icons/lumymon/dream_catcher.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Dream Catcher</a></h4><p>Catch Cresselia, the Pokémon that dispels nightmares with its light.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Nightmare Embodiment <a class='ico' href='items.html#lumymon:nightmare_weaver'><img class="spr" src="icons/lumymon/nightmare_weaver.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Nightmare Weaver</a></h4><p>Confront and catch Darkrai, the master of eternal shadows.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Everlasting Spark <a class='ico' href='items.html#lumymon:spark_relic'><img class="spr" src="icons/lumymon/spark_relic.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Spark Relic</a></h4><p>Continue the Regi saga from Hoenn: catch Regieleki, the golem with the greatest electrical power.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Dragon Maw <a class='ico' href='items.html#lumymon:draco_relic'><img class="spr" src="icons/lumymon/draco_relic.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Draco Relic</a></h4><p>Catch Regidrago, the golem made of concentrated dragon energy.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Titan of the Ages <a class='ico' href='items.html#lumymon:titan_relic'><img class="spr" src="icons/lumymon/titan_relic.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Titan Relic</a></h4><p>Awaken and catch Regigigas, the creator of the colossal golems.</p></div></div><div class="mile"><span class='kind item-k'>item</span>
+  <div><h4>Prince of the Sea <a class='ico' href='items.html#cobbreeding:manaphy_egg'><img class="spr" src="icons/cobbreeding/manaphy_egg.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Pokemon Egg</a></h4><p>After becoming Champion, obtain the rare Manaphy Egg, a treasure from the ocean&#x27;s depths.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Drifting Seed of the Sea <a class='ico' href='items.html#minecraft:heart_of_the_sea'><img class="spr" src="icons/minecraft/heart_of_the_sea.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Heart Of The Sea</a></h4><p>Hatch Phione from an egg and welcome it to your team.</p></div></div><div class="mile"><span class='kind item-k'>item</span>
+  <div><h4>Pallet Town Legacy <a class='ico' href='items.html#lumymon:prof_oak_letter'><img class="spr" src="icons/lumymon/prof_oak_letter.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Professor Oak&#x27;s Letter</a></h4><p>Assemble the five first companions of Kanto to earn Professor Oak&#x27;s Letter.</p></div></div><div class="mile"><span class='kind legendary-k'>legendary</span>
+  <div><h4>Gratitude Bloom <a class='ico' href='items.html#mega_showdown:gracidea_flower'><img class="spr" src="icons/mega_showdown/gracidea_flower.png" style="width:18px;height:18px" alt="" loading="lazy" onerror="this.remove()"> Gracidea Flower</a></h4><p>Catch Shaymin, the Pokémon that transforms ruined lands into flower fields.</p></div></div></section></div>
+<footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
+</body></html>

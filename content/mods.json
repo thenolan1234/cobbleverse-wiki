@@ -1,0 +1,725 @@
+{
+ "intro": "<p>COBBLEVERSE is built from roughly 137 mods — 136 of them active — running on Fabric for Minecraft 1.21.1. The heart of the pack is <b>Cobblemon 1.7.3</b>, which puts Pokémon in the world to find, battle, catch, and evolve. Around it sit the flagship additions that define the pack: <b>Radical Cobblemon Trainers</b> fills the world with over 1,500 <a href=\"trainers.html\">battle-ready trainers</a> drawn from Radical Red, Unbound, and Brilliant Diamond/Shining Pearl (about 380 of them are wired into the COBBLEVERSE story series — the rest belong to those optional side series); <b>Mega Showdown</b> brings Mega Evolution, Z-Moves, Terastallization, Dynamax, and Ultra Burst into battle; <b>Legendary Monuments</b> adds the structures and mechanics for earning Legendary and Mythical Pokémon; <b>Cobblemon Raid Dens</b> adds raid boss battles; <b>CobbleDollars</b> powers the shop economy; <b>Cobbreeding</b> adds breeding; and <b>TM Craft</b> makes TMs craftable.</p><p>The rest of the roster plays support: world generation and structures, furniture and decor for building your own gyms and Pokécenters, quality-of-life tweaks, interface and audio-visual polish, a thick layer of performance mods, and the libraries holding it all together. Every entry below is listed with its exact jar file name from the pack's <code>mods</code> folder.</p>",
+ "categories": [
+  {
+   "name": "Pokemon & Gameplay",
+   "mods": [
+    {
+     "name": "Cobblemon",
+     "file": "Cobblemon-fabric-1.7.3+1.21.1.jar",
+     "summary": "The core mod: Pokémon spawn in the world for you to find, battle, capture, and evolve."
+    },
+    {
+     "name": "Radical Cobblemon Trainers",
+     "file": "rctmod-fabric-1.21.1-0.18.1-beta.jar",
+     "summary": "Over 1,500 unique trainers from Radical Red, Unbound, and BDSP spawn naturally in your world."
+    },
+    {
+     "name": "Cobblemon: Mega Showdown",
+     "file": "mega_showdown-fabric-1.8.4+1.7.3+1.21.1.jar",
+     "summary": "Adds Mega Evolution, Z-Moves, Terastallization, Dynamax, Ultra Burst, Primals, and fusion forms."
+    },
+    {
+     "name": "zamega",
+     "file": "zamega-fabric-1.7.3.jar",
+     "summary": "Adds all Mega Evolutions from Pokémon Legends: Z-A (requires Mega Showdown)."
+    },
+    {
+     "name": "Legendary Monuments",
+     "file": "LegendaryMonuments-Cobbleverse.jar",
+     "summary": "Custom structures and mechanics for obtaining Legendary and Mythical Pokémon."
+    },
+    {
+     "name": "Cobblemon Raid Dens",
+     "file": "cobblemonraiddens-fabric-0.11.3+1.21.1.jar",
+     "summary": "Adds raid dens where you battle powerful boss Pokémon."
+    },
+    {
+     "name": "CobbleDollars",
+     "file": "CobbleDollars-fabric-2.0.0+Beta-5.1+1.21.1.jar",
+     "summary": "The pack's currency — earn CobbleDollars and spend them at merchants."
+    },
+    {
+     "name": "Cobbreeding",
+     "file": "Cobbreeding-fabric-2.2.2.jar",
+     "summary": "Adds Pokémon breeding to Cobblemon."
+    },
+    {
+     "name": "TM Craft",
+     "file": "tmcraft-1.4.18+1.7.3.jar",
+     "summary": "Craftable TMs for teaching your Pokémon new moves."
+    },
+    {
+     "name": "LumyMon",
+     "file": "LumyMon-0.6.6.jar",
+     "summary": "COBBLEVERSE's own content mod with custom additions built for the pack."
+    },
+    {
+     "name": "COBBLEVERSE Badges",
+     "file": "CobbleverseBadges-1.3.jar",
+     "summary": "Gym Badges and League Trophies for the Kanto, Johto, Hoenn, and Sinnoh regions."
+    },
+    {
+     "name": "Cobblemon Capture XP",
+     "file": "capturexp-fabric-1.7.3-1.3.0.jar",
+     "summary": "Your team earns experience when you capture a Pokémon."
+    },
+    {
+     "name": "PlayerXP",
+     "file": "playerxp-fabric-1.0.9+1.21.1.jar",
+     "summary": "Winning battles grants player XP for your enchanting needs."
+    },
+    {
+     "name": "Cobblemon Fight or Flight",
+     "file": "fightorflight-fabric-0.10.9.jar",
+     "summary": "Wild Pokémon flee or fight back when attacked or after a failed capture."
+    },
+    {
+     "name": "Only Bottle Caps",
+     "file": "Only Bottle Caps-1.3.0.jar",
+     "summary": "Bottle Cap items that max a Pokémon's IVs — per stat, or all at once with a Gold Bottle Cap."
+    },
+    {
+     "name": "CobbleCuisine",
+     "file": "cobblecuisine-2.0.1-1.7.rc1.jar",
+     "summary": "Snacks and treats to cook for your Cobblemon adventures."
+    },
+    {
+     "name": "Cobblenav",
+     "file": "cobblenav-fabric-2.3.3.jar",
+     "summary": "A PokéNav-style gadget inspired by Pokémon Ruby/Sapphire/Emerald and ORAS."
+    },
+    {
+     "name": "PastureLoot",
+     "file": "pastureLoot-1.0.5+1.21.1.jar",
+     "summary": "Pokémon left in pastures occasionally produce their drop items over time."
+    },
+    {
+     "name": "Safe Pastures",
+     "file": "SafePastures-1.1.1+1.21.1.jar",
+     "summary": "Keeps Pokémon in pastures safe from harm."
+    },
+    {
+     "name": "Cobblemon Battle Positions",
+     "file": "cobblemon-battle-positions-1.1.3.jar",
+     "summary": "Marker blocks that set custom battle positions for NPC fights and stadium-style PVP arenas."
+    },
+    {
+     "name": "Cobblemon Battle Extras",
+     "file": "cobblemon-battle-extras-fabric-1.13.45.jar",
+     "summary": "Extra in-battle info displays plus keyboard and controller support for battles."
+    }
+   ]
+  },
+  {
+   "name": "World & Structures",
+   "mods": [
+    {
+     "name": "VanillaBackport",
+     "file": "VanillaBackport-fabric-1.21.1-1.1.7.10.jar",
+     "summary": "Backports features from newer Minecraft versions to 1.21.1."
+    },
+    {
+     "name": "Repurposed Structures",
+     "file": "repurposed_structures-7.5.21+1.21.1-fabric.jar",
+     "summary": "More variants of vanilla structures throughout the world."
+    },
+    {
+     "name": "Cobblemon Additions",
+     "file": "cobblemon-additions-4.1.6.jar",
+     "summary": "Pokémon-themed village and city variants with extra structures inside them."
+    },
+    {
+     "name": "Biome Replacer",
+     "file": "biomereplacer-2.1-hippo-fabric.jar",
+     "summary": "Swaps selected biomes for others without touching the rest of world generation."
+    },
+    {
+     "name": "MobsBeGone",
+     "file": "MobsBeGone-0.0.7.jar",
+     "summary": "Controls which entities are allowed to spawn in the world."
+    },
+    {
+     "name": "VillagerConfig",
+     "file": "villagerconfig-fabric-4.5.4+1.21.1.jar",
+     "summary": "Lets the pack fully customize villagers and their trades."
+    }
+   ]
+  },
+  {
+   "name": "Items & Storage",
+   "mods": [
+    {
+     "name": "Sophisticated Backpacks",
+     "file": "sophisticatedbackpacks-1.21.1-3.23.4.3.106.jar",
+     "summary": "Upgradeable backpacks with plenty of functional extras."
+    },
+    {
+     "name": "Sophisticated Storage",
+     "file": "sophisticatedstorage-1.21.1-1.3.7.9.139.jar",
+     "summary": "Upgradeable storage containers to match the backpacks."
+    },
+    {
+     "name": "Tom's Simple Storage",
+     "file": "toms_storage_fabric-1.21-2.3.0.jar",
+     "summary": "A simple mass-storage network for your items."
+    },
+    {
+     "name": "Comforts",
+     "file": "comforts-fabric-9.0.5+1.21.1.jar",
+     "summary": "Sleeping bags and hammocks in 16 colors that don't set your spawn point."
+    },
+    {
+     "name": "Interactic",
+     "file": "interactic-0.2.3+1.21.jar",
+     "summary": "Refined item interactions — throwing, fancy pickup animations, and more."
+    }
+   ]
+  },
+  {
+   "name": "Building & Decoration",
+   "mods": [
+    {
+     "name": "CobbleFurnies",
+     "file": "CobbleFurnies-fabric-1.2.jar",
+     "summary": "Pokémon-flavored furniture for building labs, Pokécenters, and cozy cabins."
+    },
+    {
+     "name": "Pokeblocks",
+     "file": "pokeblocks-1.4.0-1.21.1.jar",
+     "summary": "Hundreds of decorative Pokémon blocks, including Pokédolls in regular, shiny, and giant sizes."
+    },
+    {
+     "name": "Handcrafted",
+     "file": "handcrafted-fabric-1.21.1-4.0.3.jar",
+     "summary": "A large vanilla-friendly furniture mod."
+    },
+    {
+     "name": "Cozy Home",
+     "file": "Luckys-Cozyhome-Refurnished-1.1.20.jar",
+     "summary": "More furniture for your builds."
+    },
+    {
+     "name": "Beautify",
+     "file": "beautify-2.0.0+1.21.1.jar",
+     "summary": "Vanilla-styled decorative blocks with custom models."
+    },
+    {
+     "name": "Carved Wood",
+     "file": "Carved Wood-fabric-1.21.1-1.9.7-B.jar",
+     "summary": "New wooden blocks and variants of existing ones."
+    },
+    {
+     "name": "Moar Concrete",
+     "file": "moar-concrete-1.3.1.jar",
+     "summary": "Concrete slabs, stairs, walls, fences, bricks, panels, and buttons."
+    },
+    {
+     "name": "Rechiseled",
+     "file": "rechiseled-1.2.4-fabric-mc1.21.jar",
+     "summary": "Chisel decorative blocks back and forth between their variants."
+    }
+   ]
+  },
+  {
+   "name": "Quality of Life",
+   "mods": [
+    {
+     "name": "Waystones",
+     "file": "waystones-fabric-1.21.1-21.1.37.jar",
+     "summary": "Activate waystones in the world and teleport back to them any time."
+    },
+    {
+     "name": "Catch Indicator",
+     "file": "catchindicator-fabric-1.7.0.jar",
+     "summary": "A small icon next to wild Pokémon names shows whether they're caught, seen, or unknown."
+    },
+    {
+     "name": "Cobblemon Catch Rate Display",
+     "file": "catchrate-display-fabric-2.8.22.jar",
+     "summary": "Live catch-rate percentages in battle, factoring in ball, status, and HP."
+    },
+    {
+     "name": "Better Pokédex Scanner",
+     "file": "better-pokedex-scanner-1.0.0.jar",
+     "summary": "The Pokédex scanner reticule detects Pokémon aspects."
+    },
+    {
+     "name": "MoreCobblemonTweaks",
+     "file": "MoreCobblemonTweaks-fabric-1.3.3.jar",
+     "summary": "Client-side Cobblemon tweaks like PC multiselect and egg lore."
+    },
+    {
+     "name": "Mouse Tweaks",
+     "file": "MouseTweaks-fabric-mc1.21-2.26.jar",
+     "summary": "Drag-based inventory management with extra mouse-button functions."
+    },
+    {
+     "name": "Better Recipe Book",
+     "file": "brb-1.10.0-rc5+1.21.jar",
+     "summary": "Quality-of-life improvements for the vanilla recipe book."
+    },
+    {
+     "name": "Controlling",
+     "file": "Controlling-fabric-1.21.1-19.0.5.jar",
+     "summary": "Search the keybinding menu by name."
+    },
+    {
+     "name": "Ping Wheel",
+     "file": "Ping-Wheel-1.12.2-fabric-1.21.1.jar",
+     "summary": "Ping locations for teammates, co-op shooter style."
+    },
+    {
+     "name": "Lenient Death",
+     "file": "lenientdeath-1.2.5+1.21.1.jar",
+     "summary": "Server-side tweaks that make dying less frustrating."
+    },
+    {
+     "name": "NetherPortalFix",
+     "file": "netherportalfix-fabric-1.21.1-21.1.3.jar",
+     "summary": "Nether portals always link back to the right destination in multiplayer."
+    },
+    {
+     "name": "Forgiving Void",
+     "file": "forgivingvoid-fabric-1.21.1-21.1.7.jar",
+     "summary": "Falling into the void drops you back on top instead of killing you."
+    },
+    {
+     "name": "Better Nether Map",
+     "file": "nethermap-4.0.0-1.21.1.jar",
+     "summary": "Maps actually work in the Nether and other cave dimensions."
+    },
+    {
+     "name": "No Chat Restrictions",
+     "file": "NoChatRestrictions-Fabric-MC1.21.11-v1.0.0.jar",
+     "summary": "Removes restrictions around multiplayer chat."
+    }
+   ]
+  },
+  {
+   "name": "Interface & Visuals",
+   "mods": [
+    {
+     "name": "Xaero's Minimap",
+     "file": "xaerominimap-fabric-1.21.1-26.4.2.jar",
+     "summary": "A vanilla-looking minimap."
+    },
+    {
+     "name": "Xaero's World Map",
+     "file": "xaeroworldmap-fabric-1.21.1-1.44.2.jar",
+     "summary": "A self-writing fullscreen world map that pairs with the minimap."
+    },
+    {
+     "name": "Roughly Enough Items",
+     "file": "RoughlyEnoughItems-16.0.799-fabric.jar",
+     "summary": "Browse every item and recipe from your inventory screen."
+    },
+    {
+     "name": "LumyREI",
+     "file": "LumyREI-1.1.3.jar",
+     "summary": "REI recipe support for Cobblemon's Cooking Pot and Brewing Stand, plus Stark Forge recipes."
+    },
+    {
+     "name": "Advancement Plaques",
+     "file": "AdvancementPlaques-1.21.1-fabric-1.6.8.jar",
+     "summary": "Replaces advancement toasts with fancy plaques."
+    },
+    {
+     "name": "Paginated Advancements",
+     "file": "paginatedadvancements-2.5.1.jar",
+     "summary": "A better advancement screen."
+    },
+    {
+     "name": "BetterF1",
+     "file": "BetterF1-Fabric-1.1+1.21.7.jar",
+     "summary": "Choose which HUD parts F1 hides."
+    },
+    {
+     "name": "BetterF3",
+     "file": "BetterF3-11.0.3-Fabric-1.21.1.jar",
+     "summary": "A readable, customizable replacement for the F3 debug screen."
+    },
+    {
+     "name": "Better Third Person",
+     "file": "BetterThirdPerson-Fabric-1.21-1.9.0.jar",
+     "summary": "Independent camera rotation in third-person view."
+    },
+    {
+     "name": "NotEnoughAnimations",
+     "file": "notenoughanimations-fabric-1.12.4-mc1.21.1.jar",
+     "summary": "Adds and improves third-person animations."
+    },
+    {
+     "name": "FancyMenu",
+     "file": "fancymenu_fabric_3.9.8_MC_1.21.1.jar",
+     "summary": "Powers the pack's customized menus and title screen."
+    },
+    {
+     "name": "Custom Splash Screen",
+     "file": "customsplashscreen-2.2.0.jar",
+     "summary": "A customized loading screen."
+    },
+    {
+     "name": "Mod Menu",
+     "file": "modmenu-11.0.4.jar",
+     "summary": "View and configure installed mods in-game."
+    },
+    {
+     "name": "Iris",
+     "file": "iris-fabric-1.8.14-beta.1+mc1.21.1.jar",
+     "summary": "Modern shader support, compatible with OptiFine shader packs."
+    },
+    {
+     "name": "Euphoria Patcher",
+     "file": "EuphoriaPatcher-1.9.3-r5.8.1-fabric.jar",
+     "summary": "Applies the Euphoria Patches add-on to Complementary Shaders."
+    },
+    {
+     "name": "Continuity",
+     "file": "continuity-3.0.0+1.21.jar",
+     "summary": "Connected and emissive textures in the OptiFine format."
+    },
+    {
+     "name": "Entity Model Features",
+     "file": "entity_model_features-3.2.4-1.21-fabric.jar",
+     "summary": "OptiFine-format custom entity models from resource packs."
+    },
+    {
+     "name": "Entity Texture Features",
+     "file": "entity_texture_features_1.21-fabric-7.1.jar",
+     "summary": "Random, emissive, and blinking entity textures from resource packs."
+    },
+    {
+     "name": "Particle Rain",
+     "file": "particlerain-4.0.0-beta.10+1.21.1-fabric.jar",
+     "summary": "Replaces weather with prettier particle effects."
+    },
+    {
+     "name": "Particular Reforged",
+     "file": "particular-1.21.1-Fabric-1.5.5.jar",
+     "summary": "Hand-crafted ambient visual effects."
+    },
+    {
+     "name": "Highlight",
+     "file": "highlight-fabric-1.21-3.0.0.jar",
+     "summary": "Block-selection outlines that follow the block's actual shape."
+    },
+    {
+     "name": "Better Beds",
+     "file": "betterbeds-fabric-1.4.0.jar",
+     "summary": "Renders beds with block models for better looks and performance."
+    },
+    {
+     "name": "Sound Physics Remastered",
+     "file": "sound-physics-remastered-fabric-1.21.1-1.5.1.jar",
+     "summary": "Realistic sound reverb, attenuation, and absorption through blocks."
+    },
+    {
+     "name": "MusicNotification",
+     "file": "musicnotification-fabric-3.0.0+mc1.21.1.jar",
+     "summary": "Shows which music track is playing, and lets you play music on demand."
+    },
+    {
+     "name": "Infinite Music",
+     "file": "infinite-music-0.4.6.jar",
+     "summary": "Removes the delay between music tracks."
+    },
+    {
+     "name": "SoundsBeGone",
+     "file": "soundsbegone-fabric-1.5.2+mc1.21.jar",
+     "summary": "Permanently mute specific sounds you don't like."
+    },
+    {
+     "name": "Zoomify",
+     "file": "zoomify-2.15.2+1.21.1.jar",
+     "summary": "A highly configurable zoom key."
+    }
+   ]
+  },
+  {
+   "name": "Performance & Fixes",
+   "mods": [
+    {
+     "name": "Sodium",
+     "file": "sodium-fabric-0.8.12+mc1.21.1.jar",
+     "summary": "Rendering engine overhaul for major FPS gains and less stutter."
+    },
+    {
+     "name": "Reese's Sodium Options",
+     "file": "reeses-sodium-options-fabric-2.2.3+mc1.21.1.jar",
+     "summary": "A better layout for Sodium's video settings screen."
+    },
+    {
+     "name": "Lithium",
+     "file": "lithium-fabric-0.15.4+mc1.21.1.jar",
+     "summary": "Broad game-logic optimizations without changing gameplay."
+    },
+    {
+     "name": "ImmediatelyFast",
+     "file": "ImmediatelyFast-Fabric-1.6.11+1.21.1.jar",
+     "summary": "Speeds up immediate-mode rendering (HUD, GUIs, text)."
+    },
+    {
+     "name": "BadOptimizations",
+     "file": "BadOptimizations-2.4.1-1.21.1.jar",
+     "summary": "Optimizations focused on things other than rendering."
+    },
+    {
+     "name": "Krypton",
+     "file": "krypton-0.2.8.jar",
+     "summary": "Optimizes the networking stack and entity tracker."
+    },
+    {
+     "name": "FerriteCore",
+     "file": "ferritecore-7.0.3-fabric.jar",
+     "summary": "Reduces memory usage."
+    },
+    {
+     "name": "ModernFix",
+     "file": "modernfix-fabric-5.25.1+mc1.21.1.jar",
+     "summary": "Wide-ranging performance improvements and faster load times."
+    },
+    {
+     "name": "Concurrent Chunk Management Engine",
+     "file": "c2me-fabric-mc1.21.1-0.4.0-alpha.0.23.jar",
+     "summary": "Multithreaded chunk generation and loading."
+    },
+    {
+     "name": "EntityCulling",
+     "file": "entityculling-fabric-1.10.5-mc1.21.1.jar",
+     "summary": "Skips rendering entities and block entities you can't see."
+    },
+    {
+     "name": "More Culling",
+     "file": "moreculling-fabric-1.21.1-1.0.8.jar",
+     "summary": "Additional rendering culling optimizations."
+    },
+    {
+     "name": "Particle Core",
+     "file": "particle_core-0.3.3+1.21.jar",
+     "summary": "Particle culling and rendering optimizations."
+    },
+    {
+     "name": "ScalableLux",
+     "file": "ScalableLux-0.1.0.1+fabric.d0d58ab-all.jar",
+     "summary": "Rewritten light engine for faster, error-free lighting."
+    },
+    {
+     "name": "Fast Noise",
+     "file": "zfastnoise-1.0.13+1.21.jar",
+     "summary": "Optimizes vanilla world-generation noise."
+    },
+    {
+     "name": "Debugify",
+     "file": "Debugify-1.21.1+1.0.jar",
+     "summary": "Fixes vanilla bugs straight from the official bug tracker."
+    },
+    {
+     "name": "Packet Fixer",
+     "file": "packetfixer-3.3.1-1.20.5-1.21.X-merged.jar",
+     "summary": "Fixes packet and NBT size problems common in large modpacks."
+    },
+    {
+     "name": "Neruina",
+     "file": "neruina-3.3.3+1.21.1-fabric.jar",
+     "summary": "Stops ticking-entity crashes from bricking your world."
+    },
+    {
+     "name": "Not Enough Crashes",
+     "file": "notenoughcrashes-fabric-4.4.9+1.21.1.jar",
+     "summary": "Return to the title screen after a crash and see which mod caused it."
+    },
+    {
+     "name": "ToolTip Fix",
+     "file": "tooltipfix-1.1.1-1.20.jar",
+     "summary": "Keeps long tooltips from running off the screen."
+    },
+    {
+     "name": "StackDeobfuscator",
+     "file": "StackDeobfuscatorFabric-1.4.3+08e71cc.jar",
+     "summary": "Makes crash stack traces human-readable."
+    }
+   ]
+  },
+  {
+   "name": "Libraries",
+   "mods": [
+    {
+     "name": "Fabric API",
+     "file": "fabric-api-0.116.14+1.21.1.jar",
+     "summary": "Core hooks required by nearly every Fabric mod."
+    },
+    {
+     "name": "Fabric Language Kotlin",
+     "file": "fabric-language-kotlin-1.13.13+kotlin.2.4.10.jar",
+     "summary": "Kotlin support for Fabric mods."
+    },
+    {
+     "name": "Architectury",
+     "file": "architectury-13.0.8-fabric.jar",
+     "summary": "Multiplatform modding API."
+    },
+    {
+     "name": "Platform",
+     "file": "Platform-fabric-1.21.1-1.3.3.jar",
+     "summary": "Cross-platform library built on Architectury."
+    },
+    {
+     "name": "Cloth Config",
+     "file": "cloth-config-15.0.140-fabric.jar",
+     "summary": "Config screen API."
+    },
+    {
+     "name": "YetAnotherConfigLib",
+     "file": "yet_another_config_lib_v3-3.8.2+1.21.1-fabric.jar",
+     "summary": "Config library."
+    },
+    {
+     "name": "Fzzy Config",
+     "file": "fzzy_config-0.7.6+1.21.jar",
+     "summary": "Config engine with auto-generated GUIs and syncing."
+    },
+    {
+     "name": "Forge Config API Port",
+     "file": "ForgeConfigAPIPort-v21.1.6-1.21.1-Fabric.jar",
+     "summary": "Forge/NeoForge config systems on Fabric."
+    },
+    {
+     "name": "SuperMartijn642's Config Lib",
+     "file": "supermartijn642configlib-1.1.8-fabric-mc1.21.jar",
+     "summary": "Config library."
+    },
+    {
+     "name": "SuperMartijn642's Core Lib",
+     "file": "supermartijn642corelib-1.1.21-fabric-mc1.21.jar",
+     "summary": "GUI and core library."
+    },
+    {
+     "name": "Balm",
+     "file": "balm-fabric-1.21.1-21.0.63.jar",
+     "summary": "Shared library for Blay's mods (Waystones, NetherPortalFix, and more)."
+    },
+    {
+     "name": "Resourceful Lib",
+     "file": "resourcefullib-fabric-1.21-3.0.12.jar",
+     "summary": "Library for Team Resourceful mods."
+    },
+    {
+     "name": "MidnightLib",
+     "file": "midnightlib-1.7.5-fabric+1.21.1.jar",
+     "summary": "Library for Team MidnightDust mods."
+    },
+    {
+     "name": "LibJF",
+     "file": "libjf-3.17.5.jar",
+     "summary": "Library by JFronny."
+    },
+    {
+     "name": "Konkrete",
+     "file": "konkrete_fabric_1.9.9_MC_1.21.jar",
+     "summary": "Library for Keksuccino's mods (FancyMenu)."
+    },
+    {
+     "name": "Melody",
+     "file": "melody_fabric_1.0.10_MC_1.21.jar",
+     "summary": "Background-music playback library."
+    },
+    {
+     "name": "Iceberg",
+     "file": "Iceberg-1.21.1-fabric-1.3.2.jar",
+     "summary": "Events and utility library."
+    },
+    {
+     "name": "oωo",
+     "file": "owo-lib-0.12.15.4+1.21.jar",
+     "summary": "UI and data library."
+    },
+    {
+     "name": "GeckoLib 4",
+     "file": "geckolib-fabric-1.21.1-4.9.2.jar",
+     "summary": "Animation engine used by modded entities and blocks."
+    },
+    {
+     "name": "Athena",
+     "file": "athena-fabric-1.21.1-4.0.6.jar",
+     "summary": "Baked model loader."
+    },
+    {
+     "name": "Searchables",
+     "file": "Searchables-fabric-1.21.1-1.0.2.jar",
+     "summary": "Search bar library."
+    },
+    {
+     "name": "Configurable",
+     "file": "configurable-3.5.2+1.21.1-fabric.jar",
+     "summary": "Config library."
+    },
+    {
+     "name": "Accessories",
+     "file": "accessories-fabric-1.1.0-beta.53+1.21.1.jar",
+     "summary": "Data-driven accessory slot framework."
+    },
+    {
+     "name": "Accessories Compatibility Layer",
+     "file": "accessories_compat_layer-fabric-0.1.12+1.21.1.jar",
+     "summary": "Bridges other accessory APIs into Accessories."
+    },
+    {
+     "name": "Trinkets",
+     "file": "trinkets-3.10.0.jar",
+     "summary": "Data-driven accessory slot system."
+    },
+    {
+     "name": "Sophisticated Core",
+     "file": "sophisticatedcore-1.21.1-1.2.9.21.168.jar",
+     "summary": "Shared code for Sophisticated Backpacks and Storage."
+    },
+    {
+     "name": "Tim Core",
+     "file": "timcore-fabric-1.7.3-1.32.0.jar",
+     "summary": "Shared code for several Cobblemon side-mods (Capture XP, Catch Rate Display)."
+    },
+    {
+     "name": "Radical Cobblemon Trainers API",
+     "file": "rctapi-fabric-1.21.1-0.15.2-beta.jar",
+     "summary": "Trainer management and battle API behind Radical Cobblemon Trainers."
+    },
+    {
+     "name": "Fusion",
+     "file": "fusion-1.2.12-fabric-mc1.21.jar",
+     "summary": "Extra texture and model types for resource packs."
+    },
+    {
+     "name": "Global Data- & Resourcepacks",
+     "file": "globalpacks-fabric-1.21.1-21.0.6.jar",
+     "summary": "Applies the pack's bundled data and resource packs to every world."
+    },
+    {
+     "name": "Default Options",
+     "file": "defaultoptions-fabric-1.21.1-21.1.7.jar",
+     "summary": "Ships the pack's default settings and keybinds."
+    },
+    {
+     "name": "Resource Pack Overrides",
+     "file": "ResourcePackOverrides-v21.1.0-1.21.1-Fabric.jar",
+     "summary": "Keeps the pack's required resource packs always active."
+    },
+    {
+     "name": "Resource Pack Options",
+     "file": "respackopts-4.14.0+1.21.1.4.jar",
+     "summary": "Config menus for resource packs."
+    },
+    {
+     "name": "AdvancementDisable",
+     "file": "advancementdisable-fabric-1.0.1+1.21.jar",
+     "summary": "Disables unwanted mod advancements to keep the advancement tabs clean."
+    },
+    {
+     "name": "Huge Structure Blocks",
+     "file": "huge-structure-blocks-fabric-1.1.6.jar",
+     "summary": "Structure blocks with much larger capture areas."
+    }
+   ]
+  }
+ ]
+}

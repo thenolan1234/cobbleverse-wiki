@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legendaries · COBBLEVERSE Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0b1a20; --shelf:#12262e; --reef:#1a3540; --deep:#081318;
+  --foam:#dcecef; --tide:#5ad1c8; --amber:#f0a840; --coral:#e8735c;
+  --silt:#7fa3ae; --moss:#8fd18b;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--reef) var(--abyss)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--abyss); color:var(--foam);
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600; letter-spacing:-.02em; margin:0;
+}
+a{color:var(--tide);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:1px 5px;font-size:12.5px}
+
+/* ---- top nav ---- */
+nav.top{
+  display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;
+  padding:10px 18px;border-bottom:1px solid var(--reef);
+  background:var(--deep);position:sticky;top:0;z-index:50;
+}
+nav.top .brand{
+  font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;
+  color:var(--amber);margin-right:14px;letter-spacing:.02em;
+}
+nav.top .brand small{color:var(--silt);font-weight:400;font-size:11px;margin-left:6px}
+nav.top a.item{
+  padding:4px 10px;border-radius:3px;font-size:12.5px;color:var(--foam);
+}
+nav.top a.item:hover{background:var(--shelf);text-decoration:none}
+nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+
+/* ---- article pages ---- */
+.article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
+.article h1{font-size:30px;margin-bottom:6px}
+.article .sub{color:var(--silt);font-size:13px;margin-bottom:26px}
+.article section{margin:26px 0}
+.article h2{
+  font-size:19px;color:var(--amber);margin-bottom:10px;
+  border-bottom:1px solid var(--reef);padding-bottom:6px;
+}
+.article p{margin:9px 0}
+.article ul{margin:8px 0;padding-left:22px}
+.article li{margin:4px 0}
+.callout{
+  background:var(--shelf);border:1px solid var(--reef);
+  border-left:2px solid var(--tide);padding:12px 15px;border-radius:3px;
+  margin:14px 0;font-size:13.5px;
+}
+.callout.warn{border-left-color:var(--amber)}
+
+/* ---- home cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:4px;
+  padding:15px 16px;display:block;color:var(--foam);
+}
+.card:hover{border-color:var(--tide);text-decoration:none}
+.card h3{font-size:15px;color:var(--tide);margin-bottom:5px}
+.card p{margin:0;font-size:12.5px;color:var(--silt);line-height:1.5}
+.statrow{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0}
+.stat .n{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:600;color:var(--tide)}
+.stat .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--silt)}
+
+/* ---- browser (sidebar+detail) pages ---- */
+.wrap{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 45px)}
+@media(max-width:840px){.wrap{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--reef);display:flex;flex-direction:column;min-height:0}
+.padbox{padding:14px 16px 10px}
+.padbox h1{font-size:17px}
+.padbox p.note{margin:5px 0 0;color:var(--silt);font-size:11px;line-height:1.5}
+.searchbox{padding:0 16px 8px}
+input[type=search]{
+  width:100%;padding:8px 11px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:13px;
+}
+input[type=search]:focus,select:focus{outline:2px solid var(--tide);outline-offset:-1px}
+.filters{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap}
+.filters select,.filters label.chk{
+  background:var(--shelf);color:var(--foam);border:1px solid var(--reef);
+  border-radius:3px;font:inherit;font-size:11.5px;padding:4px 6px;
+}
+.filters label.chk{display:flex;align-items:center;gap:5px;cursor:pointer}
+#results{overflow-y:auto;flex:1;padding:0 8px 18px;min-height:0}
+.row{
+  padding:5px 10px;border-radius:3px;cursor:pointer;
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.row:hover{background:var(--shelf)}
+.row[aria-selected=true]{background:var(--reef)}
+.row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .ns{font-size:10px;color:var(--silt);flex-shrink:0}
+img.spr{image-rendering:pixelated;vertical-align:middle;flex-shrink:0}
+.chip img.spr{margin:-3px 3px -3px -2px}
+.mon img.spr{margin:-6px 2px -6px -4px}
+.empty{color:var(--silt);font-size:12px;padding:10px}
+main{overflow-y:auto;padding:24px 30px 70px;min-width:0}
+@media(max-width:840px){main{padding:18px 14px 60px}}
+.item-head{border-bottom:1px solid var(--reef);padding-bottom:14px;margin-bottom:20px}
+.item-head h2{font-size:26px}
+.id{color:var(--tide);font-size:12px;margin-top:4px;word-break:break-all}
+.tip{color:var(--silt);font-size:13px;margin-top:8px;font-style:italic}
+section.blk{margin-bottom:28px}
+section.blk>h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silt);margin-bottom:10px;
+}
+.splash{color:var(--silt);max-width:56ch;font-size:13.5px;line-height:1.8}
+.splash b{color:var(--foam);font-weight:400}
+
+/* chips */
+.chip{
+  display:inline-block;background:var(--deep);border:1px solid var(--reef);
+  border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer;color:var(--foam);
+  margin:0 4px 4px 0;
+}
+a.chip:hover{border-color:var(--tide);color:var(--tide);text-decoration:none}
+.chip.tag{border-style:dashed;color:var(--silt);cursor:default}
+.chip.plain{cursor:default}
+.src{font-size:10.5px;color:var(--silt);margin-top:6px}
+.badge{
+  display:inline-block;border-radius:3px;padding:1px 7px;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--reef);
+}
+.badge.addon{color:var(--amber);border-color:var(--amber)}
+.b-common{color:var(--silt)} .b-uncommon{color:var(--tide)}
+.b-rare{color:var(--amber)} .b-ultra-rare{color:var(--coral)}
+
+/* pokemon type chips: colored dot + text (identity never color-alone) */
+.type{
+  display:inline-flex;align-items:center;gap:6px;background:var(--deep);
+  border:1px solid var(--reef);border-radius:3px;padding:2px 9px 2px 7px;
+  font-size:12px;text-transform:capitalize;margin-right:5px;
+}
+.type i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* stat meters */
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;max-width:420px;align-items:center}
+.stats .k{font-size:11px;color:var(--silt);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stats .bar{height:6px;background:var(--reef);border-radius:3px;overflow:hidden}
+.stats .bar i{display:block;height:100%;background:var(--tide);border-radius:3px}
+.stats .v{font-size:12px;text-align:right;min-width:3ch}
+.stats .total .v,.stats .total .k{color:var(--amber)}
+
+/* generic data tables */
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+table.data th{
+  text-align:left;color:var(--silt);font-weight:400;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.1em;padding:5px 10px 5px 0;
+  border-bottom:1px solid var(--reef);
+}
+table.data td{padding:6px 10px 6px 0;border-bottom:1px solid var(--shelf);vertical-align:top}
+details.biomes{display:inline-block}
+details.biomes summary{cursor:pointer;color:var(--tide);font-size:12px;list-style:none}
+details.biomes summary::after{content:" \25be"}
+details.biomes[open] summary::after{content:" \25b4"}
+details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:4px 0}
+.meta{font-size:11.5px;color:var(--silt)}
+.bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tide)}
+.drop{
+  display:grid;grid-template-columns:1fr auto;gap:3px 16px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.drop .table{font-size:13px;word-break:break-all}
+.drop .runs{
+  font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;
+  color:var(--amber);white-space:nowrap;text-align:right;line-height:1.2;
+}
+.drop .runs small{display:block;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);font-weight:400}
+.drop .meta{grid-column:1/-1}
+.drop .bar{grid-column:1/-1;height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.drop .bar i{display:block;height:100%;background:var(--tide)}
+.planner{
+  background:var(--shelf);border:1px solid var(--reef);border-left:2px solid var(--amber);
+  padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;
+  gap:11px;flex-wrap:wrap;font-size:13px;
+}
+.planner input{
+  width:64px;padding:5px 7px;background:var(--abyss);color:var(--amber);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-weight:600;
+  text-align:center;
+}
+.planner .lbl{color:var(--silt)}
+.recipe{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:11px 14px;margin-bottom:8px;
+}
+.recipe .kind{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--silt)}
+.recipe .ing{margin-top:7px}
+.none{color:var(--coral);font-size:13px}
+.none b{color:var(--foam)}
+.hint{color:var(--silt);font-size:12px;margin-top:6px;line-height:1.6}
+
+/* trainer team cards */
+.mon{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:10px 13px;margin-bottom:8px;
+  display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;
+}
+.mon .sp{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600}
+.mon .lv{color:var(--amber);font-size:13px}
+.mon .kv{font-size:11.5px;color:var(--silt)}
+.mon .kv b{color:var(--foam);font-weight:400}
+.mon .moves{width:100%;font-size:11.5px;color:var(--silt)}
+.mon .moves code{margin-right:4px}
+
+/* milestone list (progression) */
+.mile{
+  display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.mile .kind{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--reef);border-radius:3px;height:fit-content;
+  white-space:nowrap;margin-top:2px;
+}
+.mile .kind.badge-k{color:var(--amber);border-color:var(--amber)}
+.mile .kind.elite-k{color:var(--coral)}
+.mile .kind.champion-k{color:var(--coral);border-color:var(--coral)}
+.mile .kind.legendary-k{color:var(--tide);border-color:var(--tide)}
+.mile .kind.item-k{color:var(--moss)}
+.mile h4{font-size:14.5px}
+.mile p{margin:2px 0 0;font-size:12.5px;color:var(--silt)}
+.mile .ico{font-size:11px;color:var(--silt)}
+footer.gen{
+  border-top:1px solid var(--reef);color:var(--silt);font-size:11px;
+  padding:14px 18px;text-align:center;
+}
+footer.gen a{color:var(--silt);text-decoration:underline}
+</style>
+</head><body>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html" aria-current="page">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a></nav>
+<div class='article'><h1>Legendaries</h1><p class='sub'>How every legendary and mythical is actually obtained in COBBLEVERSE</p><p>Legendary and Mythical Pokémon in COBBLEVERSE are never simple random encounters. Most are tied to the <b>Poké Radar</b> system from LumyMon (<code>lumymon:poke_radar</code>, crafted from iron and redstone around a <b>Locator Chip</b> found in bastion treasure, end city and ominous trial vault loot): upgrade the radar with type gems and key materials to track a legendary's structure, then bring the right summoning item to the altar inside. Others are guarded by the <b>Legendary Monuments</b> shrine system, hidden behind boss trainers of Team Rocket and Team Galactic, or simply roam the wild as ultra-rare natural spawns. Every method below is taken from the pack's own spawn data, recipes, loot tables and advancements.</p><section><h2><a href='pokedex.html#articuno'>Articuno</a></h2><p>Craft the <a href="items.html#lumymon:articuno_radar">Articuno Radar</a> (Poké Radar + Ice Gem + Never-Melt Ice + Blue Ice) to locate Articuno's tower. The <a href="items.html#lumymon:glacier_feather">Glacier Feather</a> is found inside the tower itself — use it at the altar to summon Articuno at level 50.</p><p>Key items: <a class='chip' href='items.html#lumymon:articuno_radar'>Articuno Radar</a> <a class='chip' href='items.html#lumymon:glacier_feather'>Glacier Feather</a> <a class='chip' href='items.html#lumymon:poke_radar'>Poke Radar</a></p></section><section><h2><a href='pokedex.html#zapdos'>Zapdos</a></h2><p>Craft the <a href="items.html#lumymon:zapdos_radar">Zapdos Radar</a> (Poké Radar + Electric Gem + Cell Battery + gold) to locate Zapdos' tower. Retrieve the <a href="items.html#lumymon:thunder_feather">Thunder Feather</a> inside and summon Zapdos (level 50–60) at the altar.</p><p>Key items: <a class='chip' href='items.html#lumymon:zapdos_radar'>Zapdos Radar</a> <a class='chip' href='items.html#lumymon:thunder_feather'>Thunder Feather</a></p></section><section><h2><a href='pokedex.html#moltres'>Moltres</a></h2><p>Craft the <a href="items.html#lumymon:moltres_radar">Moltres Radar</a> (Poké Radar + Fire Gem + Fire Stone + blaze powder) — its tower stands <b>in the Nether</b>. The <a href="items.html#lumymon:ember_feather">Ember Feather</a> found inside summons Moltres (level 50–60) at the altar.</p><p>Key items: <a class='chip' href='items.html#lumymon:moltres_radar'>Moltres Radar</a> <a class='chip' href='items.html#lumymon:ember_feather'>Ember Feather</a></p></section><section><h2>Galarian Birds (Dyna Tree)</h2><p>The <a href="items.html#lumymon:dyna_tree_radar">Dyna Tree Radar</a> (Poké Radar + Flying Gem + Dynamax Candy + glowstone) locates the Dyna Tree, where all three <b>Galarian</b> birds spawn at level 60: <a href="pokedex.html#articuno">Galarian Articuno</a> at night, <a href="pokedex.html#zapdos">Galarian Zapdos</a> during thunderstorms, and <a href="pokedex.html#moltres">Galarian Moltres</a> by day.</p><p>Key items: <a class='chip' href='items.html#lumymon:dyna_tree_radar'>Dyna Tree Radar</a></p></section><section><h2><a href='pokedex.html#mewtwo'>Mewtwo</a></h2><p>Recreate Team Rocket's experiment: place <a href="items.html#lumymon:ancient_dna">Ancient DNA</a> (dropped by Gym Leader <a href="trainers.html#kanto_giovanni">Giovanni</a>) and a <a href="items.html#lumymon:cloning_catalyst">Cloning Catalyst</a> (dropped by Rocket Admin <a href="trainers.html#team_rocket_admin_atena">Atena</a>) into Cobblemon's <b>Resurrection Machine</b>. The revived Mewtwo has 2 guaranteed perfect IVs; a <a href="items.html#lumymon:cloning_catalyst_shiny">Radiant Cloning Catalyst</a> yields a <b>Shiny</b> Mewtwo with 4. The <a href="items.html#lumymon:rocket_key">Rocket Key</a> reveals the Team Rocket Tower's coordinates.</p><p>Key items: <a class='chip' href='items.html#lumymon:ancient_dna'>Ancient Dna</a> <a class='chip' href='items.html#lumymon:cloning_catalyst'>Cloning Catalyst</a> <a class='chip' href='items.html#lumymon:cloning_catalyst_shiny'>Cloning Catalyst Shiny</a> <a class='chip' href='items.html#lumymon:rocket_key'>Rocket Key</a></p></section><section><h2><a href='pokedex.html#mew'>Mew</a></h2><p>Craft the <a href="items.html#lumymon:origin_fossil">Origin Fossil</a> from any Cobblemon fossil, an Ancient Origin Ball and <a href="items.html#lumymon:ancient_dna">Ancient DNA</a>, then awaken Mew (level 75–90) with it at the <b>Mew Shrine</b> in the Origin Temple.</p><p>Key items: <a class='chip' href='items.html#lumymon:origin_fossil'>Origin Fossil</a> <a class='chip' href='items.html#lumymon:ancient_dna'>Ancient Dna</a></p></section><section><h2><a href='pokedex.html#raikou'>Raikou, Entei &amp;amp; Suicune</a></h2><p>All three Legendary Beasts spawn naturally at the <b>Burned Tower</b> structure — each with an equal one-in-three chance, level 60, ultra-rare bucket. The <a href="items.html#lumymon:burned_radar">Burned Tower Radar</a> (Poké Radar + Fire Gem + flint and steel) locates it.</p><p>Key items: <a class='chip' href='items.html#lumymon:burned_radar'>Burned Radar</a></p></section><section><h2><a href='pokedex.html#lugia'>Lugia</a></h2><p>The <a href="items.html#lumymon:radio_card">Radio Card</a> locates the Rocket Radio Tower in Johto, where Team Rocket boss <a href="trainers.html#team_rocket_giovanni">Giovanni</a> drops the <a href="items.html#lumymon:silver_wing">Silver Wing</a>. Use it at <b>Whirl Island</b> (found with the <a href="items.html#lumymon:lugia_radar">Lugia Radar</a>) to summon Lugia at level 60–70.</p><p>Key items: <a class='chip' href='items.html#lumymon:silver_wing'>Silver Wing</a> <a class='chip' href='items.html#lumymon:lugia_radar'>Lugia Radar</a> <a class='chip' href='items.html#lumymon:radio_card'>Radio Card</a></p></section><section><h2><a href='pokedex.html#hooh'>Ho-Oh</a></h2><p>Defeat <a href="trainers.html#old_sage">the Old Sage</a> for the <a href="items.html#lumymon:rainbow_wing">Rainbow Wing</a>, then summon Ho-Oh (level 60–70) at the <b>Bell Tower</b>, located with the <a href="items.html#lumymon:hooh_radar">Ho-Oh Radar</a> (Poké Radar + Flying Gem + all five stat feathers + wind charge).</p><p>Key items: <a class='chip' href='items.html#lumymon:rainbow_wing'>Rainbow Wing</a> <a class='chip' href='items.html#lumymon:hooh_radar'>Hooh Radar</a></p></section><section><h2><a href='pokedex.html#celebi'>Celebi</a></h2><p>Defeat the legendary trainer <a href="trainers.html#rival_red">Red</a> to claim the <a href="items.html#lumymon:gs_ball">GS Ball</a>, which reveals Celebi (level 75–80) within the <b>Ilex Shrine</b>.</p><p>Key items: <a class='chip' href='items.html#lumymon:gs_ball'>Gs Ball</a></p></section><section><h2><a href='pokedex.html#regirock'>Regirock, Regice &amp;amp; Registeel</a></h2><p>Each golem sleeps in its own temple, located with a dedicated radar built from the matching type gem plus tumblestones: <a href="items.html#lumymon:regirock_radar">Regirock Radar</a>, <a href="items.html#lumymon:regice_radar">Regice Radar</a> and <a href="items.html#lumymon:registeel_radar">Registeel Radar</a>. The golems await inside at level 40–50.</p><p>Key items: <a class='chip' href='items.html#lumymon:regirock_radar'>Regirock Radar</a> <a class='chip' href='items.html#lumymon:regice_radar'>Regice Radar</a> <a class='chip' href='items.html#lumymon:registeel_radar'>Registeel Radar</a></p></section><section><h2><a href='pokedex.html#latias'>Latias &amp;amp; Latios</a></h2><p>The <a href="items.html#lumymon:lati_radar">Eon Duo Radar</a> (needs a Soul Dew) locates the <b>Secret Garden</b>. Hoenn Champion <a href="trainers.html#hoenn_champion_rocco">Rocco</a> drops both dews: <a href="items.html#lumymon:ruby_dew">Ruby Dew</a> attracts <a href="pokedex.html#latias">Latias</a> and <a href="items.html#lumymon:sapphire_dew">Sapphire Dew</a> attracts <a href="pokedex.html#latios">Latios</a> (level 50–75) at the garden's altar.</p><p>Key items: <a class='chip' href='items.html#lumymon:lati_radar'>Lati Radar</a> <a class='chip' href='items.html#lumymon:ruby_dew'>Ruby Dew</a> <a class='chip' href='items.html#lumymon:sapphire_dew'>Sapphire Dew</a></p></section><section><h2><a href='pokedex.html#kyogre'>Kyogre</a></h2><p>Craft the <a href="items.html#lumymon:ocean_core">Ocean Core</a> (Water Gem + Heart of the Sea) and use it within Kyogre's <b>Submerged Temple</b>, located with the <a href="items.html#lumymon:kyogre_radar">Kyogre Radar</a>. Kyogre appears at level 60–70.</p><p>Key items: <a class='chip' href='items.html#lumymon:ocean_core'>Ocean Core</a> <a class='chip' href='items.html#lumymon:kyogre_radar'>Kyogre Radar</a></p></section><section><h2><a href='pokedex.html#groudon'>Groudon</a></h2><p>Blast-furnace the <b>Geostone</b> blocks found on Groudon's volcanic island into <a href="items.html#lumymon:molten_crust">Molten Crust</a>, craft the <a href="items.html#lumymon:earth_core">Earth Core</a> (Molten Crust + iron block), and summon Groudon (level 60–70) atop the volcano. The <a href="items.html#lumymon:groudon_radar">Groudon Radar</a> marks the island.</p><p>Key items: <a class='chip' href='items.html#lumymon:earth_core'>Earth Core</a> <a class='chip' href='items.html#lumymon:molten_crust'>Molten Crust</a> <a class='chip' href='items.html#lumymon:groudon_radar'>Groudon Radar</a></p></section><section><h2><a href='pokedex.html#rayquaza'>Mega Rayquaza</a></h2><p>Forge the <a href="items.html#lumymon:sky_core">Sky Core</a> from four treasures: the <a href="items.html#lumymon:aether_gem">Aether Gem</a> (from <a href="trainers.html#hoenn_lyris">Lyris</a>), <a href="items.html#lumymon:desolate_gem">Desolate Gem</a> (Magma Leader <a href="trainers.html#team_magma_max">Max</a>), <a href="items.html#lumymon:primordial_gem">Primordial Gem</a> (Aqua Leader <a href="trainers.html#team_aqua_ivan">Ivan</a>) and the <a href="items.html#lumymon:emerald_emblem">Emerald Emblem</a> found in the Sky Pillar itself. Summon <b>Mega Rayquaza</b> (level 70–80) at the top of the Sky Pillar, located with the <a href="items.html#lumymon:rayquaza_radar">Mega Rayquaza Radar</a>.</p><p>Key items: <a class='chip' href='items.html#lumymon:sky_core'>Sky Core</a> <a class='chip' href='items.html#lumymon:aether_gem'>Aether Gem</a> <a class='chip' href='items.html#lumymon:desolate_gem'>Desolate Gem</a> <a class='chip' href='items.html#lumymon:primordial_gem'>Primordial Gem</a> <a class='chip' href='items.html#lumymon:emerald_emblem'>Emerald Emblem</a> <a class='chip' href='items.html#lumymon:rayquaza_radar'>Rayquaza Radar</a></p></section><section><h2><a href='pokedex.html#jirachi'>Jirachi</a></h2><p>Find the <a href="items.html#lumymon:melodic_tape_vol_1">Melodic Tape (Vol.1)</a> inside the <b>Wish Cave</b> and play it at Jirachi's shrine to awaken it at level 75–80.</p><p>Key items: <a class='chip' href='items.html#lumymon:melodic_tape_vol_1'>Melodic Tape Vol 1</a></p></section><section><h2><a href='pokedex.html#deoxys'>Deoxys</a></h2><p>A <a href="items.html#lumymon:meteorite_crystal">Meteorite Crystal</a> lies at Deoxys' fallen meteorite — use it to call Deoxys back to its shrine at level 75–80. The Deoxys Meteorite block (from Mega Showdown) later lets it change forms.</p><p>Key items: <a class='chip' href='items.html#lumymon:meteorite_crystal'>Meteorite Crystal</a></p></section><section><h2><a href='pokedex.html#uxie'>Uxie, Mesprit &amp;amp; Azelf</a></h2><p>Defeat the three Team Galactic Commanders to reveal the hidden lakes: <a href="trainers.html#team_galactic_commander_jupiter">Jupiter</a> in the Eterna Building (<a href="items.html#lumymon:acuity_proof">Acuity Proof</a>), <a href="trainers.html#team_galactic_commander_mars">Mars</a> at the Wind Plant (<a href="items.html#lumymon:verity_proof">Verity Proof</a>) and <a href="trainers.html#team_galactic_commander_saturn">Saturn</a> in the Galactic HQ (<a href="items.html#lumymon:valor_proof">Valor Proof</a>). <a href="pokedex.html#uxie">Uxie</a> (Lake Acuity), <a href="pokedex.html#mesprit">Mesprit</a> (Lake Verity) and <a href="pokedex.html#azelf">Azelf</a> (Lake Valor) await at level 40–65, and each guardian grants its jewel of gratitude — needed to reforge a broken Red Chain.</p><p>Key items: <a class='chip' href='items.html#lumymon:acuity_proof'>Acuity Proof</a> <a class='chip' href='items.html#lumymon:verity_proof'>Verity Proof</a> <a class='chip' href='items.html#lumymon:valor_proof'>Valor Proof</a></p></section><section><h2><a href='pokedex.html#dialga'>Dialga &amp;amp; Palkia</a></h2><p>Seize the <a href="items.html#lumymon:red_chain">Red Chain</a> by defeating <a href="trainers.html#team_galactic_cyrus">Cyrus</a> at the Galactic HQ — or reforge a <a href="items.html#lumymon:broken_red_chain">Broken Red Chain</a> with the Knowledge, Emotion and Willpower Jewels of the Lake Guardians. Use it on the altars at <b>Spear Pillar</b> (located with the <a href="items.html#lumymon:space_time_radar">Space-Time Radar</a>) to summon <a href="pokedex.html#dialga">Dialga</a> and <a href="pokedex.html#palkia">Palkia</a> at level 70.</p><p>Key items: <a class='chip' href='items.html#lumymon:red_chain'>Red Chain</a> <a class='chip' href='items.html#lumymon:broken_red_chain'>Broken Red Chain</a> <a class='chip' href='items.html#lumymon:knowledge_jewel'>Knowledge Jewel</a> <a class='chip' href='items.html#lumymon:emotion_jewel'>Emotion Jewel</a> <a class='chip' href='items.html#lumymon:willpower_jewel'>Willpower Jewel</a> <a class='chip' href='items.html#lumymon:space_time_radar'>Space Time Radar</a></p></section><section><h2><a href='pokedex.html#heatran'>Heatran</a></h2><p>Combine the <a href="items.html#lumymon:heat_fragment">Heat Fragment</a> (from <a href="trainers.html#sinnoh_buck">Buck</a>) and <a href="items.html#lumymon:heat_splinter">Heat Splinter</a> (from Galactic scientist <a href="trainers.html#team_galactic_charon">Charon</a>) into a Magmatic Cluster, then reheat it in the <b>Stark Forge</b> to restore the <a href="items.html#lumymon:magma_stone">Magma Stone</a>. It summons Heatran (level 50–65) at its altar in <b>Stark Mountain</b>, a Nether fortress located with the <a href="items.html#lumymon:heatran_radar">Heatran Radar</a>.</p><p>Key items: <a class='chip' href='items.html#lumymon:magma_stone'>Magma Stone</a> <a class='chip' href='items.html#lumymon:heat_fragment'>Heat Fragment</a> <a class='chip' href='items.html#lumymon:heat_splinter'>Heat Splinter</a> <a class='chip' href='items.html#lumymon:heatran_radar'>Heatran Radar</a></p></section><section><h2><a href='pokedex.html#regigigas'>Regigigas</a></h2><p>Forge the <a href="items.html#lumymon:titan_relic">Titan Relic</a> from the five elemental relics (Cryo, Draco, Metal, Pebble and Spark, mined from their matching LumyMon ores) and use it to awaken Regigigas (level 70–80) inside the <b>Snowpoint Temple</b>, located with the <a href="items.html#lumymon:regigigas_radar">Regigigas Radar</a>.</p><p>Key items: <a class='chip' href='items.html#lumymon:titan_relic'>Titan Relic</a> <a class='chip' href='items.html#lumymon:regigigas_radar'>Regigigas Radar</a></p></section><section><h2><a href='pokedex.html#cresselia'>Cresselia</a></h2><p>The <a href="items.html#lumymon:member_card">Member Card</a> (from <a href="trainers.html#sinnoh_elfio">Elfio</a>) reveals <b>Fullmoon Island</b>, Cresselia's dwelling. Weave a <a href="items.html#lumymon:dream_catcher">Dream Catcher</a> from <a href="items.html#lumymon:dream_string">Dream String</a> (looted in the island's dream side) and a <a href="items.html#lumymon:lunar_wing">Lunar Wing</a>, then channel it at Cresselia's altar (level 40–65).</p><p>Key items: <a class='chip' href='items.html#lumymon:member_card'>Member Card</a> <a class='chip' href='items.html#lumymon:dream_catcher'>Dream Catcher</a> <a class='chip' href='items.html#lumymon:dream_string'>Dream String</a> <a class='chip' href='items.html#lumymon:lunar_wing'>Lunar Wing</a></p></section><section><h2><a href='pokedex.html#darkrai'>Darkrai</a></h2><p>Sleep holding the <a href="items.html#lumymon:moonlight_amulet">Moonlight Amulet</a> to cross into the <b>Nightmare Dimension</b> on Newmoon Island. Loot <a href="items.html#lumymon:nightmare_string">Nightmare String</a> there, craft the <a href="items.html#lumymon:nightmare_weaver">Nightmare Weaver</a> (amulet + string) and use it at Darkrai's shrine to manifest it (level 40–65). Keep a <a href="items.html#lumymon:lunar_wing">Lunar Wing</a> handy — it is your only way back out of the shadows.</p><p>Key items: <a class='chip' href='items.html#lumymon:moonlight_amulet'>Moonlight Amulet</a> <a class='chip' href='items.html#lumymon:nightmare_weaver'>Nightmare Weaver</a> <a class='chip' href='items.html#lumymon:nightmare_string'>Nightmare String</a> <a class='chip' href='items.html#lumymon:lunar_wing'>Lunar Wing</a></p></section><section><h2><a href='pokedex.html#manaphy'>Manaphy &amp;amp; Phione</a></h2><p>The rare <b>Manaphy Egg</b> is recovered from Manaphy's hidden ocean shrine, and Manaphy itself appears there at level 50. Per the pack's advancements, <a href="pokedex.html#phione">Phione</a> is obtained by hatching an egg (Cobbreeding handles Pokémon breeding and egg hatching in this pack).</p></section><section><h2><a href='pokedex.html#shaymin'>Shaymin</a></h2><p><a href="items.html#lumymon:prof_oak_letter">Professor Oak's Letter</a>, infused with Gracidea scent, invites Shaymin (level 50–55) to the <b>Flower Paradise</b> shrine — the letter is tied to the "Pallet Town Legacy" advancement (assembling the five first companions of Kanto). Each use fades the letter; restore a <a href="items.html#lumymon:faded_letter">Faded Letter</a> with a Gracidea Flower to call Shaymin again.</p><p>Key items: <a class='chip' href='items.html#lumymon:prof_oak_letter'>Prof Oak Letter</a> <a class='chip' href='items.html#lumymon:faded_letter'>Faded Letter</a></p></section><section><h2><a href='pokedex.html#giratina'>Giratina</a></h2><p>Restore the <a href="items.html#lumymon:old_journal">Old Journal</a> from a Torn Journal and Torn Page (both looted in the Team Galactic HQ and Wind Plant) to reveal <b>Turnback Cave</b>. Its depths hold a portal room into the <b>Distortion World</b> — a whole separate dimension — and cave chests can hold the <a href="items.html#legendarymonuments:griseous_key">Griseous Key</a>. In the Distortion World, mine Distortion Origin Ore for Raw Origin (smelts to <a href="items.html#legendarymonuments:origin_ingot">Origin Ingots</a>, and 8 Raw Origin + an iron ingot craft a reusable <a href="items.html#legendarymonuments:distortion_portal">Distortion Portal</a>). The <a href="items.html#lumymon:giratina_radar">Giratina Radar</a> then locates Giratina's Island, where the Renegade Pokémon lurks at level 75–95.</p><p>Key items: <a class='chip' href='items.html#lumymon:old_journal'>Old Journal</a> <a class='chip' href='items.html#lumymon:torn_journal'>Torn Journal</a> <a class='chip' href='items.html#lumymon:torn_page'>Torn Page</a> <a class='chip' href='items.html#legendarymonuments:griseous_key'>Griseous Key</a> <a class='chip' href='items.html#legendarymonuments:distortion_portal'>Distortion Portal</a> <a class='chip' href='items.html#lumymon:giratina_radar'>Giratina Radar</a> <a class='chip' href='items.html#legendarymonuments:origin_ingot'>Origin Ingot</a></p></section><section><h2><a href='pokedex.html#arceus'>Arceus</a></h2><p>Craft the <a href="items.html#lumymon:azure_flute">Azure Flute</a> from the <a href="items.html#lumymon:temporal_flute">Temporal Flute</a> (from <a href="trainers.html#hisui_damon">Damon</a>), the <a href="items.html#lumymon:spatial_flute">Spatial Flute</a> (from <a href="trainers.html#hisui_perula">Perula</a>) and an <a href="items.html#legendarymonuments:origin_ingot">Origin Ingot</a>. Hold right-click to play it and cross the dimensional veil to the <b>Temple of Sinnoh</b>, where Arceus awaits at level 70.</p><p>Key items: <a class='chip' href='items.html#lumymon:azure_flute'>Azure Flute</a> <a class='chip' href='items.html#lumymon:temporal_flute'>Temporal Flute</a> <a class='chip' href='items.html#lumymon:spatial_flute'>Spatial Flute</a> <a class='chip' href='items.html#legendarymonuments:origin_ingot'>Origin Ingot</a></p></section><section><h2><a href='pokedex.html#victini'>Victini</a></h2><p>Spawns naturally in the Nether's <b>crimson forest</b> at level 50 (ultra-rare).</p></section><section><h2><a href='pokedex.html#cobalion'>Swords of Justice</a></h2><p>All four spawn naturally: <a href="pokedex.html#cobalion">Cobalion</a> in windswept forests, <a href="pokedex.html#terrakion">Terrakion</a> in savannas, <a href="pokedex.html#virizion">Virizion</a> in forests (each level 50–70), and <a href="pokedex.html#keldeo">Keldeo</a> at level 60 (rarely 80) in Terralith's sakura groves and valleys.</p></section><section><h2><a href='pokedex.html#tornadus'>Forces of Nature</a></h2><p>Natural roamers: <a href="pokedex.html#tornadus">Tornadus</a> over oceans, <a href="pokedex.html#thundurus">Thundurus</a> in mountains, <a href="pokedex.html#landorus">Landorus</a> in badlands during clear weather (all level 50–60), and <a href="pokedex.html#enamorus">Enamorus</a> in mountains at level 50.</p></section><section><h2><a href='pokedex.html#reshiram'>Tao Trio</a></h2><p><a href="pokedex.html#reshiram">Reshiram</a> spawns in mountains during clear weather and <a href="pokedex.html#zekrom">Zekrom</a> in mountains during thunderstorms (both level 70–84); <a href="pokedex.html#kyurem">Kyurem</a> appears in ice spikes while it rains (level 66–78). Craft the <a href="items.html#mega_showdown:dna_splicer">DNA Splicers</a> to fuse Kyurem with Reshiram or Zekrom.</p><p>Key items: <a class='chip' href='items.html#mega_showdown:dna_splicer'>Dna Splicer</a></p></section><section><h2><a href='pokedex.html#meloetta'>Meloetta</a></h2><p>Spawns naturally in <b>sunflower plains</b> at level 50–55.</p></section><section><h2><a href='pokedex.html#genesect'>Genesect</a></h2><p>Spawns naturally in <b>dripstone caves</b> at level 48–68.</p></section><section><h2><a href='pokedex.html#xerneas'>Xerneas, Yveltal &amp;amp; Zygarde</a></h2><p><a href="pokedex.html#xerneas">Xerneas</a> appears in floral biomes by day and <a href="pokedex.html#yveltal">Yveltal</a> in spooky biomes at night (both level 65–75, very rare). <a href="pokedex.html#zygarde">Zygarde</a> spawns at level 1–10 in dripstone and lush caves — Mega Showdown's Zygarde Cores let it assemble its forms.</p></section><section><h2><a href='pokedex.html#diancie'>Kalos Mythicals</a></h2><p><a href="pokedex.html#diancie">Diancie</a> spawns in lush caves (level 45–68), <a href="pokedex.html#hoopa">Hoopa</a> in the End (level 65–75) and <a href="pokedex.html#volcanion">Volcanion</a> in mountains (level 70).</p></section><section><h2><a href='pokedex.html#typenull'>Type: Null &amp;amp; Silvally</a></h2><p>Team Rocket Scientists drop the <a href="items.html#lumymon:fossilized_helmet">Fossilized Helmet</a> — revive it in the <b>Resurrection Machine</b> to create Type: Null. It evolves into <a href="pokedex.html#silvally">Silvally</a> at 160 friendship.</p><p>Key items: <a class='chip' href='items.html#lumymon:fossilized_helmet'>Fossilized Helmet</a></p></section><section><h2><a href='pokedex.html#tapukoko'>Island Guardians (Tapus)</a></h2><p>All four Tapus spawn naturally at level 50–70 under open sky: <a href="pokedex.html#tapukoko">Tapu Koko</a> in savannas and jungles, <a href="pokedex.html#tapulele">Tapu Lele</a> in floral biomes and beaches, <a href="pokedex.html#tapubulu">Tapu Bulu</a> along rivers and jungles, and <a href="pokedex.html#tapufini">Tapu Fini</a> along rivers and beaches.</p></section><section><h2><a href='pokedex.html#cosmog'>Cosmog line (Solgaleo &amp;amp; Lunala)</a></h2><p><a href="pokedex.html#cosmog">Cosmog</a> spawns in the End (level 28–42) and evolves into <a href="pokedex.html#cosmoem">Cosmoem</a> at level 43, then into <a href="pokedex.html#solgaleo">Solgaleo</a> (level 53, daytime) or <a href="pokedex.html#lunala">Lunala</a> (level 53, night). Both also spawn directly — Solgaleo in sunny savannas and the End, Lunala in spooky biomes at night and the End.</p><p>Key items: <a class='chip' href='items.html#mega_showdown:n_solarizer'>N Solarizer</a> <a class='chip' href='items.html#mega_showdown:n_lunarizer'>N Lunarizer</a></p></section><section><h2><a href='pokedex.html#necrozma'>Necrozma</a></h2><p>Necrozma spawns in the End at level 70–75. Its fused forms wait in dedicated End towers: the <a href="items.html#lumymon:necrozma_dusk_radar">Necrozma Dusk Radar</a> (built with an <a href="items.html#mega_showdown:n_solarizer">N Solarizer</a>) locates the Dusk Tower for <b>Dusk Mane</b>, and the <a href="items.html#lumymon:necrozma_dawn_radar">Necrozma Dawn Radar</a> (with an <a href="items.html#mega_showdown:n_lunarizer">N Lunarizer</a>) the Dawn Tower for <b>Dawn Wings</b>.</p><p>Key items: <a class='chip' href='items.html#lumymon:necrozma_dusk_radar'>Necrozma Dusk Radar</a> <a class='chip' href='items.html#lumymon:necrozma_dawn_radar'>Necrozma Dawn Radar</a> <a class='chip' href='items.html#mega_showdown:n_solarizer'>N Solarizer</a> <a class='chip' href='items.html#mega_showdown:n_lunarizer'>N Lunarizer</a></p></section><section><h2><a href='pokedex.html#nihilego'>Ultra Beasts</a></h2><p>Ultra Beasts spawn naturally, mostly in the End and extreme biomes: <a href="pokedex.html#nihilego">Nihilego</a> in oceans, <a href="pokedex.html#buzzwole">Buzzwole</a> in jungles, <a href="pokedex.html#pheromosa">Pheromosa</a> in Terralith steppes and the End, <a href="pokedex.html#xurkitree">Xurkitree</a>, <a href="pokedex.html#celesteela">Celesteela</a> and <a href="pokedex.html#guzzlord">Guzzlord</a> in the End, <a href="pokedex.html#kartana">Kartana</a> in cherry groves, <a href="pokedex.html#stakataka">Stakataka</a> in the deep dark, <a href="pokedex.html#blacephalon">Blacephalon</a> in spooky biomes, and <a href="pokedex.html#poipole">Poipole</a> at the End's Dawn and Dusk Towers.</p></section><section><h2><a href='pokedex.html#magearna'>Alolan Mythicals</a></h2><p><a href="pokedex.html#magearna">Magearna</a> spawns in taigas (level 50–85), <a href="pokedex.html#marshadow">Marshadow</a> in the deep dark (level 45–68) and <a href="pokedex.html#zeraora">Zeraora</a> in badlands and forests (level 45–85).</p></section><section><h2><a href='pokedex.html#meltan'>Meltan &amp;amp; Melmetal</a></h2><p>Meltan spawns near placed <b>iron blocks</b> anywhere in the overworld (level 38–48) and on beaches. It evolves into <a href="pokedex.html#melmetal">Melmetal</a> at level 70 — while holding an <b>anvil</b>.</p></section><section><h2><a href='pokedex.html#zacian'>Zacian &amp;amp; Zamazenta</a></h2><p>Both heroes spawn in <b>dark forests</b> at level 65–80. The <a href="items.html#mega_showdown:rusted_sword">Rusted Sword</a> (Luna Henge ruins, Zacian raid bosses) and <a href="items.html#mega_showdown:rusted_shield">Rusted Shield</a> (Sol Henge ruins, Zamazenta raid bosses) unlock their Crowned forms.</p><p>Key items: <a class='chip' href='items.html#mega_showdown:rusted_sword'>Rusted Sword</a> <a class='chip' href='items.html#mega_showdown:rusted_shield'>Rusted Shield</a></p></section><section><h2><a href='pokedex.html#eternatus'>Eternatus</a></h2><p>Eternatus slumbers in the <b>Eternatus Cocoon</b>, a Legendary Monuments structure generating in the End highlands and midlands. Mine and smelt <a href="items.html#legendarymonuments:galar_particle">Galar Particles</a> from Galar Particle Ore, press nine into a <a href="items.html#legendarymonuments:galar_particle_block">Galar Particle Block</a>, and craft the <a href="items.html#lumymon:eternatus_radar">Eternatus Radar</a> to track the cocoon. Eternatus emerges at level 70–90.</p><p>Key items: <a class='chip' href='items.html#lumymon:eternatus_radar'>Eternatus Radar</a> <a class='chip' href='items.html#legendarymonuments:galar_particle'>Galar Particle</a> <a class='chip' href='items.html#legendarymonuments:galar_particle_block'>Galar Particle Block</a></p></section><section><h2><a href='pokedex.html#kubfu'>Kubfu &amp;amp; Urshifu</a></h2><p>Kubfu spawns in <b>cherry groves</b> (level 30–50). Use a <a href="items.html#cobblemon:scroll_of_darkness">Scroll of Darkness</a> for Single Strike <a href="pokedex.html#urshifu">Urshifu</a> or a <a href="items.html#cobblemon:scroll_of_waters">Scroll of Waters</a> for Rapid Strike. Urshifu itself also spawns in cherry groves at level 60–80.</p><p>Key items: <a class='chip' href='items.html#cobblemon:scroll_of_darkness'>Scroll Of Darkness</a> <a class='chip' href='items.html#cobblemon:scroll_of_waters'>Scroll Of Waters</a></p></section><section><h2><a href='pokedex.html#zarude'>Zarude</a></h2><p>Spawns naturally in <b>jungles</b> at level 70.</p></section><section><h2><a href='pokedex.html#regieleki'>Regieleki &amp;amp; Regidrago</a></h2><p>Both new golems share the <b>Split-Decision Temple</b> (level 70–80), located with the <a href="items.html#lumymon:split_decision_radar">Split-Decision Radar</a> — like the Crown Tundra original, the temple binds <a href="pokedex.html#regieleki">Regieleki</a> and <a href="pokedex.html#regidrago">Regidrago</a> to a single choice.</p><p>Key items: <a class='chip' href='items.html#lumymon:split_decision_radar'>Split Decision Radar</a></p></section><section><h2><a href='pokedex.html#calyrex'>Calyrex, Glastrier &amp;amp; Spectrier</a></h2><p>The <a href="items.html#lumymon:calyrex_ice_radar">Calyrex Ice Rider Radar</a> locates the <b>Crown Spire</b>, home of <a href="pokedex.html#glastrier">Glastrier</a> (level 60), while the <a href="items.html#lumymon:calyrex_shadow_radar">Shadow Rider Radar</a> finds the <b>Crown Cemetery</b> and <a href="pokedex.html#spectrier">Spectrier</a>. Both radars require the <a href="items.html#mega_showdown:reins_of_unity">Reins of Unity</a>. A <a href="items.html#lumymon:calyrex_crown">Calyrex Crown</a> found within these sites, placed upon the statue, summons Calyrex itself (level 50–70) — the Reins then fuse it with its steed.</p><p>Key items: <a class='chip' href='items.html#lumymon:calyrex_ice_radar'>Calyrex Ice Radar</a> <a class='chip' href='items.html#lumymon:calyrex_shadow_radar'>Calyrex Shadow Radar</a> <a class='chip' href='items.html#lumymon:calyrex_crown'>Calyrex Crown</a> <a class='chip' href='items.html#mega_showdown:reins_of_unity'>Reins Of Unity</a></p></section><section><h2><a href='pokedex.html#wochien'>Treasures of Ruin</a></h2><p>Four cursed shrines from Legendary Monuments hold the Treasures of Ruin. Their <b>seals</b> drop from Nether loot (bastion, nether fortress and ruined portal chests); combine each seal with a Dark Tera Shard, the matching type gem and a Poké Radar to craft its shrine radar: <a href="items.html#lumymon:wochien_radar">Wo-Chien Radar</a> → Grasswither Shrine, <a href="items.html#lumymon:chienpao_radar">Chien-Pao Radar</a> → Icerend Shrine, <a href="items.html#lumymon:tinglu_radar">Ting-Lu Radar</a> → Groundblight Shrine and <a href="items.html#lumymon:chiyu_radar">Chi-Yu Radar</a> → Firescourge Shrine. <a href="pokedex.html#wochien">Wo-Chien</a>, <a href="pokedex.html#chienpao">Chien-Pao</a>, <a href="pokedex.html#tinglu">Ting-Lu</a> and <a href="pokedex.html#chiyu">Chi-Yu</a> appear at their shrines at levels 65–80.</p><p>Key items: <a class='chip' href='items.html#legendarymonuments:grasswither_seal'>Grasswither Seal</a> <a class='chip' href='items.html#legendarymonuments:icerend_seal'>Icerend Seal</a> <a class='chip' href='items.html#legendarymonuments:groundblight_seal'>Groundblight Seal</a> <a class='chip' href='items.html#legendarymonuments:firescourge_seal'>Firescourge Seal</a> <a class='chip' href='items.html#lumymon:wochien_radar'>Wochien Radar</a> <a class='chip' href='items.html#lumymon:chienpao_radar'>Chienpao Radar</a> <a class='chip' href='items.html#lumymon:tinglu_radar'>Tinglu Radar</a> <a class='chip' href='items.html#lumymon:chiyu_radar'>Chiyu Radar</a></p></section><section><h2><a href='pokedex.html#koraidon'>Koraidon &amp;amp; Miraidon</a></h2><p>Both box legends spawn naturally on <b>beaches</b> under open sky at level 40.</p></section><section><h2><a href='pokedex.html#ogerpon'>Loyal Three &amp;amp; Ogerpon</a></h2><p><a href="pokedex.html#okidogi">Okidogi</a> roams savannas, <a href="pokedex.html#munkidori">Munkidori</a> jungles and <a href="pokedex.html#fezandipiti">Fezandipiti</a> mountain peaks (all level 70–75); <a href="pokedex.html#ogerpon">Ogerpon</a> spawns in lush biomes at level 50–75.</p></section><section><h2><a href='pokedex.html#terapagos'>Terapagos &amp;amp; Pecharunt</a></h2><p><a href="pokedex.html#terapagos">Terapagos</a> spawns in deep caves below Y=0 on <b>amethyst blocks</b> (level 55–75). <a href="pokedex.html#pecharunt">Pecharunt</a> appears in spooky biomes at level 60–80.</p></section><section><h2><a href='pokedex.html#greattusk'>Paradox Pokémon</a></h2><p>All Paradox Pokémon are natural spawns rather than summons — e.g. <a href="pokedex.html#greattusk">Great Tusk</a> in arid biomes, <a href="pokedex.html#fluttermane">Flutter Mane</a> in spooky biomes and the deep dark, <a href="pokedex.html#roaringmoon">Roaring Moon</a> in mountains at night, <a href="pokedex.html#irontreads">Iron Treads</a> in arid mountains, <a href="pokedex.html#ironvaliant">Iron Valiant</a> in plains during thunderstorms, <a href="pokedex.html#walkingwake">Walking Wake</a> in rainy mountains and <a href="pokedex.html#gougingfire">Gouging Fire</a> in basalt deltas. Check each species' Pokédex entry for exact conditions.</p></section></div>
+<footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
+</body></html>

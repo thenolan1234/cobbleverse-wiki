@@ -1,0 +1,462 @@
+{
+ "intro": "<p>Legendary and Mythical Pokémon in COBBLEVERSE are never simple random encounters. Most are tied to the <b>Poké Radar</b> system from LumyMon (<code>lumymon:poke_radar</code>, crafted from iron and redstone around a <b>Locator Chip</b> found in bastion treasure, end city and ominous trial vault loot): upgrade the radar with type gems and key materials to track a legendary's structure, then bring the right summoning item to the altar inside. Others are guarded by the <b>Legendary Monuments</b> shrine system, hidden behind boss trainers of Team Rocket and Team Galactic, or simply roam the wild as ultra-rare natural spawns. Every method below is taken from the pack's own spawn data, recipes, loot tables and advancements.</p>",
+ "legendaries": [
+  {
+   "name": "Articuno",
+   "species": "articuno",
+   "keyItems": [
+    "lumymon:articuno_radar",
+    "lumymon:glacier_feather",
+    "lumymon:poke_radar"
+   ],
+   "method": "<p>Craft the <a href=\"items.html#lumymon:articuno_radar\">Articuno Radar</a> (Poké Radar + Ice Gem + Never-Melt Ice + Blue Ice) to locate Articuno's tower. The <a href=\"items.html#lumymon:glacier_feather\">Glacier Feather</a> is found inside the tower itself — use it at the altar to summon Articuno at level 50.</p>"
+  },
+  {
+   "name": "Zapdos",
+   "species": "zapdos",
+   "keyItems": [
+    "lumymon:zapdos_radar",
+    "lumymon:thunder_feather"
+   ],
+   "method": "<p>Craft the <a href=\"items.html#lumymon:zapdos_radar\">Zapdos Radar</a> (Poké Radar + Electric Gem + Cell Battery + gold) to locate Zapdos' tower. Retrieve the <a href=\"items.html#lumymon:thunder_feather\">Thunder Feather</a> inside and summon Zapdos (level 50–60) at the altar.</p>"
+  },
+  {
+   "name": "Moltres",
+   "species": "moltres",
+   "keyItems": [
+    "lumymon:moltres_radar",
+    "lumymon:ember_feather"
+   ],
+   "method": "<p>Craft the <a href=\"items.html#lumymon:moltres_radar\">Moltres Radar</a> (Poké Radar + Fire Gem + Fire Stone + blaze powder) — its tower stands <b>in the Nether</b>. The <a href=\"items.html#lumymon:ember_feather\">Ember Feather</a> found inside summons Moltres (level 50–60) at the altar.</p>"
+  },
+  {
+   "name": "Galarian Birds (Dyna Tree)",
+   "keyItems": [
+    "lumymon:dyna_tree_radar"
+   ],
+   "method": "<p>The <a href=\"items.html#lumymon:dyna_tree_radar\">Dyna Tree Radar</a> (Poké Radar + Flying Gem + Dynamax Candy + glowstone) locates the Dyna Tree, where all three <b>Galarian</b> birds spawn at level 60: <a href=\"pokedex.html#articuno\">Galarian Articuno</a> at night, <a href=\"pokedex.html#zapdos\">Galarian Zapdos</a> during thunderstorms, and <a href=\"pokedex.html#moltres\">Galarian Moltres</a> by day.</p>"
+  },
+  {
+   "name": "Mewtwo",
+   "species": "mewtwo",
+   "keyItems": [
+    "lumymon:ancient_dna",
+    "lumymon:cloning_catalyst",
+    "lumymon:cloning_catalyst_shiny",
+    "lumymon:rocket_key"
+   ],
+   "method": "<p>Recreate Team Rocket's experiment: place <a href=\"items.html#lumymon:ancient_dna\">Ancient DNA</a> (dropped by Gym Leader <a href=\"trainers.html#kanto_giovanni\">Giovanni</a>) and a <a href=\"items.html#lumymon:cloning_catalyst\">Cloning Catalyst</a> (dropped by Rocket Admin <a href=\"trainers.html#team_rocket_admin_atena\">Atena</a>) into Cobblemon's <b>Resurrection Machine</b>. The revived Mewtwo has 2 guaranteed perfect IVs; a <a href=\"items.html#lumymon:cloning_catalyst_shiny\">Radiant Cloning Catalyst</a> yields a <b>Shiny</b> Mewtwo with 4. The <a href=\"items.html#lumymon:rocket_key\">Rocket Key</a> reveals the Team Rocket Tower's coordinates.</p>"
+  },
+  {
+   "name": "Mew",
+   "species": "mew",
+   "keyItems": [
+    "lumymon:origin_fossil",
+    "lumymon:ancient_dna"
+   ],
+   "method": "<p>Craft the <a href=\"items.html#lumymon:origin_fossil\">Origin Fossil</a> from any Cobblemon fossil, an Ancient Origin Ball and <a href=\"items.html#lumymon:ancient_dna\">Ancient DNA</a>, then awaken Mew (level 75–90) with it at the <b>Mew Shrine</b> in the Origin Temple.</p>"
+  },
+  {
+   "name": "Raikou, Entei &amp; Suicune",
+   "species": "raikou",
+   "keyItems": [
+    "lumymon:burned_radar"
+   ],
+   "method": "<p>All three Legendary Beasts spawn naturally at the <b>Burned Tower</b> structure — each with an equal one-in-three chance, level 60, ultra-rare bucket. The <a href=\"items.html#lumymon:burned_radar\">Burned Tower Radar</a> (Poké Radar + Fire Gem + flint and steel) locates it.</p>"
+  },
+  {
+   "name": "Lugia",
+   "species": "lugia",
+   "keyItems": [
+    "lumymon:silver_wing",
+    "lumymon:lugia_radar",
+    "lumymon:radio_card"
+   ],
+   "method": "<p>The <a href=\"items.html#lumymon:radio_card\">Radio Card</a> locates the Rocket Radio Tower in Johto, where Team Rocket boss <a href=\"trainers.html#team_rocket_giovanni\">Giovanni</a> drops the <a href=\"items.html#lumymon:silver_wing\">Silver Wing</a>. Use it at <b>Whirl Island</b> (found with the <a href=\"items.html#lumymon:lugia_radar\">Lugia Radar</a>) to summon Lugia at level 60–70.</p>"
+  },
+  {
+   "name": "Ho-Oh",
+   "species": "hooh",
+   "keyItems": [
+    "lumymon:rainbow_wing",
+    "lumymon:hooh_radar"
+   ],
+   "method": "<p>Defeat <a href=\"trainers.html#old_sage\">the Old Sage</a> for the <a href=\"items.html#lumymon:rainbow_wing\">Rainbow Wing</a>, then summon Ho-Oh (level 60–70) at the <b>Bell Tower</b>, located with the <a href=\"items.html#lumymon:hooh_radar\">Ho-Oh Radar</a> (Poké Radar + Flying Gem + all five stat feathers + wind charge).</p>"
+  },
+  {
+   "name": "Celebi",
+   "species": "celebi",
+   "keyItems": [
+    "lumymon:gs_ball"
+   ],
+   "method": "<p>Defeat the legendary trainer <a href=\"trainers.html#rival_red\">Red</a> to claim the <a href=\"items.html#lumymon:gs_ball\">GS Ball</a>, which reveals Celebi (level 75–80) within the <b>Ilex Shrine</b>.</p>"
+  },
+  {
+   "name": "Regirock, Regice &amp; Registeel",
+   "species": "regirock",
+   "keyItems": [
+    "lumymon:regirock_radar",
+    "lumymon:regice_radar",
+    "lumymon:registeel_radar"
+   ],
+   "method": "<p>Each golem sleeps in its own temple, located with a dedicated radar built from the matching type gem plus tumblestones: <a href=\"items.html#lumymon:regirock_radar\">Regirock Radar</a>, <a href=\"items.html#lumymon:regice_radar\">Regice Radar</a> and <a href=\"items.html#lumymon:registeel_radar\">Registeel Radar</a>. The golems await inside at level 40–50.</p>"
+  },
+  {
+   "name": "Latias &amp; Latios",
+   "species": "latias",
+   "keyItems": [
+    "lumymon:lati_radar",
+    "lumymon:ruby_dew",
+    "lumymon:sapphire_dew"
+   ],
+   "method": "<p>The <a href=\"items.html#lumymon:lati_radar\">Eon Duo Radar</a> (needs a Soul Dew) locates the <b>Secret Garden</b>. Hoenn Champion <a href=\"trainers.html#hoenn_champion_rocco\">Rocco</a> drops both dews: <a href=\"items.html#lumymon:ruby_dew\">Ruby Dew</a> attracts <a href=\"pokedex.html#latias\">Latias</a> and <a href=\"items.html#lumymon:sapphire_dew\">Sapphire Dew</a> attracts <a href=\"pokedex.html#latios\">Latios</a> (level 50–75) at the garden's altar.</p>"
+  },
+  {
+   "name": "Kyogre",
+   "species": "kyogre",
+   "keyItems": [
+    "lumymon:ocean_core",
+    "lumymon:kyogre_radar"
+   ],
+   "method": "<p>Craft the <a href=\"items.html#lumymon:ocean_core\">Ocean Core</a> (Water Gem + Heart of the Sea) and use it within Kyogre's <b>Submerged Temple</b>, located with the <a href=\"items.html#lumymon:kyogre_radar\">Kyogre Radar</a>. Kyogre appears at level 60–70.</p>"
+  },
+  {
+   "name": "Groudon",
+   "species": "groudon",
+   "keyItems": [
+    "lumymon:earth_core",
+    "lumymon:molten_crust",
+    "lumymon:groudon_radar"
+   ],
+   "method": "<p>Blast-furnace the <b>Geostone</b> blocks found on Groudon's volcanic island into <a href=\"items.html#lumymon:molten_crust\">Molten Crust</a>, craft the <a href=\"items.html#lumymon:earth_core\">Earth Core</a> (Molten Crust + iron block), and summon Groudon (level 60–70) atop the volcano. The <a href=\"items.html#lumymon:groudon_radar\">Groudon Radar</a> marks the island.</p>"
+  },
+  {
+   "name": "Mega Rayquaza",
+   "species": "rayquaza",
+   "keyItems": [
+    "lumymon:sky_core",
+    "lumymon:aether_gem",
+    "lumymon:desolate_gem",
+    "lumymon:primordial_gem",
+    "lumymon:emerald_emblem",
+    "lumymon:rayquaza_radar"
+   ],
+   "method": "<p>Forge the <a href=\"items.html#lumymon:sky_core\">Sky Core</a> from four treasures: the <a href=\"items.html#lumymon:aether_gem\">Aether Gem</a> (from <a href=\"trainers.html#hoenn_lyris\">Lyris</a>), <a href=\"items.html#lumymon:desolate_gem\">Desolate Gem</a> (Magma Leader <a href=\"trainers.html#team_magma_max\">Max</a>), <a href=\"items.html#lumymon:primordial_gem\">Primordial Gem</a> (Aqua Leader <a href=\"trainers.html#team_aqua_ivan\">Ivan</a>) and the <a href=\"items.html#lumymon:emerald_emblem\">Emerald Emblem</a> found in the Sky Pillar itself. Summon <b>Mega Rayquaza</b> (level 70–80) at the top of the Sky Pillar, located with the <a href=\"items.html#lumymon:rayquaza_radar\">Mega Rayquaza Radar</a>.</p>"
+  },
+  {
+   "name": "Jirachi",
+   "species": "jirachi",
+   "keyItems": [
+    "lumymon:melodic_tape_vol_1"
+   ],
+   "method": "<p>Find the <a href=\"items.html#lumymon:melodic_tape_vol_1\">Melodic Tape (Vol.1)</a> inside the <b>Wish Cave</b> and play it at Jirachi's shrine to awaken it at level 75–80.</p>"
+  },
+  {
+   "name": "Deoxys",
+   "species": "deoxys",
+   "keyItems": [
+    "lumymon:meteorite_crystal"
+   ],
+   "method": "<p>A <a href=\"items.html#lumymon:meteorite_crystal\">Meteorite Crystal</a> lies at Deoxys' fallen meteorite — use it to call Deoxys back to its shrine at level 75–80. The Deoxys Meteorite block (from Mega Showdown) later lets it change forms.</p>"
+  },
+  {
+   "name": "Uxie, Mesprit &amp; Azelf",
+   "species": "uxie",
+   "keyItems": [
+    "lumymon:acuity_proof",
+    "lumymon:verity_proof",
+    "lumymon:valor_proof"
+   ],
+   "method": "<p>Defeat the three Team Galactic Commanders to reveal the hidden lakes: <a href=\"trainers.html#team_galactic_commander_jupiter\">Jupiter</a> in the Eterna Building (<a href=\"items.html#lumymon:acuity_proof\">Acuity Proof</a>), <a href=\"trainers.html#team_galactic_commander_mars\">Mars</a> at the Wind Plant (<a href=\"items.html#lumymon:verity_proof\">Verity Proof</a>) and <a href=\"trainers.html#team_galactic_commander_saturn\">Saturn</a> in the Galactic HQ (<a href=\"items.html#lumymon:valor_proof\">Valor Proof</a>). <a href=\"pokedex.html#uxie\">Uxie</a> (Lake Acuity), <a href=\"pokedex.html#mesprit\">Mesprit</a> (Lake Verity) and <a href=\"pokedex.html#azelf\">Azelf</a> (Lake Valor) await at level 40–65, and each guardian grants its jewel of gratitude — needed to reforge a broken Red Chain.</p>"
+  },
+  {
+   "name": "Dialga &amp; Palkia",
+   "species": "dialga",
+   "keyItems": [
+    "lumymon:red_chain",
+    "lumymon:broken_red_chain",
+    "lumymon:knowledge_jewel",
+    "lumymon:emotion_jewel",
+    "lumymon:willpower_jewel",
+    "lumymon:space_time_radar"
+   ],
+   "method": "<p>Seize the <a href=\"items.html#lumymon:red_chain\">Red Chain</a> by defeating <a href=\"trainers.html#team_galactic_cyrus\">Cyrus</a> at the Galactic HQ — or reforge a <a href=\"items.html#lumymon:broken_red_chain\">Broken Red Chain</a> with the Knowledge, Emotion and Willpower Jewels of the Lake Guardians. Use it on the altars at <b>Spear Pillar</b> (located with the <a href=\"items.html#lumymon:space_time_radar\">Space-Time Radar</a>) to summon <a href=\"pokedex.html#dialga\">Dialga</a> and <a href=\"pokedex.html#palkia\">Palkia</a> at level 70.</p>"
+  },
+  {
+   "name": "Heatran",
+   "species": "heatran",
+   "keyItems": [
+    "lumymon:magma_stone",
+    "lumymon:heat_fragment",
+    "lumymon:heat_splinter",
+    "lumymon:heatran_radar"
+   ],
+   "method": "<p>Combine the <a href=\"items.html#lumymon:heat_fragment\">Heat Fragment</a> (from <a href=\"trainers.html#sinnoh_buck\">Buck</a>) and <a href=\"items.html#lumymon:heat_splinter\">Heat Splinter</a> (from Galactic scientist <a href=\"trainers.html#team_galactic_charon\">Charon</a>) into a Magmatic Cluster, then reheat it in the <b>Stark Forge</b> to restore the <a href=\"items.html#lumymon:magma_stone\">Magma Stone</a>. It summons Heatran (level 50–65) at its altar in <b>Stark Mountain</b>, a Nether fortress located with the <a href=\"items.html#lumymon:heatran_radar\">Heatran Radar</a>.</p>"
+  },
+  {
+   "name": "Regigigas",
+   "species": "regigigas",
+   "keyItems": [
+    "lumymon:titan_relic",
+    "lumymon:regigigas_radar"
+   ],
+   "method": "<p>Forge the <a href=\"items.html#lumymon:titan_relic\">Titan Relic</a> from the five elemental relics (Cryo, Draco, Metal, Pebble and Spark, mined from their matching LumyMon ores) and use it to awaken Regigigas (level 70–80) inside the <b>Snowpoint Temple</b>, located with the <a href=\"items.html#lumymon:regigigas_radar\">Regigigas Radar</a>.</p>"
+  },
+  {
+   "name": "Cresselia",
+   "species": "cresselia",
+   "keyItems": [
+    "lumymon:member_card",
+    "lumymon:dream_catcher",
+    "lumymon:dream_string",
+    "lumymon:lunar_wing"
+   ],
+   "method": "<p>The <a href=\"items.html#lumymon:member_card\">Member Card</a> (from <a href=\"trainers.html#sinnoh_elfio\">Elfio</a>) reveals <b>Fullmoon Island</b>, Cresselia's dwelling. Weave a <a href=\"items.html#lumymon:dream_catcher\">Dream Catcher</a> from <a href=\"items.html#lumymon:dream_string\">Dream String</a> (looted in the island's dream side) and a <a href=\"items.html#lumymon:lunar_wing\">Lunar Wing</a>, then channel it at Cresselia's altar (level 40–65).</p>"
+  },
+  {
+   "name": "Darkrai",
+   "species": "darkrai",
+   "keyItems": [
+    "lumymon:moonlight_amulet",
+    "lumymon:nightmare_weaver",
+    "lumymon:nightmare_string",
+    "lumymon:lunar_wing"
+   ],
+   "method": "<p>Sleep holding the <a href=\"items.html#lumymon:moonlight_amulet\">Moonlight Amulet</a> to cross into the <b>Nightmare Dimension</b> on Newmoon Island. Loot <a href=\"items.html#lumymon:nightmare_string\">Nightmare String</a> there, craft the <a href=\"items.html#lumymon:nightmare_weaver\">Nightmare Weaver</a> (amulet + string) and use it at Darkrai's shrine to manifest it (level 40–65). Keep a <a href=\"items.html#lumymon:lunar_wing\">Lunar Wing</a> handy — it is your only way back out of the shadows.</p>"
+  },
+  {
+   "name": "Manaphy &amp; Phione",
+   "species": "manaphy",
+   "keyItems": [],
+   "method": "<p>The rare <b>Manaphy Egg</b> is recovered from Manaphy's hidden ocean shrine, and Manaphy itself appears there at level 50. Per the pack's advancements, <a href=\"pokedex.html#phione\">Phione</a> is obtained by hatching an egg (Cobbreeding handles Pokémon breeding and egg hatching in this pack).</p>"
+  },
+  {
+   "name": "Shaymin",
+   "species": "shaymin",
+   "keyItems": [
+    "lumymon:prof_oak_letter",
+    "lumymon:faded_letter"
+   ],
+   "method": "<p><a href=\"items.html#lumymon:prof_oak_letter\">Professor Oak's Letter</a>, infused with Gracidea scent, invites Shaymin (level 50–55) to the <b>Flower Paradise</b> shrine — the letter is tied to the \"Pallet Town Legacy\" advancement (assembling the five first companions of Kanto). Each use fades the letter; restore a <a href=\"items.html#lumymon:faded_letter\">Faded Letter</a> with a Gracidea Flower to call Shaymin again.</p>"
+  },
+  {
+   "name": "Giratina",
+   "species": "giratina",
+   "keyItems": [
+    "lumymon:old_journal",
+    "lumymon:torn_journal",
+    "lumymon:torn_page",
+    "legendarymonuments:griseous_key",
+    "legendarymonuments:distortion_portal",
+    "lumymon:giratina_radar",
+    "legendarymonuments:origin_ingot"
+   ],
+   "method": "<p>Restore the <a href=\"items.html#lumymon:old_journal\">Old Journal</a> from a Torn Journal and Torn Page (both looted in the Team Galactic HQ and Wind Plant) to reveal <b>Turnback Cave</b>. Its depths hold a portal room into the <b>Distortion World</b> — a whole separate dimension — and cave chests can hold the <a href=\"items.html#legendarymonuments:griseous_key\">Griseous Key</a>. In the Distortion World, mine Distortion Origin Ore for Raw Origin (smelts to <a href=\"items.html#legendarymonuments:origin_ingot\">Origin Ingots</a>, and 8 Raw Origin + an iron ingot craft a reusable <a href=\"items.html#legendarymonuments:distortion_portal\">Distortion Portal</a>). The <a href=\"items.html#lumymon:giratina_radar\">Giratina Radar</a> then locates Giratina's Island, where the Renegade Pokémon lurks at level 75–95.</p>"
+  },
+  {
+   "name": "Arceus",
+   "species": "arceus",
+   "keyItems": [
+    "lumymon:azure_flute",
+    "lumymon:temporal_flute",
+    "lumymon:spatial_flute",
+    "legendarymonuments:origin_ingot"
+   ],
+   "method": "<p>Craft the <a href=\"items.html#lumymon:azure_flute\">Azure Flute</a> from the <a href=\"items.html#lumymon:temporal_flute\">Temporal Flute</a> (from <a href=\"trainers.html#hisui_damon\">Damon</a>), the <a href=\"items.html#lumymon:spatial_flute\">Spatial Flute</a> (from <a href=\"trainers.html#hisui_perula\">Perula</a>) and an <a href=\"items.html#legendarymonuments:origin_ingot\">Origin Ingot</a>. Hold right-click to play it and cross the dimensional veil to the <b>Temple of Sinnoh</b>, where Arceus awaits at level 70.</p>"
+  },
+  {
+   "name": "Victini",
+   "species": "victini",
+   "keyItems": [],
+   "method": "<p>Spawns naturally in the Nether's <b>crimson forest</b> at level 50 (ultra-rare).</p>"
+  },
+  {
+   "name": "Swords of Justice",
+   "species": "cobalion",
+   "keyItems": [],
+   "method": "<p>All four spawn naturally: <a href=\"pokedex.html#cobalion\">Cobalion</a> in windswept forests, <a href=\"pokedex.html#terrakion\">Terrakion</a> in savannas, <a href=\"pokedex.html#virizion\">Virizion</a> in forests (each level 50–70), and <a href=\"pokedex.html#keldeo\">Keldeo</a> at level 60 (rarely 80) in Terralith's sakura groves and valleys.</p>"
+  },
+  {
+   "name": "Forces of Nature",
+   "species": "tornadus",
+   "keyItems": [],
+   "method": "<p>Natural roamers: <a href=\"pokedex.html#tornadus\">Tornadus</a> over oceans, <a href=\"pokedex.html#thundurus\">Thundurus</a> in mountains, <a href=\"pokedex.html#landorus\">Landorus</a> in badlands during clear weather (all level 50–60), and <a href=\"pokedex.html#enamorus\">Enamorus</a> in mountains at level 50.</p>"
+  },
+  {
+   "name": "Tao Trio",
+   "species": "reshiram",
+   "keyItems": [
+    "mega_showdown:dna_splicer"
+   ],
+   "method": "<p><a href=\"pokedex.html#reshiram\">Reshiram</a> spawns in mountains during clear weather and <a href=\"pokedex.html#zekrom\">Zekrom</a> in mountains during thunderstorms (both level 70–84); <a href=\"pokedex.html#kyurem\">Kyurem</a> appears in ice spikes while it rains (level 66–78). Craft the <a href=\"items.html#mega_showdown:dna_splicer\">DNA Splicers</a> to fuse Kyurem with Reshiram or Zekrom.</p>"
+  },
+  {
+   "name": "Meloetta",
+   "species": "meloetta",
+   "keyItems": [],
+   "method": "<p>Spawns naturally in <b>sunflower plains</b> at level 50–55.</p>"
+  },
+  {
+   "name": "Genesect",
+   "species": "genesect",
+   "keyItems": [],
+   "method": "<p>Spawns naturally in <b>dripstone caves</b> at level 48–68.</p>"
+  },
+  {
+   "name": "Xerneas, Yveltal &amp; Zygarde",
+   "species": "xerneas",
+   "keyItems": [],
+   "method": "<p><a href=\"pokedex.html#xerneas\">Xerneas</a> appears in floral biomes by day and <a href=\"pokedex.html#yveltal\">Yveltal</a> in spooky biomes at night (both level 65–75, very rare). <a href=\"pokedex.html#zygarde\">Zygarde</a> spawns at level 1–10 in dripstone and lush caves — Mega Showdown's Zygarde Cores let it assemble its forms.</p>"
+  },
+  {
+   "name": "Kalos Mythicals",
+   "species": "diancie",
+   "keyItems": [],
+   "method": "<p><a href=\"pokedex.html#diancie\">Diancie</a> spawns in lush caves (level 45–68), <a href=\"pokedex.html#hoopa\">Hoopa</a> in the End (level 65–75) and <a href=\"pokedex.html#volcanion\">Volcanion</a> in mountains (level 70).</p>"
+  },
+  {
+   "name": "Type: Null &amp; Silvally",
+   "species": "typenull",
+   "keyItems": [
+    "lumymon:fossilized_helmet"
+   ],
+   "method": "<p>Team Rocket Scientists drop the <a href=\"items.html#lumymon:fossilized_helmet\">Fossilized Helmet</a> — revive it in the <b>Resurrection Machine</b> to create Type: Null. It evolves into <a href=\"pokedex.html#silvally\">Silvally</a> at 160 friendship.</p>"
+  },
+  {
+   "name": "Island Guardians (Tapus)",
+   "species": "tapukoko",
+   "keyItems": [],
+   "method": "<p>All four Tapus spawn naturally at level 50–70 under open sky: <a href=\"pokedex.html#tapukoko\">Tapu Koko</a> in savannas and jungles, <a href=\"pokedex.html#tapulele\">Tapu Lele</a> in floral biomes and beaches, <a href=\"pokedex.html#tapubulu\">Tapu Bulu</a> along rivers and jungles, and <a href=\"pokedex.html#tapufini\">Tapu Fini</a> along rivers and beaches.</p>"
+  },
+  {
+   "name": "Cosmog line (Solgaleo &amp; Lunala)",
+   "species": "cosmog",
+   "keyItems": [
+    "mega_showdown:n_solarizer",
+    "mega_showdown:n_lunarizer"
+   ],
+   "method": "<p><a href=\"pokedex.html#cosmog\">Cosmog</a> spawns in the End (level 28–42) and evolves into <a href=\"pokedex.html#cosmoem\">Cosmoem</a> at level 43, then into <a href=\"pokedex.html#solgaleo\">Solgaleo</a> (level 53, daytime) or <a href=\"pokedex.html#lunala\">Lunala</a> (level 53, night). Both also spawn directly — Solgaleo in sunny savannas and the End, Lunala in spooky biomes at night and the End.</p>"
+  },
+  {
+   "name": "Necrozma",
+   "species": "necrozma",
+   "keyItems": [
+    "lumymon:necrozma_dusk_radar",
+    "lumymon:necrozma_dawn_radar",
+    "mega_showdown:n_solarizer",
+    "mega_showdown:n_lunarizer"
+   ],
+   "method": "<p>Necrozma spawns in the End at level 70–75. Its fused forms wait in dedicated End towers: the <a href=\"items.html#lumymon:necrozma_dusk_radar\">Necrozma Dusk Radar</a> (built with an <a href=\"items.html#mega_showdown:n_solarizer\">N Solarizer</a>) locates the Dusk Tower for <b>Dusk Mane</b>, and the <a href=\"items.html#lumymon:necrozma_dawn_radar\">Necrozma Dawn Radar</a> (with an <a href=\"items.html#mega_showdown:n_lunarizer\">N Lunarizer</a>) the Dawn Tower for <b>Dawn Wings</b>.</p>"
+  },
+  {
+   "name": "Ultra Beasts",
+   "species": "nihilego",
+   "keyItems": [],
+   "method": "<p>Ultra Beasts spawn naturally, mostly in the End and extreme biomes: <a href=\"pokedex.html#nihilego\">Nihilego</a> in oceans, <a href=\"pokedex.html#buzzwole\">Buzzwole</a> in jungles, <a href=\"pokedex.html#pheromosa\">Pheromosa</a> in Terralith steppes and the End, <a href=\"pokedex.html#xurkitree\">Xurkitree</a>, <a href=\"pokedex.html#celesteela\">Celesteela</a> and <a href=\"pokedex.html#guzzlord\">Guzzlord</a> in the End, <a href=\"pokedex.html#kartana\">Kartana</a> in cherry groves, <a href=\"pokedex.html#stakataka\">Stakataka</a> in the deep dark, <a href=\"pokedex.html#blacephalon\">Blacephalon</a> in spooky biomes, and <a href=\"pokedex.html#poipole\">Poipole</a> at the End's Dawn and Dusk Towers.</p>"
+  },
+  {
+   "name": "Alolan Mythicals",
+   "species": "magearna",
+   "keyItems": [],
+   "method": "<p><a href=\"pokedex.html#magearna\">Magearna</a> spawns in taigas (level 50–85), <a href=\"pokedex.html#marshadow\">Marshadow</a> in the deep dark (level 45–68) and <a href=\"pokedex.html#zeraora\">Zeraora</a> in badlands and forests (level 45–85).</p>"
+  },
+  {
+   "name": "Meltan &amp; Melmetal",
+   "species": "meltan",
+   "keyItems": [],
+   "method": "<p>Meltan spawns near placed <b>iron blocks</b> anywhere in the overworld (level 38–48) and on beaches. It evolves into <a href=\"pokedex.html#melmetal\">Melmetal</a> at level 70 — while holding an <b>anvil</b>.</p>"
+  },
+  {
+   "name": "Zacian &amp; Zamazenta",
+   "species": "zacian",
+   "keyItems": [
+    "mega_showdown:rusted_sword",
+    "mega_showdown:rusted_shield"
+   ],
+   "method": "<p>Both heroes spawn in <b>dark forests</b> at level 65–80. The <a href=\"items.html#mega_showdown:rusted_sword\">Rusted Sword</a> (Luna Henge ruins, Zacian raid bosses) and <a href=\"items.html#mega_showdown:rusted_shield\">Rusted Shield</a> (Sol Henge ruins, Zamazenta raid bosses) unlock their Crowned forms.</p>"
+  },
+  {
+   "name": "Eternatus",
+   "species": "eternatus",
+   "keyItems": [
+    "lumymon:eternatus_radar",
+    "legendarymonuments:galar_particle",
+    "legendarymonuments:galar_particle_block"
+   ],
+   "method": "<p>Eternatus slumbers in the <b>Eternatus Cocoon</b>, a Legendary Monuments structure generating in the End highlands and midlands. Mine and smelt <a href=\"items.html#legendarymonuments:galar_particle\">Galar Particles</a> from Galar Particle Ore, press nine into a <a href=\"items.html#legendarymonuments:galar_particle_block\">Galar Particle Block</a>, and craft the <a href=\"items.html#lumymon:eternatus_radar\">Eternatus Radar</a> to track the cocoon. Eternatus emerges at level 70–90.</p>"
+  },
+  {
+   "name": "Kubfu &amp; Urshifu",
+   "species": "kubfu",
+   "keyItems": [
+    "cobblemon:scroll_of_darkness",
+    "cobblemon:scroll_of_waters"
+   ],
+   "method": "<p>Kubfu spawns in <b>cherry groves</b> (level 30–50). Use a <a href=\"items.html#cobblemon:scroll_of_darkness\">Scroll of Darkness</a> for Single Strike <a href=\"pokedex.html#urshifu\">Urshifu</a> or a <a href=\"items.html#cobblemon:scroll_of_waters\">Scroll of Waters</a> for Rapid Strike. Urshifu itself also spawns in cherry groves at level 60–80.</p>"
+  },
+  {
+   "name": "Zarude",
+   "species": "zarude",
+   "keyItems": [],
+   "method": "<p>Spawns naturally in <b>jungles</b> at level 70.</p>"
+  },
+  {
+   "name": "Regieleki &amp; Regidrago",
+   "species": "regieleki",
+   "keyItems": [
+    "lumymon:split_decision_radar"
+   ],
+   "method": "<p>Both new golems share the <b>Split-Decision Temple</b> (level 70–80), located with the <a href=\"items.html#lumymon:split_decision_radar\">Split-Decision Radar</a> — like the Crown Tundra original, the temple binds <a href=\"pokedex.html#regieleki\">Regieleki</a> and <a href=\"pokedex.html#regidrago\">Regidrago</a> to a single choice.</p>"
+  },
+  {
+   "name": "Calyrex, Glastrier &amp; Spectrier",
+   "species": "calyrex",
+   "keyItems": [
+    "lumymon:calyrex_ice_radar",
+    "lumymon:calyrex_shadow_radar",
+    "lumymon:calyrex_crown",
+    "mega_showdown:reins_of_unity"
+   ],
+   "method": "<p>The <a href=\"items.html#lumymon:calyrex_ice_radar\">Calyrex Ice Rider Radar</a> locates the <b>Crown Spire</b>, home of <a href=\"pokedex.html#glastrier\">Glastrier</a> (level 60), while the <a href=\"items.html#lumymon:calyrex_shadow_radar\">Shadow Rider Radar</a> finds the <b>Crown Cemetery</b> and <a href=\"pokedex.html#spectrier\">Spectrier</a>. Both radars require the <a href=\"items.html#mega_showdown:reins_of_unity\">Reins of Unity</a>. A <a href=\"items.html#lumymon:calyrex_crown\">Calyrex Crown</a> found within these sites, placed upon the statue, summons Calyrex itself (level 50–70) — the Reins then fuse it with its steed.</p>"
+  },
+  {
+   "name": "Treasures of Ruin",
+   "species": "wochien",
+   "keyItems": [
+    "legendarymonuments:grasswither_seal",
+    "legendarymonuments:icerend_seal",
+    "legendarymonuments:groundblight_seal",
+    "legendarymonuments:firescourge_seal",
+    "lumymon:wochien_radar",
+    "lumymon:chienpao_radar",
+    "lumymon:tinglu_radar",
+    "lumymon:chiyu_radar"
+   ],
+   "method": "<p>Four cursed shrines from Legendary Monuments hold the Treasures of Ruin. Their <b>seals</b> drop from Nether loot (bastion, nether fortress and ruined portal chests); combine each seal with a Dark Tera Shard, the matching type gem and a Poké Radar to craft its shrine radar: <a href=\"items.html#lumymon:wochien_radar\">Wo-Chien Radar</a> → Grasswither Shrine, <a href=\"items.html#lumymon:chienpao_radar\">Chien-Pao Radar</a> → Icerend Shrine, <a href=\"items.html#lumymon:tinglu_radar\">Ting-Lu Radar</a> → Groundblight Shrine and <a href=\"items.html#lumymon:chiyu_radar\">Chi-Yu Radar</a> → Firescourge Shrine. <a href=\"pokedex.html#wochien\">Wo-Chien</a>, <a href=\"pokedex.html#chienpao\">Chien-Pao</a>, <a href=\"pokedex.html#tinglu\">Ting-Lu</a> and <a href=\"pokedex.html#chiyu\">Chi-Yu</a> appear at their shrines at levels 65–80.</p>"
+  },
+  {
+   "name": "Koraidon &amp; Miraidon",
+   "species": "koraidon",
+   "keyItems": [],
+   "method": "<p>Both box legends spawn naturally on <b>beaches</b> under open sky at level 40.</p>"
+  },
+  {
+   "name": "Loyal Three &amp; Ogerpon",
+   "species": "ogerpon",
+   "keyItems": [],
+   "method": "<p><a href=\"pokedex.html#okidogi\">Okidogi</a> roams savannas, <a href=\"pokedex.html#munkidori\">Munkidori</a> jungles and <a href=\"pokedex.html#fezandipiti\">Fezandipiti</a> mountain peaks (all level 70–75); <a href=\"pokedex.html#ogerpon\">Ogerpon</a> spawns in lush biomes at level 50–75.</p>"
+  },
+  {
+   "name": "Terapagos &amp; Pecharunt",
+   "species": "terapagos",
+   "keyItems": [],
+   "method": "<p><a href=\"pokedex.html#terapagos\">Terapagos</a> spawns in deep caves below Y=0 on <b>amethyst blocks</b> (level 55–75). <a href=\"pokedex.html#pecharunt\">Pecharunt</a> appears in spooky biomes at level 60–80.</p>"
+  },
+  {
+   "name": "Paradox Pokémon",
+   "species": "greattusk",
+   "keyItems": [],
+   "method": "<p>All Paradox Pokémon are natural spawns rather than summons — e.g. <a href=\"pokedex.html#greattusk\">Great Tusk</a> in arid biomes, <a href=\"pokedex.html#fluttermane\">Flutter Mane</a> in spooky biomes and the deep dark, <a href=\"pokedex.html#roaringmoon\">Roaring Moon</a> in mountains at night, <a href=\"pokedex.html#irontreads\">Iron Treads</a> in arid mountains, <a href=\"pokedex.html#ironvaliant\">Iron Valiant</a> in plains during thunderstorms, <a href=\"pokedex.html#walkingwake\">Walking Wake</a> in rainy mountains and <a href=\"pokedex.html#gougingfire\">Gouging Fire</a> in basalt deltas. Check each species' Pokédex entry for exact conditions.</p>"
+  }
+ ]
+}

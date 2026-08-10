@@ -1,0 +1,764 @@
+{
+ "intro": "<p>The rest of this wiki is generated from the pack’s own files and works offline — this page is the exception: hand-checked links to community guide creators and reference sites. The best guide videos have also been distilled into this wiki’s own pages — see <a href=\"tips.html\">Tips &amp; Tricks</a>, <a href=\"legendaries.html\">Legendaries</a> and <a href=\"mechanics.html\">Mechanics</a>, each of which credits its sources.</p>",
+ "sections": [
+  {
+   "heading": "COBBLEVERSE creators & guides",
+   "note": "Channels and videos made specifically for this modpack. Start with Ploop Craft — a channel dedicated to COBBLEVERSE guides.",
+   "entries": [
+    {
+     "title": "Ploop Craft",
+     "url": "https://www.youtube.com/@Ploop-Craft",
+     "creator": "Ploop Craft",
+     "kind": "channel",
+     "topics": [
+      "guides",
+      "updates",
+      "smp",
+      "dedicated-cobbleverse"
+     ],
+     "note": "Channel dedicated to COBBLEVERSE guide videos; as of Aug 2026 also streaming the YourRAGE (YRG) Cobbleverse SMP tournament series and covering 1.7.4x updates.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "Cobbleverse Guides",
+     "url": "https://www.youtube.com/playlist?list=PLbzeNhqj3QKnHcStiMMnJxcop3GlEJTXB",
+     "creator": "Ploop Craft",
+     "kind": "playlist",
+     "topics": [
+      "guides",
+      "tutorials"
+     ],
+     "note": "Ploop Craft's collected COBBLEVERSE guide playlist - the one-stop entry point for their tutorial content.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "20 Tips and Tricks to Enhance your Cobbleverse Playthrough!",
+     "url": "https://www.youtube.com/watch?v=Zwlt0Jfb5-I",
+     "creator": "Ploop Craft",
+     "kind": "video",
+     "topics": [
+      "tips",
+      "beginner",
+      "progression"
+     ],
+     "note": "20 practical quality-of-life and progression tips for a COBBLEVERSE playthrough.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "EVERYTHING You Need to Know About Cobbleverse Updates 1.7.40-1.7.42!",
+     "url": "https://www.youtube.com/watch?v=f5EL-T-DfM0",
+     "creator": "Ploop Craft",
+     "kind": "video",
+     "topics": [
+      "updates",
+      "1.7.4x",
+      "changelog"
+     ],
+     "note": "Walkthrough of what changed in pack versions 1.7.40-1.7.42 (uploaded 2026-07-22) - useful for players updating from 1.7.3.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "The ULTIMATE Beginner's Guide for Cobbleverse!",
+     "url": "https://www.youtube.com/watch?v=8E5faA1fEgA",
+     "creator": "ShoCkZxZ",
+     "kind": "video",
+     "topics": [
+      "beginner",
+      "starter-guide",
+      "progression"
+     ],
+     "note": "Start-to-first-badges onboarding: starter kit, trainer card, level caps, gyms. Very recent (Aug 2026), so matches current pack versions.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "Cobbleverse General Guides",
+     "url": "https://www.youtube.com/playlist?list=PLmkfipGZwhLFQGQ2rh9BiosdORXU_O0n5",
+     "creator": "ShoCkZxZ",
+     "kind": "playlist",
+     "topics": [
+      "guides",
+      "tutorials"
+     ],
+     "note": "ShoCkZxZ's playlist of general COBBLEVERSE how-to videos (beginner topics, money, mechanics).",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "EASIEST Ways to Make INFINITE MONEY in Cobbleverse!",
+     "url": "https://www.youtube.com/watch?v=VVYU42bj-o8",
+     "creator": "ShoCkZxZ",
+     "kind": "video",
+     "topics": [
+      "cobbledollars",
+      "money",
+      "economy"
+     ],
+     "note": "Fast CobbleDollar earning methods (trainer rematches, selling to CobbleMerchants, Gimmighoul relic coins).",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "Cobbleverse Guide (Modpack Tutorials, Structures & Legendaries)",
+     "url": "https://www.youtube.com/playlist?list=PLt8PNvsUSYkNvgH4PId6QbuFRYrKRiU-Y",
+     "creator": "RXCALIVER",
+     "kind": "playlist",
+     "topics": [
+      "legendaries",
+      "structures",
+      "tutorials"
+     ],
+     "note": "RXCALIVER's full COBBLEVERSE tutorial playlist covering modpack mechanics, structures, and legendary hunting across regions.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "How to Find Every Kanto & Johto Legendary Structure in Cobbleverse",
+     "url": "https://www.youtube.com/watch?v=_UsOYfDmwXo",
+     "creator": "RXCALIVER",
+     "kind": "video",
+     "topics": [
+      "legendaries",
+      "kanto",
+      "johto",
+      "structures"
+     ],
+     "note": "Tour of all Kanto and Johto legendary monuments and what you need to summon each.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "How to Find ALL Hoenn Legendary Structures in Cobbleverse (Full Guide)",
+     "url": "https://www.youtube.com/watch?v=ciGQFjXEW0w",
+     "creator": "RXCALIVER",
+     "kind": "video",
+     "topics": [
+      "legendaries",
+      "hoenn",
+      "structures"
+     ],
+     "note": "Companion Hoenn-region legendary structure guide - completes RXCALIVER's Kanto/Johto/Hoenn/Sinnoh coverage.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "Cobbleverse Legendary Strucutre GUIDE",
+     "url": "https://www.youtube.com/playlist?list=PLBLu769owhiqaPUG7bSd58XwRYKmnr7dw",
+     "creator": "KageNinja",
+     "kind": "playlist",
+     "topics": [
+      "legendaries",
+      "structures",
+      "johto",
+      "sinnoh"
+     ],
+     "note": "Alternate legendary-structure guide series (per-region find & summon videos, incl. Johto and Sinnoh); KageNinja also runs a Cobbleverse Series Season 1 playthrough playlist.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "How To Unlock All Regions Cobbleverse! - Tutorial",
+     "url": "https://www.youtube.com/watch?v=TmuzAE43GfE",
+     "creator": "FryBry",
+     "kind": "video",
+     "topics": [
+      "regions",
+      "johto",
+      "hoenn",
+      "sinnoh",
+      "progression"
+     ],
+     "note": "How region gating works and how to unlock Johto/Hoenn/Sinnoh content in the pack config; FryBry also has per-region legendary structure tutorials.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "100 Cobbleverse Tips And Tricks: Everything You Need To Know About Cobbleverse",
+     "url": "https://www.youtube.com/watch?v=cylRa-XHzFs",
+     "creator": "Pocketcraft",
+     "kind": "video",
+     "topics": [
+      "tips",
+      "mechanics",
+      "reference"
+     ],
+     "note": "Dense 100-tip compilation spanning mechanics, progression, and hidden features; Pocketcraft also publishes written guides at pocketcraft.net.",
+     "group": "cobbleverse-creators"
+    },
+    {
+     "title": "A Very Scuffed Updated Pokémon Guide For Cobblemon Mega Showdown! (Mega Evolution, Dynamax, Z-Moves)",
+     "url": "https://www.youtube.com/watch?v=K2UJJZYBg3o",
+     "creator": "LBee",
+     "kind": "video",
+     "topics": [
+      "mega-showdown",
+      "mega-evolution",
+      "z-moves",
+      "tera"
+     ],
+     "note": "Not COBBLEVERSE-branded but covers the exact Mega Showdown mod the pack ships: how to get key items and use megas, Z-moves, Dynamax, and Terastallization.",
+     "group": "cobbleverse-creators"
+    }
+   ]
+  },
+  {
+   "heading": "Cobblemon how-tos",
+   "note": "General Cobblemon tutorials that apply to the version this pack runs (Cobblemon 1.6–1.7 era).",
+   "entries": [
+    {
+     "title": "The Complete Cobblemon Beginner Guide (2026)",
+     "url": "https://www.youtube.com/watch?v=2LJtDhAvfCo",
+     "creator": "Foallow",
+     "kind": "video",
+     "topics": [
+      "basics",
+      "getting started",
+      "catching",
+      "battling"
+     ],
+     "note": "Up-to-date general Cobblemon primer (June 2026) covering catching, battling, and core mechanics — good first watch before pack-specific guides.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "How Cobblemon Spawning Works: Buckets, Weights, and Presets",
+     "url": "https://cobblewiki.com/blog/how-cobblemon-spawning-works",
+     "creator": "CobbleWiki",
+     "kind": "website",
+     "topics": [
+      "spawning",
+      "biomes",
+      "rarity buckets",
+      "weights"
+     ],
+     "note": "Clear written explanation of the common/uncommon/rare/ultra-rare bucket roll, spawn weights, and biome/time/weather conditions — the mechanics behind where Pokemon appear.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "A PRACTICAL Guide for the Perfect Shiny Hunting Strategy in Cobblemon",
+     "url": "https://www.youtube.com/watch?v=6zjxUZIHNVE",
+     "creator": "CallieBuilds",
+     "kind": "video",
+     "topics": [
+      "shiny hunting",
+      "strategy"
+     ],
+     "note": "Practical shiny-hunting strategy from a dedicated Cobblemon shiny hunter (May 2026) — current-version methods, not outdated 1.4 tricks.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "A PRACTICAL Guide To Shiny Hunting RARE Pokémon in Cobblemon 1.6",
+     "url": "https://www.youtube.com/watch?v=Hax7B0Q8ltc",
+     "creator": "CallieBuilds",
+     "kind": "video",
+     "topics": [
+      "shiny hunting",
+      "rare spawns",
+      "odds"
+     ],
+     "note": "Companion video focused on shiny hunting rare/low-weight spawns, with odds breakdowns (Aug 2025, Cobblemon 1.6 — still applies to 1.7).",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Everything you need to know about Cobblemon Ev Training",
+     "url": "https://www.youtube.com/watch?v=m5KK6aSULm0",
+     "creator": "Bozzled",
+     "kind": "video",
+     "topics": [
+      "EV training",
+      "IVs",
+      "stats"
+     ],
+     "note": "Recent (2026) rundown of EV training via battles, vitamins, and mochi — how to build competitive stat spreads for gym fights.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Minecraft Cobblemon how to BREED pokemon (Full Guide) (2026)",
+     "url": "https://www.youtube.com/watch?v=4uBWw7VtUxA",
+     "creator": "Udisen",
+     "kind": "video",
+     "topics": [
+      "breeding",
+      "Cobbreeding",
+      "pasture",
+      "eggs"
+     ],
+     "note": "2026 step-by-step pasture-block breeding walkthrough (breeding in this pack comes from the Cobbreeding side-mod): egg groups, Ditto, egg hatching timer.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "A Very Scuffed Pokémon Breeding Guide For Cobblemon!",
+     "url": "https://www.youtube.com/watch?v=_R9NA3dVNBc",
+     "creator": "LBee",
+     "kind": "video",
+     "topics": [
+      "breeding",
+      "Cobbreeding",
+      "IV inheritance"
+     ],
+     "note": "Breeding guide from a creator who covers the exact mods in COBBLEVERSE — pasture breeding, compatibility, and stat inheritance.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "The Ultimate Cobblemon FISHING Guide | Cobblemon 1.6",
+     "url": "https://www.youtube.com/watch?v=4uRLMD4kUUA",
+     "creator": "Jonathan's Playroom",
+     "kind": "video",
+     "topics": [
+      "fishing",
+      "poke rod",
+      "bait",
+      "Magikarp patterns"
+     ],
+     "note": "Comprehensive poke rod fishing guide (Jan 2025, covers the 1.6 fishing system still used in 1.7): rod crafting, baits, and fishing-exclusive spawns.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Cobblemon 1.7 Riding Update — Every Pokémon You Can Ride!",
+     "url": "https://www.youtube.com/watch?v=RaO-OAFysgw",
+     "creator": "RXCALIVER",
+     "kind": "video",
+     "topics": [
+      "riding",
+      "1.7 update",
+      "mounts"
+     ],
+     "note": "Showcases every rideable Pokemon in Cobblemon 1.7 and how the land/water/air riding styles work — shift+right-click a Pokemon and pick Ride.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Everything You NEED to Know About the Cobblemon 1.7 Update!! (Cooking, Lures and Riding Pokemon)",
+     "url": "https://www.youtube.com/watch?v=xYO3zd1pqhA",
+     "creator": "Mightee Duck",
+     "kind": "video",
+     "topics": [
+      "1.7 update",
+      "riding",
+      "cooking",
+      "lures",
+      "aprijuice"
+     ],
+     "note": "Full overview of the Cobblemon 1.7 feature set this pack runs on: riding, the new cooking system, lures, and aprijuice ride boosts.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Cobblemon Raid Dens | Soloing up to 7★ Raids!",
+     "url": "https://www.youtube.com/watch?v=Jzb6B4g2jHw",
+     "creator": "FrozenBanditt",
+     "kind": "video",
+     "topics": [
+      "raid dens",
+      "raid strategy",
+      "solo play"
+     ],
+     "note": "Strategy video for the Cobblemon Raid Dens mod (the one in this pack) — how to take on tier 1-7 raid crystals solo.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "How to Fix Cobblemon Raid Dens for SINGLE PLAYER! (Config Tutorial)",
+     "url": "https://www.youtube.com/watch?v=ksQi9256eag",
+     "creator": "Dangsterz",
+     "kind": "video",
+     "topics": [
+      "raid dens",
+      "config",
+      "single player"
+     ],
+     "note": "Config tweaks that make high-tier raids beatable when you play COBBLEVERSE solo instead of on a full server.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "How to Pick Up and Move RAID DENS in COBBLEMON! (Cobbleverse)",
+     "url": "https://www.youtube.com/watch?v=bBH--lT2HTc",
+     "creator": "Dangsterz",
+     "kind": "video",
+     "topics": [
+      "raid dens",
+      "Cobbleverse",
+      "tips"
+     ],
+     "note": "Short Cobbleverse-specific tip: relocate raid dens and group them near your base for easy repeat raiding.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "A Very Scuffed Updated Pokémon Guide For Cobblemon Mega Showdown! (Mega Evolution, Dynamax, Z-Moves)",
+     "url": "https://www.youtube.com/watch?v=K2UJJZYBg3o",
+     "creator": "LBee",
+     "kind": "video",
+     "topics": [
+      "Mega Showdown",
+      "mega evolution",
+      "z-moves",
+      "dynamax",
+      "tera"
+     ],
+     "note": "Updated guide to the Mega Showdown mod used by this pack — obtaining key items and using mega evolution, Z-moves, dynamax, and terastallization in battle.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "A Very Scuffed Cobblemon Modpack Review for Cobbleverse! (Legendaries, Mega Evolution, Mounts, etc!)",
+     "url": "https://www.youtube.com/watch?v=mSAQ4iyXeEc",
+     "creator": "LBee",
+     "kind": "video",
+     "topics": [
+      "Cobbleverse",
+      "modpack overview",
+      "legendaries"
+     ],
+     "note": "A tour of COBBLEVERSE itself — how the pack's legendary spawning, Mega Showdown, and mounts fit together; useful orientation for new players.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Cobblemon Fossil Guide - Restoration & Dig Sites",
+     "url": "https://cobblemon.gg/guides/fossils",
+     "creator": "Cobblemon.gg",
+     "kind": "website",
+     "topics": [
+      "fossils",
+      "resurrection machine",
+      "dig sites"
+     ],
+     "note": "Written walkthrough of fossil hunting: brushing suspicious sand/gravel at dig sites, building the Resurrection Machine, and reviving fossil Pokemon.",
+     "group": "cobblemon-guides"
+    },
+    {
+     "title": "Poké Ball - Cobblemon Wiki",
+     "url": "https://wiki.cobblemon.com/index.php/Pok%C3%A9_Ball",
+     "creator": "Official Cobblemon Wiki",
+     "kind": "website",
+     "topics": [
+      "apricorns",
+      "poke ball crafting",
+      "recipes"
+     ],
+     "note": "Official wiki reference for every poke ball recipe — grow and cook apricorns, craft lids and bases; always current with the installed Cobblemon version.",
+     "group": "cobblemon-guides"
+    }
+   ]
+  },
+  {
+   "heading": "Farms & money",
+   "note": "Apricorn/berry farming, CobbleDollars income, and evergreen vanilla farms that still work on 1.21.",
+   "entries": [
+    {
+     "title": "The BEST Cobblemon 1.7 Apricorn Farms: The Cobblemon Survival Guide S2E6",
+     "url": "https://www.youtube.com/watch?v=QyIJA7DyZls",
+     "creator": "Pocketcraft",
+     "kind": "video",
+     "topics": [
+      "apricorn farming",
+      "automation",
+      "pokeballs"
+     ],
+     "note": "Simple AFK-able automatic apricorn farm plus other popular designs, built for Cobblemon 1.7 (Dec 2025) - matches this pack's Cobblemon version.",
+     "group": "farms-money"
+    },
+    {
+     "title": "5 Beginner Farms You NEED in Cobblemon 1.7 !",
+     "url": "https://www.youtube.com/watch?v=_je0ucAOUHY",
+     "creator": "RXCALIVER",
+     "kind": "video",
+     "topics": [
+      "beginner farms",
+      "apricorn farming",
+      "early game"
+     ],
+     "note": "Roundup of five starter farms for Cobblemon 1.7; good first stop before committing to bigger builds (skip any Create-mod variants - COBBLEVERSE does not ship Create).",
+     "group": "farms-money"
+    },
+    {
+     "title": "How To Build An AUTOMATIC Berry Farm In Cobblemon! The Cobblemon Survival Guide S2E16",
+     "url": "https://www.youtube.com/watch?v=H2RaCjCv3fE",
+     "creator": "Pocketcraft",
+     "kind": "video",
+     "topics": [
+      "berry farming",
+      "automation"
+     ],
+     "note": "Automatic berry farm build from the Season 2 (Cobblemon 1.7-era) survival guide series.",
+     "group": "farms-money"
+    },
+    {
+     "title": "How to Get Every Berry (2025) – Cobblemon Berry Farming Guide",
+     "url": "https://www.youtube.com/watch?v=p_UyzEoghxc",
+     "creator": "RXCALIVER",
+     "kind": "video",
+     "topics": [
+      "berry farming",
+      "berry mutations"
+     ],
+     "note": "How to obtain all berry types via biome planting and mutation pairs (plant two different berries adjacent for rare mutations); 2025 guide.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Cobblemon EXP Candy Farm – Level Pokémon from 1 to 100 FAST",
+     "url": "https://www.youtube.com/watch?v=EQ-R1pCzPR0",
+     "creator": "RXCALIVER",
+     "kind": "video",
+     "topics": [
+      "xp farming",
+      "exp candy",
+      "leveling"
+     ],
+     "note": "Farm EXP Candy with the campfire cooking-pot system (base Cobblemon 1.7 feature) to power-level toward each COBBLEVERSE gym's level cap.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Minecraft how to get MONEY in Cobblemon (FAST)",
+     "url": "https://www.youtube.com/watch?v=j-itt5llK60",
+     "creator": "Udisen",
+     "kind": "video",
+     "topics": [
+      "cobbledollars",
+      "money farming"
+     ],
+     "note": "Quick CobbleDollars primer: earn money from defeating wild Pokemon (payout scales with level) and spend it at Cobble Merchants.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Money ! - CobbleVerse Wiki (Fandom)",
+     "url": "https://cobbleverse.fandom.com/wiki/Money_!",
+     "creator": "CobbleVerse Wiki (Fandom)",
+     "kind": "website",
+     "topics": [
+      "cobbledollars",
+      "money farming",
+      "merchants"
+     ],
+     "note": "Pack-specific money page from the community CobbleVerse wiki - covers CobbleDollars earning and selling to merchants (default rate 1 emerald = 500 CobbleDollars) as configured in this modpack.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Cobblemon Raid Dens | Soloing up to 7★ Raids!",
+     "url": "https://www.youtube.com/watch?v=Jzb6B4g2jHw",
+     "creator": "FrozenBanditt",
+     "kind": "video",
+     "topics": [
+      "raid dens",
+      "raid farming",
+      "strategy"
+     ],
+     "note": "Strategies for soloing high-tier raid den crystals (up to 7-star) for the Cobblemon Raid Dens mod that COBBLEVERSE includes; raids drop loot plus the raid Pokemon itself.",
+     "group": "farms-money"
+    },
+    {
+     "title": "A Guide to \"Radical Cobblemon Trainers\" mod (NPC BATTLES in Cobblemon)",
+     "url": "https://www.youtube.com/watch?v=Dzk3DTmBQDE",
+     "creator": "Jonathan's Playroom",
+     "kind": "video",
+     "topics": [
+      "trainer battles",
+      "level cap",
+      "money farming"
+     ],
+     "note": "Full guide (Feb 2025) to the RCT trainer mod COBBLEVERSE uses for gym progression - trainer spawning, rematches (normal trainers allow 2, leaders 1) and battle loot, the pack's main battling income.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Minecraft 1.21 Easy IRON Farm Tutorial - 1300+ Per Hour",
+     "url": "https://www.youtube.com/watch?v=Yhbe2PKsaAs",
+     "creator": "Voltrox",
+     "kind": "video",
+     "topics": [
+      "iron farm",
+      "vanilla farms",
+      "1.21"
+     ],
+     "note": "High-yield iron farm explicitly built for 1.21 (Mar 2025) - works on the pack's mostly-vanilla Fabric 1.21.1 worldgen; iron feeds dispenser/hopper builds and emerald trades.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Minecraft 1.21+ Easy Iron Farm Tutorial - 300 Per Hour",
+     "url": "https://www.youtube.com/watch?v=xDJtXznj8Fg",
+     "creator": "Shulkercraft",
+     "kind": "video",
+     "topics": [
+      "iron farm",
+      "vanilla farms",
+      "early game",
+      "1.21"
+     ],
+     "note": "Simpler, cheaper 1.21+ iron farm from a long-running farm-tutorial channel - the easy early-game option if the Voltrox build is too big.",
+     "group": "farms-money"
+    },
+    {
+     "title": "Minecraft 1.21 Villager Trading Hall Tutorial",
+     "url": "https://www.youtube.com/watch?v=3ctHrKRGSu0",
+     "creator": "ReytGood",
+     "kind": "video",
+     "topics": [
+      "villager trading",
+      "emeralds",
+      "1.21"
+     ],
+     "note": "Easy 1.21 villager trading hall (Java and Bedrock) - emeralds matter double here since CobbleDollars merchants buy emeralds at 500 CobbleDollars each by default.",
+     "group": "farms-money"
+    },
+    {
+     "title": "The Cobblemon Survival Guide (playlist)",
+     "url": "https://www.youtube.com/playlist?list=PL7MWETmTY8IKaiO_7niSMgGn9bAHojr2C",
+     "creator": "Pocketcraft",
+     "kind": "playlist",
+     "topics": [
+      "cobblemon guides",
+      "farms",
+      "let's play"
+     ],
+     "note": "Full episode-by-episode Cobblemon how-to series in let's-play form (Season 2 covers 1.7, active into Jan 2026) - source of the apricorn, berry, and leveling episodes above plus hearty grains/Galarica nut farming.",
+     "group": "farms-money"
+    }
+   ]
+  },
+  {
+   "heading": "Websites & tools",
+   "note": "Written guides, databases and calculators worth bookmarking.",
+   "entries": [
+    {
+     "title": "Pocketcraft - The Ultimate Cobblemon Guide",
+     "url": "https://pocketcraft.net/",
+     "creator": "Pocketcraft",
+     "kind": "website",
+     "topics": [
+      "spawns",
+      "biomes",
+      "item drops",
+      "team builder",
+      "tools"
+     ],
+     "note": "Searchable spawn database for 800+ Cobblemon (biomes, rarity bucket, weight, level range, conditions) plus biome/structure finder, item-drop tables, and team builder; data labeled updated for 2026.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "Cobblemon Spawns: Ultimate Location & Rate Tracker",
+     "url": "https://pocketcraft.net/spawns",
+     "creator": "Pocketcraft",
+     "kind": "website",
+     "topics": [
+      "spawns",
+      "rarity",
+      "spawn conditions"
+     ],
+     "note": "Direct link to Pocketcraft's spawn tracker - the page players will use most: type any Pokemon and get its full spawn entry (biome, rarity tier, weight, context, level range).",
+     "group": "websites-tools"
+    },
+    {
+     "title": "Cobblemon Wiki (official)",
+     "url": "https://wiki.cobblemon.com/index.php/Main_Page",
+     "creator": "Cobblemon team",
+     "kind": "website",
+     "topics": [
+      "base mod mechanics",
+      "pokemon",
+      "items",
+      "riding"
+     ],
+     "note": "The official wiki for the base Cobblemon mod - mechanics, Pokemon data, items, and the new 1.7.0 riding system; authoritative for anything not COBBLEVERSE-specific.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "COBBLEVERSE Wiki - LUMYVERSE",
+     "url": "https://www.lumyverse.com/en/cobbleverse/",
+     "creator": "LUMYVERSE",
+     "kind": "website",
+     "topics": [
+      "gym leaders",
+      "installation",
+      "tutorials",
+      "troubleshooting",
+      "changelogs"
+     ],
+     "note": "The official pack wiki: installation guides, gym leaders for Kanto/Johto/Hoenn/Sinnoh/Unova with signature items, legendary-catching tutorials, money-making, common issues; changelog current to pack 1.7.42 (July 2026).",
+     "group": "websites-tools"
+    },
+    {
+     "title": "COBBLEVERSE Wiki (cobbleverse.wiki)",
+     "url": "https://www.cobbleverse.wiki/",
+     "creator": "LUMYVERSE",
+     "kind": "website",
+     "topics": [
+      "spawns",
+      "riding stats",
+      "data reference"
+     ],
+     "note": "LUMYVERSE's newer auto-generated data wiki: per-Pokemon spawn conditions and riding/mount statistics for Gens 1-9 as they exist in the pack; still being populated but official.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "COBBLEVERSE - Pokemon Adventure [Cobblemon] on Modrinth",
+     "url": "https://modrinth.com/modpack/cobbleverse",
+     "creator": "LUMYVERSE",
+     "kind": "website",
+     "topics": [
+      "downloads",
+      "changelogs",
+      "mod list"
+     ],
+     "note": "Official distribution page - version changelogs, full mod list, and the only supported download source; useful for checking what changed between pack versions.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "LUMYVERSE Discord Server",
+     "url": "https://discord.com/invite/fhuRQpZ3HW",
+     "creator": "LUMYVERSE",
+     "kind": "website",
+     "topics": [
+      "community",
+      "support",
+      "bug reports"
+     ],
+     "note": "Official COBBLEVERSE/LUMYVERSE Discord (~98k members) - fastest place for pack support, bug reports, and update news; invite confirmed via search Aug 2026.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "Cobblemon Mega Showdown Wiki (GitHub)",
+     "url": "https://github.com/yajatkaul/CobblemonMegaShowdown/wiki",
+     "creator": "yajatkaul",
+     "kind": "website",
+     "topics": [
+      "mega evolution",
+      "z-moves",
+      "terastallization",
+      "dynamax",
+      "datapacks"
+     ],
+     "note": "Official docs for the Mega Showdown mod COBBLEVERSE uses for megas/Z-moves/tera - covers battle gimmick mechanics and datapack customization; the Modrinth page (modrinth.com/mod/cobblemon-mega-showdown) lists all 48 megas + primals.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "Radical Cobblemon Trainers - Docs",
+     "url": "https://srcmc.gitlab.io/rct/docs/latest/",
+     "creator": "SRCMC",
+     "kind": "website",
+     "topics": [
+      "level caps",
+      "trainers",
+      "progression",
+      "commands",
+      "config"
+     ],
+     "note": "Official docs for the RCT mod behind COBBLEVERSE's trainer battles and level-cap progression - explains how caps rise by beating key trainers, trainer spawning, commands, and difficulty config; versioned docs kept current.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "Cobblemon Tools",
+     "url": "https://cobblemon.tools/",
+     "creator": "Roanoke Development",
+     "kind": "website",
+     "topics": [
+      "pokedex",
+      "team builder",
+      "moves",
+      "abilities",
+      "battle replays"
+     ],
+     "note": "Pokedex-style lookup site for Cobblemon: species stats, drops, riding data, move/ability search, team builder with import/export, and battle replays; base-mod data, not COBBLEVERSE-specific.",
+     "group": "websites-tools"
+    },
+    {
+     "title": "CobbleVerse Wiki (Fandom)",
+     "url": "https://cobbleverse.fandom.com/wiki/CobbleVerse_Wiki",
+     "creator": "Fandom community",
+     "kind": "website",
+     "topics": [
+      "community wiki",
+      "mega evolutions",
+      "pack guides"
+     ],
+     "note": "Community-run COBBLEVERSE wiki with player-written pages (e.g. a mega evolutions/Z-moves/tera guide); coverage and freshness vary - treat as secondary to the official LUMYVERSE wikis.",
+     "group": "websites-tools"
+    }
+   ]
+  }
+ ]
+}

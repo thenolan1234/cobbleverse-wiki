@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Key Items Guide · COBBLEVERSE Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0b1a20; --shelf:#12262e; --reef:#1a3540; --deep:#081318;
+  --foam:#dcecef; --tide:#5ad1c8; --amber:#f0a840; --coral:#e8735c;
+  --silt:#7fa3ae; --moss:#8fd18b;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--reef) var(--abyss)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--abyss); color:var(--foam);
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600; letter-spacing:-.02em; margin:0;
+}
+a{color:var(--tide);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:1px 5px;font-size:12.5px}
+
+/* ---- top nav ---- */
+nav.top{
+  display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;
+  padding:10px 18px;border-bottom:1px solid var(--reef);
+  background:var(--deep);position:sticky;top:0;z-index:50;
+}
+nav.top .brand{
+  font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;
+  color:var(--amber);margin-right:14px;letter-spacing:.02em;
+}
+nav.top .brand small{color:var(--silt);font-weight:400;font-size:11px;margin-left:6px}
+nav.top a.item{
+  padding:4px 10px;border-radius:3px;font-size:12.5px;color:var(--foam);
+}
+nav.top a.item:hover{background:var(--shelf);text-decoration:none}
+nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+
+/* ---- article pages ---- */
+.article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
+.article h1{font-size:30px;margin-bottom:6px}
+.article .sub{color:var(--silt);font-size:13px;margin-bottom:26px}
+.article section{margin:26px 0}
+.article h2{
+  font-size:19px;color:var(--amber);margin-bottom:10px;
+  border-bottom:1px solid var(--reef);padding-bottom:6px;
+}
+.article p{margin:9px 0}
+.article ul{margin:8px 0;padding-left:22px}
+.article li{margin:4px 0}
+.callout{
+  background:var(--shelf);border:1px solid var(--reef);
+  border-left:2px solid var(--tide);padding:12px 15px;border-radius:3px;
+  margin:14px 0;font-size:13.5px;
+}
+.callout.warn{border-left-color:var(--amber)}
+
+/* ---- home cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:4px;
+  padding:15px 16px;display:block;color:var(--foam);
+}
+.card:hover{border-color:var(--tide);text-decoration:none}
+.card h3{font-size:15px;color:var(--tide);margin-bottom:5px}
+.card p{margin:0;font-size:12.5px;color:var(--silt);line-height:1.5}
+.statrow{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0}
+.stat .n{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:600;color:var(--tide)}
+.stat .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--silt)}
+
+/* ---- browser (sidebar+detail) pages ---- */
+.wrap{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 45px)}
+@media(max-width:840px){.wrap{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--reef);display:flex;flex-direction:column;min-height:0}
+.padbox{padding:14px 16px 10px}
+.padbox h1{font-size:17px}
+.padbox p.note{margin:5px 0 0;color:var(--silt);font-size:11px;line-height:1.5}
+.searchbox{padding:0 16px 8px}
+input[type=search]{
+  width:100%;padding:8px 11px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:13px;
+}
+input[type=search]:focus,select:focus{outline:2px solid var(--tide);outline-offset:-1px}
+.filters{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap}
+.filters select,.filters label.chk{
+  background:var(--shelf);color:var(--foam);border:1px solid var(--reef);
+  border-radius:3px;font:inherit;font-size:11.5px;padding:4px 6px;
+}
+.filters label.chk{display:flex;align-items:center;gap:5px;cursor:pointer}
+#results{overflow-y:auto;flex:1;padding:0 8px 18px;min-height:0}
+.row{
+  padding:5px 10px;border-radius:3px;cursor:pointer;
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.row:hover{background:var(--shelf)}
+.row[aria-selected=true]{background:var(--reef)}
+.row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .ns{font-size:10px;color:var(--silt);flex-shrink:0}
+img.spr{image-rendering:pixelated;vertical-align:middle;flex-shrink:0}
+.chip img.spr{margin:-3px 3px -3px -2px}
+.mon img.spr{margin:-6px 2px -6px -4px}
+.empty{color:var(--silt);font-size:12px;padding:10px}
+main{overflow-y:auto;padding:24px 30px 70px;min-width:0}
+@media(max-width:840px){main{padding:18px 14px 60px}}
+.item-head{border-bottom:1px solid var(--reef);padding-bottom:14px;margin-bottom:20px}
+.item-head h2{font-size:26px}
+.id{color:var(--tide);font-size:12px;margin-top:4px;word-break:break-all}
+.tip{color:var(--silt);font-size:13px;margin-top:8px;font-style:italic}
+section.blk{margin-bottom:28px}
+section.blk>h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silt);margin-bottom:10px;
+}
+.splash{color:var(--silt);max-width:56ch;font-size:13.5px;line-height:1.8}
+.splash b{color:var(--foam);font-weight:400}
+
+/* chips */
+.chip{
+  display:inline-block;background:var(--deep);border:1px solid var(--reef);
+  border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer;color:var(--foam);
+  margin:0 4px 4px 0;
+}
+a.chip:hover{border-color:var(--tide);color:var(--tide);text-decoration:none}
+.chip.tag{border-style:dashed;color:var(--silt);cursor:default}
+.chip.plain{cursor:default}
+.src{font-size:10.5px;color:var(--silt);margin-top:6px}
+.badge{
+  display:inline-block;border-radius:3px;padding:1px 7px;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--reef);
+}
+.badge.addon{color:var(--amber);border-color:var(--amber)}
+.b-common{color:var(--silt)} .b-uncommon{color:var(--tide)}
+.b-rare{color:var(--amber)} .b-ultra-rare{color:var(--coral)}
+
+/* pokemon type chips: colored dot + text (identity never color-alone) */
+.type{
+  display:inline-flex;align-items:center;gap:6px;background:var(--deep);
+  border:1px solid var(--reef);border-radius:3px;padding:2px 9px 2px 7px;
+  font-size:12px;text-transform:capitalize;margin-right:5px;
+}
+.type i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* stat meters */
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;max-width:420px;align-items:center}
+.stats .k{font-size:11px;color:var(--silt);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stats .bar{height:6px;background:var(--reef);border-radius:3px;overflow:hidden}
+.stats .bar i{display:block;height:100%;background:var(--tide);border-radius:3px}
+.stats .v{font-size:12px;text-align:right;min-width:3ch}
+.stats .total .v,.stats .total .k{color:var(--amber)}
+
+/* generic data tables */
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+table.data th{
+  text-align:left;color:var(--silt);font-weight:400;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.1em;padding:5px 10px 5px 0;
+  border-bottom:1px solid var(--reef);
+}
+table.data td{padding:6px 10px 6px 0;border-bottom:1px solid var(--shelf);vertical-align:top}
+details.biomes{display:inline-block}
+details.biomes summary{cursor:pointer;color:var(--tide);font-size:12px;list-style:none}
+details.biomes summary::after{content:" \25be"}
+details.biomes[open] summary::after{content:" \25b4"}
+details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:4px 0}
+.meta{font-size:11.5px;color:var(--silt)}
+.bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tide)}
+.drop{
+  display:grid;grid-template-columns:1fr auto;gap:3px 16px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.drop .table{font-size:13px;word-break:break-all}
+.drop .runs{
+  font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;
+  color:var(--amber);white-space:nowrap;text-align:right;line-height:1.2;
+}
+.drop .runs small{display:block;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);font-weight:400}
+.drop .meta{grid-column:1/-1}
+.drop .bar{grid-column:1/-1;height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.drop .bar i{display:block;height:100%;background:var(--tide)}
+.planner{
+  background:var(--shelf);border:1px solid var(--reef);border-left:2px solid var(--amber);
+  padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;
+  gap:11px;flex-wrap:wrap;font-size:13px;
+}
+.planner input{
+  width:64px;padding:5px 7px;background:var(--abyss);color:var(--amber);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-weight:600;
+  text-align:center;
+}
+.planner .lbl{color:var(--silt)}
+.recipe{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:11px 14px;margin-bottom:8px;
+}
+.recipe .kind{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--silt)}
+.recipe .ing{margin-top:7px}
+.none{color:var(--coral);font-size:13px}
+.none b{color:var(--foam)}
+.hint{color:var(--silt);font-size:12px;margin-top:6px;line-height:1.6}
+
+/* trainer team cards */
+.mon{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:10px 13px;margin-bottom:8px;
+  display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;
+}
+.mon .sp{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600}
+.mon .lv{color:var(--amber);font-size:13px}
+.mon .kv{font-size:11.5px;color:var(--silt)}
+.mon .kv b{color:var(--foam);font-weight:400}
+.mon .moves{width:100%;font-size:11.5px;color:var(--silt)}
+.mon .moves code{margin-right:4px}
+
+/* milestone list (progression) */
+.mile{
+  display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.mile .kind{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--reef);border-radius:3px;height:fit-content;
+  white-space:nowrap;margin-top:2px;
+}
+.mile .kind.badge-k{color:var(--amber);border-color:var(--amber)}
+.mile .kind.elite-k{color:var(--coral)}
+.mile .kind.champion-k{color:var(--coral);border-color:var(--coral)}
+.mile .kind.legendary-k{color:var(--tide);border-color:var(--tide)}
+.mile .kind.item-k{color:var(--moss)}
+.mile h4{font-size:14.5px}
+.mile p{margin:2px 0 0;font-size:12.5px;color:var(--silt)}
+.mile .ico{font-size:11px;color:var(--silt)}
+footer.gen{
+  border-top:1px solid var(--reef);color:var(--silt);font-size:11px;
+  padding:14px 18px;text-align:center;
+}
+footer.gen a{color:var(--silt);text-decoration:underline}
+</style>
+</head><body>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="key-items.html" aria-current="page">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a></nav>
+<div class="article">
+<h1>Key Items Guide</h1>
+<p class="sub">The items that matter in this pack</p>
+<p>COBBLEVERSE layers hundreds of custom items on top of Cobblemon 1.7.3. This page covers the ones that actually gate your adventure: region badges and their boxes, the crafted signature keys that locate every gym, the legendary key items, the pack's evolution and battle gear, the TM crafting system, and the CobbleDollars economy. Every item links into the <a href="items.html">item index</a>; leaders and bosses link to the <a href="trainers.html">trainer pages</a>. For full legendary summoning walkthroughs, see the progression and legendary guides — this page keeps those to one line each.</p>
+<section><h2>Badges &amp; badge boxes</h2><p>Each of the four regions has eight gym badges plus a League Trophy, added by the CobbleverseBadges mod. A leader drops their badge <b>guaranteed, on your first victory only</b> — rematches never drop a second one. The region's Champion drops the League Trophy the same way.</p><ul><li><b>Kanto</b> — <a href="items.html#cobbleversebadges:kanto_boulder_badge">Boulder</a> (Brock), <a href="items.html#cobbleversebadges:kanto_cascade_badge">Cascade</a> (Misty), <a href="items.html#cobbleversebadges:kanto_thunder_badge">Thunder</a> (Lt. Surge), <a href="items.html#cobbleversebadges:kanto_rainbow_badge">Rainbow</a> (Erika), <a href="items.html#cobbleversebadges:kanto_soul_badge">Soul</a> (Koga), <a href="items.html#cobbleversebadges:kanto_marsh_badge">Marsh</a> (Sabrina), <a href="items.html#cobbleversebadges:kanto_volcano_badge">Volcano</a> (Blaine), <a href="items.html#cobbleversebadges:kanto_earth_badge">Earth</a> (Giovanni); <a href="items.html#cobbleversebadges:kanto_league_trophy">Kanto League Trophy</a> from <a href="trainers.html#kanto_champion_blue">Champion Blue</a>.</li><li><b>Johto</b> — <a href="items.html#cobbleversebadges:johto_zephyr_badge">Zephyr</a> (Valerio), <a href="items.html#cobbleversebadges:johto_hive_badge">Hive</a> (Raffaello), <a href="items.html#cobbleversebadges:johto_plain_badge">Plain</a> (Chiara), <a href="items.html#cobbleversebadges:johto_fog_badge">Fog</a> (Angelo), <a href="items.html#cobbleversebadges:johto_storm_badge">Storm</a> (Furio), <a href="items.html#cobbleversebadges:johto_mineral_badge">Mineral</a> (Jasmine), <a href="items.html#cobbleversebadges:johto_glacier_badge">Glacier</a> (Alfredo), <a href="items.html#cobbleversebadges:johto_rising_badge">Rising</a> (Sandra); <a href="items.html#cobbleversebadges:johto_league_trophy">Johto League Trophy</a> from <a href="trainers.html#johto_champion_lance">Champion Lance</a>.</li><li><b>Hoenn</b> — <a href="items.html#cobbleversebadges:hoenn_stone_badge">Stone</a> (Petra), <a href="items.html#cobbleversebadges:hoenn_knuckle_badge">Knuckle</a> (Rudi), <a href="items.html#cobbleversebadges:hoenn_dynamo_badge">Dynamo</a> (Walter), <a href="items.html#cobbleversebadges:hoenn_heat_badge">Heat</a> (Fiammetta), <a href="items.html#cobbleversebadges:hoenn_balance_badge">Balance</a> (Norman), <a href="items.html#cobbleversebadges:hoenn_feather_badge">Feather</a> (Alice), <a href="items.html#cobbleversebadges:hoenn_mind_badge">Mind</a> (Tell &amp; Pat), <a href="items.html#cobbleversebadges:hoenn_rain_badge">Rain</a> (Adriano); <a href="items.html#cobbleversebadges:hoenn_league_trophy">Hoenn League Trophy</a> from <a href="trainers.html#hoenn_champion_rocco">Champion Rocco</a>.</li><li><b>Sinnoh</b> — <a href="items.html#cobbleversebadges:sinnoh_coal_badge">Coal</a> (Pedro), <a href="items.html#cobbleversebadges:sinnoh_forest_badge">Forest</a> (Gardenia), <a href="items.html#cobbleversebadges:sinnoh_cobble_badge">Cobble</a> (Marzia), <a href="items.html#cobbleversebadges:sinnoh_fen_badge">Fen</a> (Omar), <a href="items.html#cobbleversebadges:sinnoh_relic_badge">Relic</a> (Fannie), <a href="items.html#cobbleversebadges:sinnoh_mine_badge">Mine</a> (Ferruccio), <a href="items.html#cobbleversebadges:sinnoh_icicle_badge">Icicle</a> (Bianca), <a href="items.html#cobbleversebadges:sinnoh_beacon_badge">Beacon</a> (Corrado); <a href="items.html#cobbleversebadges:sinnoh_league_trophy">Sinnoh League Trophy</a> from <a href="trainers.html#sinnoh_champion_camilla">Champion Camilla</a>.</li></ul><p><b>Badge boxes.</b> Each region has a pocket badge case — right-click it to open a small storage screen for your collection. Craft one with a row of three region-colored wool over an iron ingot, redstone, iron ingot row, or simply beat the region's first leader, who drops the box alongside your first badge.</p><ul><li><a href="items.html#cobbleversebadges:kanto_badge_box">Kanto Badges</a> — yellow wool; also dropped by <a href="trainers.html#kanto_brock">Brock</a>.</li><li><a href="items.html#cobbleversebadges:johto_badge_box">Johto Badges</a> — light blue wool; also dropped by <a href="trainers.html#johto_valerio">Valerio</a>.</li><li><a href="items.html#cobbleversebadges:hoenn_badge_box">Hoenn Badges</a> — green wool; also dropped by <a href="trainers.html#hoenn_petra">Petra</a>.</li><li><a href="items.html#cobbleversebadges:sinnoh_badge_box">Sinnoh Badges</a> — magenta wool; also dropped by <a href="trainers.html#sinnoh_pedro">Pedro</a>.</li></ul></section><section><h2>Gym signature items: how to find every gym</h2><p>Every gym leader has a crafted <b>signature item</b> whose tooltip reads "Required item to locate X's Gym." These are map keys: craft the item, then insert it into the matching region <b>Cartography Table</b> to receive a treasure map marking that leader's gym. The gym generates with a Trainer Spawner already keyed to its leader, so once you arrive the battle is waiting. None of these keys drop from loot or appear in shops — crafting is the only source.</p><p>The tables themselves are cheap: the <a href="items.html#lumymon:kanto_cartography_table">Kanto Cartography Table</a> is planks + <a href="items.html#cobblemon:poke_ball">Poké Ball</a> + paper, and the <a href="items.html#lumymon:johto_cartography_table">Johto</a>, <a href="items.html#lumymon:hoenn_cartography_table">Hoenn</a> and <a href="items.html#lumymon:sinnoh_cartography_table">Sinnoh</a> tables swap in an Azure, Verdant or Roseate Ball. Late-game content adds <a href="items.html#lumymon:nether_cartography_table">Nether</a>, <a href="items.html#lumymon:end_cartography_table">End</a> and <a href="items.html#lumymon:distortion_cartography_table">Distortion</a> tables (the last crafted from an Ancient Poké Ball and <a href="items.html#legendarymonuments:distortion_planks">Distortion Planks</a>).</p><ul><li><b>Kanto</b> — <a href="trainers.html#kanto_brock">Brock</a>: <a href="items.html#lumymon:onyx_stone">Onyx Stone</a> (Hard Stone, coal, stone). <a href="trainers.html#kanto_misty">Misty</a>: <a href="items.html#lumymon:cerulean_star">Cerulean Star</a> (Water Stone, sand, seagrass). <a href="trainers.html#kanto_ltsurge">Lt. Surge</a>: <a href="items.html#lumymon:lieutenant_medal">Lieutenant Medal</a> (Electric Gem, gold, green wool). <a href="trainers.html#kanto_erika">Erika</a>: <a href="items.html#lumymon:nature_fan">Nature Fan</a> (Miracle Seed, pink wool, stripped oak). <a href="trainers.html#kanto_koga">Koga</a>: <a href="items.html#lumymon:ninja_poison">Ninja Poison</a> (Black Sludge, fermented spider eye, glass). <a href="trainers.html#kanto_sabrina">Sabrina</a>: <a href="items.html#lumymon:hypnotic_whip">Hypnotic Whip</a> (Focus Sash, arrow, red wool). <a href="trainers.html#kanto_blaine">Blaine</a>: <a href="items.html#lumymon:cinnabar_glasses">Cinnabar Glasses</a> (Choice Specs, magma cream, tinted glass). <a href="trainers.html#kanto_giovanni">Giovanni</a>: <a href="items.html#lumymon:boss_ring">Boss Ring</a> (Power Weight, emerald block, gold). League: <a href="items.html#lumymon:rival_sling">Rival Sling</a> (Eject Pack, blue wool, ender pearl).</li><li><b>Johto</b> — <a href="trainers.html#johto_valerio">Valerio</a>: <a href="items.html#lumymon:raptor_bracer">Raptor Bracer</a> (Power Bracer, black wool, feather). <a href="trainers.html#johto_raffaello">Raffaello</a>: <a href="items.html#lumymon:magnifying_glass">Magnifying Glass</a> (Wide Lens, breeze rod, iron). <a href="trainers.html#johto_chiara">Chiara</a>: <a href="items.html#lumymon:sweet_milk">Sweet Milk</a> (Whipped Dream, milk bucket, light blue glass). <a href="trainers.html#johto_angelo">Angelo</a>: <a href="items.html#lumymon:spirit_scarf">Spirit Scarf</a> (Reaper Cloth, amethyst, purple wool). <a href="trainers.html#johto_furio">Furio</a>: <a href="items.html#lumymon:heavy_dumbbell">Heavy Dumbbell</a> (Protective Pads, anvil, iron). <a href="trainers.html#johto_jasmine">Jasmine</a>: <a href="items.html#lumymon:secret_medicine">Secret Medicine</a> (Iron Ball, bundle, iron nugget). <a href="trainers.html#johto_alfredo">Alfredo</a>: <a href="items.html#lumymon:winter_staff">Winter Staff</a> (Ice Stone block, blue ice, stripped spruce). <a href="trainers.html#johto_sandra">Sandra</a>: <a href="items.html#lumymon:pearl_choker">Pearl Choker</a> (Dragon Scale, chain, netherite ingot). League: <a href="items.html#lumymon:master_cape">Master Cape</a> (Covert Cloak, dragon's breath, obsidian).</li><li><b>Hoenn</b> — <a href="trainers.html#hoenn_petra">Petra</a>: <a href="items.html#lumymon:rock_tome">Rock Tome</a> (pink apricorn, paper, stone slab). <a href="trainers.html#hoenn_rudi">Rudi</a>: <a href="items.html#lumymon:fighting_glove">Fighting Glove</a> (red apricorn, iron, red wool, string). <a href="trainers.html#hoenn_walter">Walter</a>: <a href="items.html#lumymon:electric_connector">Electric Connector</a> (Cell Battery, chain, gold nugget). <a href="trainers.html#hoenn_fiammetta">Fiammetta</a>: <a href="items.html#lumymon:fire_lighter">Fire Lighter</a> (Charcoal Stick, flint, iron). <a href="trainers.html#hoenn_norman">Norman</a>: <a href="items.html#lumymon:normal_tablet">Normal Tablet</a> (black + white apricorns, quartz slab). <a href="trainers.html#hoenn_alice">Alice</a>: <a href="items.html#lumymon:flying_feather">Flying Feather</a> (Sky Tumblestone, feather, wind charge). <a href="trainers.html#hoenn_tell">Tell &amp; Pat</a>: <a href="items.html#lumymon:psychic_medallion">Psychic Medallion</a> — combine a <a href="items.html#lumymon:medallion_heart">Medallion Heart</a> (Psychic Gem + amethyst) with a <a href="items.html#lumymon:medallion_shell">Medallion Shell</a> (Relic Coin + gold). <a href="trainers.html#hoenn_adriano">Adriano</a>: <a href="items.html#lumymon:water_rod">Water Rod</a> (Dive Rod + Prism Scale). League: <a href="items.html#lumymon:steel_hat">Steel Hat</a> (Metal Coat, netherite ingot, obsidian, redstone block).</li><li><b>Sinnoh</b> — <a href="trainers.html#sinnoh_pedro">Pedro</a>: <a href="items.html#lumymon:rock_casque">Rock Casque</a> (Rocky Helmet, copper, recovery compass). <a href="trainers.html#sinnoh_gardenia">Gardenia</a>: <a href="items.html#lumymon:grass_aroma">Grass Aroma</a> (Grass Gem, azure bluet, small dripleaf). <a href="trainers.html#sinnoh_marzia">Marzia</a>: <a href="items.html#lumymon:fighting_bandage">Fighting Bandage</a> (Max Potion, paper, slime ball). <a href="trainers.html#sinnoh_omar">Omar</a>: <a href="items.html#lumymon:water_mask">Water Mask</a> (Water Gem, diamond, quartz). <a href="trainers.html#sinnoh_fannie">Fannie</a>: <a href="items.html#lumymon:ghost_pendant">Ghost Pendant</a> (Ghost Gem, chorus fruit, gold). <a href="trainers.html#sinnoh_ferruccio">Ferruccio</a>: <a href="items.html#lumymon:steel_spade">Steel Spade</a> (Armor Fossil, copper, iron block). <a href="trainers.html#sinnoh_bianca">Bianca</a>: <a href="items.html#lumymon:ice_ribbon">Ice Ribbon</a> (Choice Scarf, blue ice, light blue wool). <a href="trainers.html#sinnoh_corrado">Corrado</a>: <a href="items.html#lumymon:electric_fuse">Electric Fuse</a> (Booster Energy, netherite ingot, yellow glass). League: <a href="items.html#lumymon:draconic_fin">Draconic Fin</a> (Dragon Gem, Dragon Tera Shard, dragon's breath).</li><li><b>Sinnoh Elite Four keys</b> — the Sinnoh league members carry their own crafted signature items: <a href="items.html#lumymon:bug_net">Bug Net</a> (Aaron), <a href="items.html#lumymon:fire_flint">Fire Flint</a> (Vulcano), <a href="items.html#lumymon:ground_shawl">Ground Shawl</a> (Terrie) and <a href="items.html#lumymon:psychic_volume">Psychic Volume</a> (Luciano). Kanto and Johto Elite Four signature items are ordinary Cobblemon held items (Never-Melt Ice, Focus Band and the like).</li></ul></section><section><h2>Legendary key items</h2><p>One line per item — the legendaries guide covers each full method. Radar note first: almost every legendary hunt starts from the <a href="items.html#lumymon:poke_radar">Poké Radar</a> (a <a href="items.html#lumymon:locator_chip">Locator Chip</a> + iron + redstone; chips turn up in bastion treasure, end city loot and ominous trial vaults), which combines with themed materials into a specific legendary radar.</p><ul><li><a href="items.html#lumymon:ancient_dna">Ancient DNA</a> — Mew's essence, dropped by <a href="trainers.html#kanto_giovanni">Giovanni</a>; use it in the Resurrection Machine with a <a href="items.html#lumymon:cloning_catalyst">Cloning Catalyst</a> (dropped by Rocket Admin Atena) to create <a href="pokedex.html#mewtwo">Mewtwo</a>, or craft it onward.</li><li><a href="items.html#lumymon:origin_fossil">Origin Fossil</a> — any Cobblemon fossil + Ancient Origin Ball + Ancient DNA; revives <a href="pokedex.html#mew">Mew</a> at the Mew Shrine.</li><li><a href="items.html#lumymon:rocket_armor">Rocket Armor</a> — smith a netherite chestplate with a <a href="items.html#lumymon:synthetic_matrix">Synthetic Matrix</a> to unlock armored Mewtwo.</li><li><a href="items.html#lumymon:ember_feather">Ember</a>, <a href="items.html#lumymon:thunder_feather">Thunder</a> and <a href="items.html#lumymon:glacier_feather">Glacier Feathers</a> — summon <a href="pokedex.html#moltres">Moltres</a>, <a href="pokedex.html#zapdos">Zapdos</a> and <a href="pokedex.html#articuno">Articuno</a> at their altars; all three combine into the <a href="items.html#lumymon:soul_feather">Soul Feather</a>.</li><li><a href="items.html#lumymon:rainbow_wing">Rainbow Wing</a> (from the Old Sage) and <a href="items.html#lumymon:silver_wing">Silver Wing</a> (from Rocket Boss Giovanni) — summon <a href="pokedex.html#hooh">Ho-Oh</a> at the Bell Tower and <a href="pokedex.html#lugia">Lugia</a> at Whirl Island; the <a href="items.html#lumymon:shadow_soul_stone">Shadow Soul Stone</a> (<a href="items.html#lumymon:corrupted_shard">Corrupted Shard</a> + <a href="items.html#lumymon:shadow_heart">Shadow Heart</a> from Admin Apollo) turns Lugia into its Shadow Form.</li><li><a href="items.html#lumymon:gs_ball">GS Ball</a> — dropped by Rival Red; reveals <a href="pokedex.html#celebi">Celebi</a> at the Ilex Shrine.</li><li><a href="items.html#lumymon:pebble_relic">Pebble</a>/<a href="items.html#lumymon:cryo_relic">Cryo</a>/<a href="items.html#lumymon:metal_relic">Metal</a>/<a href="items.html#lumymon:spark_relic">Spark</a>/<a href="items.html#lumymon:draco_relic">Draco Relics</a> — mined from Rock, Ice, Steel, Electron and Dragon Ore; each wakes its Regi, and all five craft the <a href="items.html#lumymon:titan_relic">Titan Relic</a> for <a href="pokedex.html#regigigas">Regigigas</a>.</li><li><a href="items.html#lumymon:magma_stone">Magma Stone</a> — fuse the <a href="items.html#lumymon:heat_splinter">Heat Splinter</a> (Galactic's Charon) and <a href="items.html#lumymon:heat_fragment">Heat Fragment</a> (Buck) into a Magmatic Cluster, then re-heat it in the <a href="items.html#lumymon:stark_forge">Stark Forge</a> to summon <a href="pokedex.html#heatran">Heatran</a>.</li><li><a href="items.html#lumymon:red_chain">Red Chain</a> — dropped by Galactic Boss Cyrus; a <a href="items.html#lumymon:broken_red_chain">Broken Red Chain</a> is reforged with the Knowledge, Emotion and Willpower Jewels earned from the lake trio; used on the Spear Pillar altars for <a href="pokedex.html#dialga">Dialga</a> and <a href="pokedex.html#palkia">Palkia</a>. The Verity/Valor/Acuity Proofs from Commanders Mars, Saturn and Jupiter reveal the hidden lakes first.</li><li><a href="items.html#legendarymonuments:origin_ingot">Origin Ingot</a> — smelt <a href="items.html#legendarymonuments:raw_origin">Raw Origin</a> mined from <a href="items.html#legendarymonuments:distortion_origin_ore">Distortion Origin Ore</a> in the Distortion World; it crafts both the <a href="items.html#lumymon:azure_flute">Azure Flute</a> (with the <a href="items.html#lumymon:temporal_flute">Temporal</a> and <a href="items.html#lumymon:spatial_flute">Spatial Flutes</a>) leading to <a href="pokedex.html#arceus">Arceus</a>, and the <a href="items.html#lumymon:giratina_radar">Giratina Radar</a>.</li><li><a href="items.html#legendarymonuments:griseous_key">Griseous Key</a> — a rare (about 1%) find in Turnback Cave chests, tied to <a href="pokedex.html#giratina">Giratina</a>.</li><li><a href="items.html#lumymon:dream_catcher">Dream Catcher</a> — <a href="items.html#lumymon:dream_string">Dream String</a> (Fullmoon Island) + <a href="items.html#lumymon:lunar_wing">Lunar Wing</a> calls <a href="pokedex.html#cresselia">Cresselia</a>; the <a href="items.html#lumymon:nightmare_weaver">Nightmare Weaver</a> (<a href="items.html#lumymon:moonlight_amulet">Moonlight Amulet</a> + Nightmare String from Newmoon Island) manifests <a href="pokedex.html#darkrai">Darkrai</a>; the <a href="items.html#lumymon:member_card">Member Card</a> comes from Elfio.</li><li><a href="items.html#lumymon:earth_core">Earth Core</a> / <a href="items.html#lumymon:ocean_core">Ocean Core</a> / <a href="items.html#lumymon:sky_core">Sky Core</a> — summon <a href="pokedex.html#groudon">Groudon</a>, <a href="pokedex.html#kyogre">Kyogre</a> and Mega <a href="pokedex.html#rayquaza">Rayquaza</a>. The Sky Core needs the <a href="items.html#lumymon:desolate_gem">Desolate</a> (Magma's Max), <a href="items.html#lumymon:primordial_gem">Primordial</a> (Aqua's Ivan) and <a href="items.html#lumymon:aether_gem">Aether Gems</a> (Mega Trainer Lyris) plus an <a href="items.html#lumymon:emerald_emblem">Emerald Emblem</a>.</li><li><a href="items.html#legendarymonuments:grasswither_seal">Grasswither</a>, <a href="items.html#legendarymonuments:icerend_seal">Icerend</a>, <a href="items.html#legendarymonuments:firescourge_seal">Firescourge</a> and <a href="items.html#legendarymonuments:groundblight_seal">Groundblight Seals</a> — found in Nether loot (bastions, fortresses, ruined portals); each crafts the radar that locates its Ruin shrine (Wo-Chien, Chien-Pao, Chi-Yu, Ting-Lu).</li><li><a href="items.html#legendarymonuments:galar_particle">Galar Particle</a> — smelted from Galar Particle Ore; a particle block goes into the <a href="items.html#lumymon:eternatus_radar">Eternatus Radar</a> that locates the <a href="pokedex.html#eternatus">Eternatus</a> Cocoon, and particles also craft Galarian Torches.</li></ul></section><section><h2>Evolution, Mega &amp; held items</h2><p>The pack re-sources several Cobblemon evolution items and adds the full Mega Showdown battle-gear ladder.</p><ul><li><b>Evolution stones from ore.</b> Mega Showdown's ten Mega Meteoroid ores smelt or blast directly into evolution stones: <a href="items.html#cobblemon:fire_stone">Fire</a>, <a href="items.html#cobblemon:water_stone">Water</a>, <a href="items.html#cobblemon:thunder_stone">Thunder</a>, <a href="items.html#cobblemon:leaf_stone">Leaf</a>, <a href="items.html#cobblemon:ice_stone">Ice</a>, <a href="items.html#cobblemon:sun_stone">Sun</a>, <a href="items.html#cobblemon:moon_stone">Moon</a>, <a href="items.html#cobblemon:shiny_stone">Shiny</a>, <a href="items.html#cobblemon:dusk_stone">Dusk</a> and <a href="items.html#cobblemon:dawn_stone">Dawn Stones</a>.</li><li><b>Trade-evolution helper.</b> The <a href="items.html#cobblemon:link_cable">Link Cable</a> is craftable (copper ingots + quartz + ender pearl) — use it on a trade-evolver like Haunter or Machoke instead of trading.</li><li><b>Ability items, cheap.</b> Mega Showdown adds crafting for the <a href="items.html#cobblemon:ability_capsule">Ability Capsule</a> (amethyst + diamond + pink dye) and <a href="items.html#cobblemon:ability_patch">Ability Patch</a> (diamond + iron + nether star), plus the <a href="items.html#cobblemon:eject_pack">Eject Pack</a> and smithing recipes that turn a Terrain Extender + type gem into the four terrain <a href="items.html#cobblemon:grassy_seed">seeds</a>.</li><li><b>Mega Evolution.</b> Craft a <a href="items.html#mega_showdown:keystone">Keystone</a> from Keystone Ore (Mega Trainer Lyris also drops one), then socket it into a <a href="items.html#mega_showdown:mega_bracelet">Mega Bracelet</a> or <a href="items.html#mega_showdown:mega_ring">Mega Ring</a> (keystone + apricorn + diamond + iron). Your Pokémon still needs its species Mega Stone (Charizardite, Lucarionite and the rest) as a held item.</li><li><b>Z-Moves.</b> <a href="items.html#mega_showdown:sparkling_stone_light">Light</a> and <a href="items.html#mega_showdown:sparkling_stone_dark">Dark Sparkling Stones</a> dig up at Mega Showdown archaeological sites; they craft the <a href="items.html#mega_showdown:z_ring">Z-Ring</a> and <a href="items.html#mega_showdown:z_power_ring">Z-Power Ring</a>, worn with a type or species Z-Crystal.</li><li><b>Dynamax and Tera.</b> The <a href="items.html#mega_showdown:dynamax_band">Dynamax Band</a> needs a <a href="items.html#mega_showdown:wishing_star">Wishing Star</a>; the <a href="items.html#mega_showdown:tera_orb">Tera Orb</a> is crafted from amethyst, blaze powder, diamond, ender pearl and glowstone, and <a href="items.html#mega_showdown:fire_tera_shard">Tera Shards</a> change a Pokémon's Tera type. The endgame <a href="items.html#mega_showdown:omni_ring">Omni Ring</a> fuses a Keystone, both Sparkling Stones, a Tera Orb and a Wishing Star onto netherite.</li><li><b>Form &amp; fusion gear.</b> Craftable: <a href="items.html#mega_showdown:dna_splicer">DNA Splicers</a> (Kyurem), <a href="items.html#mega_showdown:n_solarizer">N Solarizer</a> / <a href="items.html#mega_showdown:n_lunarizer">N Lunarizer</a> (Necrozma, built on Sun/Moon Stones), <a href="items.html#mega_showdown:reins_of_unity">Reins of Unity</a> (Calyrex) and the <a href="items.html#mega_showdown:zygarde_cube">Zygarde Cube</a>. Found in the world: <a href="items.html#mega_showdown:rusted_sword">Rusted Sword</a> / <a href="items.html#mega_showdown:rusted_shield">Rusted Shield</a> (henge ruins and Zacian/Zamazenta raids), <a href="items.html#mega_showdown:prison_bottle">Prison Bottle</a> and <a href="items.html#mega_showdown:reveal_glass">Reveal Glass</a> (desert pyramids).</li></ul></section><section><h2>TMs &amp; move-learning (TMCraft)</h2><p>TMs are single-use discs labelled <code>TM-###: Move</code> — used on a Pokémon that can learn the move (the disc shows ABLE, UNABLE or LEARNED per party member). The pack ships <b>802 craftable TMs</b>, all shapeless recipes with the same shape: the move's Cobblemon <b>type gem</b> + one or two thematic items + a <b>Blank Disc</b> of the right tier. Examples: Absorb = Grass Gem + sponge + Copper Blank Disc; Acrobatics = Flying Gem + elytra + Iron Blank Disc; Agility = Psychic Gem + firework rocket + Emerald Blank Disc.</p><ul><li><b>Blank Disc ladder.</b> A <a href="items.html#tmcraft:copper_blank_disc">Copper Blank Disc</a> is just one copper ingot. Upgrade it at a smithing table with the <a href="items.html#tmcraft:move_upgrade_smithing_template">Move Upgrade Smithing Template</a> (cobbled deepslate + gold + blaze powder; duplicable): copper → <a href="items.html#tmcraft:iron_blank_disc">iron</a> → <a href="items.html#tmcraft:gold_blank_disc">gold</a> → <a href="items.html#tmcraft:diamond_blank_disc">diamond</a> → <a href="items.html#tmcraft:netherite_blank_disc">netherite</a>, with <a href="items.html#tmcraft:emerald_blank_disc">emerald</a> branching off gold. Stronger moves demand higher tiers — the pool splits roughly 137 copper / 146 iron / 171 gold / 108 diamond / 138 emerald / 91 netherite.</li><li><b>TM drops.</b> Every gym leader victory also drops one random TM from a themed pool (<a href="trainers.html#kanto_brock">Brock</a> hands out Bide, Rock Tomb, Rock Slide or Headbutt). Team Rocket trainers drop TMs from a huge random pool, Rocket agents drop blank discs, and raid dens have a small blank-disc chance.</li><li><b>Stations.</b> TMCraft also adds the craftable <a href="items.html#tmcraft:move_tutor_table">Move Tutor Table</a> and <a href="items.html#tmcraft:pokemon_breeder_table">Pokémon Breeder Table</a>. The Blank Books/Eggs/Stars and the four Move Recorders exist as items but have no crafting recipe or loot source in this pack's data.</li></ul></section><section><h2>Money: CobbleDollars, shops &amp; the Bank</h2><p><b>CobbleDollars</b> is the pack's currency. You earn it automatically by winning battles against trainer NPCs and wild Pokémon (COBBLEVERSE halves the base income with a 0.5 multiplier). Spend it at <b>Cobble Merchant</b> NPCs and cash out items at the <b>Bank</b> screen, which buys from a fixed price list.</p><ul><li><b>Merchant shop.</b> Poké, Citrine, Verdant, Azure, Roseate and Slate Balls cost 400; <a href="items.html#cobblemon:great_ball">Great Ball</a> 750, <a href="items.html#cobblemon:ultra_ball">Ultra Ball</a> 1,000, <a href="items.html#cobblemon:luxury_ball">Luxury Ball</a> 4,000. Potion 600, Super 900, Hyper 1,600, <a href="items.html#cobblemon:revive">Revive</a> 3,000. A mob-drops tab sells egg through ender pearl (250–1,600), and a Cards tab sells the Trainer Card (500) and the <a href="items.html#lumymon:store_card">Store Card</a> (999), which locates the nearest Department Store.</li><li><b>Bank sell prices</b> (what the bank pays you): emerald 400 and emerald block 3,750; <a href="items.html#cobblemon:relic_coin">Relic Coin</a> 50, pouch 475, sack 4,500; healing items from Potion 50 up to Full Restore 750; vitamins 2,500 each and PP Max 3,500; elytra 25,000; and notably the legendary bird feathers at 5,000 each with the <a href="items.html#lumymon:soul_feather">Soul Feather</a> at 30,000 — plus a long food list for pocket change.</li><li><b>Trainer Card.</b> Sold for 500, it tracks your trainer progress and shows each trainer's type, team, level cap, spawn biomes and — usefully for this page — their signature item.</li><li><b>Admin note.</b> A <a href="items.html#cobbledollars:cobble_merchant_spawn_egg">Cobble Merchant Spawn Egg</a> exists for creative mode, so server owners can place shops anywhere.</li></ul></section>
+</div>
+<footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
+</body></html>
