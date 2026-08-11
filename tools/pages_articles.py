@@ -302,6 +302,7 @@ def build_structures(inv: list, have: set, species: dict,
                 f"<img src='{full}' loading='lazy' alt='{esc(name)}'></a>"
                 f"<figcaption><b>{esc(name)}</b>"
                 f"<span class='meta'> · {esc(e['ns'])}{glink}{links}"
+                f" · <a href='viewer.html?s={esc(e['slug'])}'>3D view</a>"
                 f" · <a href='{full}' target='_blank' rel='noopener'>full "
                 f"size</a></span></figcaption></figure>")
         parts.append("</div></section>")

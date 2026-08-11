@@ -605,6 +605,8 @@ def main() -> None:
         pages["structures.html"] = build_structures(struct_inv, have,
                                                     d["species"],
                                                     content["legendaries"])
+        from viewer_page import build_viewer
+        pages["viewer.html"] = build_viewer()
 
     # ---- global search index (shared by every page's nav search bar)
     idx = []

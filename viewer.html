@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Viewer · COBBLEVERSE Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0b1a20; --shelf:#12262e; --reef:#1a3540; --deep:#081318;
+  --foam:#dcecef; --tide:#5ad1c8; --amber:#f0a840; --coral:#e8735c;
+  --silt:#7fa3ae; --moss:#8fd18b;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--reef) var(--abyss)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--abyss); color:var(--foam);
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600; letter-spacing:-.02em; margin:0;
+}
+a{color:var(--tide);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:1px 5px;font-size:12.5px}
+
+/* ---- top nav ---- */
+nav.top{
+  display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;
+  padding:10px 18px;border-bottom:1px solid var(--reef);
+  background:var(--deep);position:sticky;top:0;z-index:50;
+}
+nav.top .brand{
+  font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;
+  color:var(--amber);margin-right:14px;letter-spacing:.02em;
+}
+nav.top .brand small{color:var(--silt);font-weight:400;font-size:11px;margin-left:6px}
+nav.top a.item{
+  padding:4px 10px;border-radius:3px;font-size:12.5px;color:var(--foam);
+}
+nav.top a.item:hover{background:var(--shelf);text-decoration:none}
+nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+/* anchor jumps must clear the sticky nav (height measured into --navh) */
+[id]{scroll-margin-top:calc(var(--navh, 52px) + 12px)}
+.navsearch{margin-left:auto;position:relative;min-width:180px;flex:0 1 260px}
+.navsearch input{
+  width:100%;padding:5px 10px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:12.5px;
+}
+.navsearch input:focus{outline:2px solid var(--tide);outline-offset:-1px}
+#gq-results{
+  position:absolute;top:110%;right:0;width:340px;max-width:92vw;max-height:60vh;
+  overflow-y:auto;background:var(--deep);border:1px solid var(--reef);
+  border-radius:4px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;
+}
+#gq-results .gr{
+  display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
+  font-size:13px;color:var(--foam);text-decoration:none;
+}
+#gq-results .gr:hover,#gq-results .gr.sel{background:var(--reef)}
+#gq-results .gr img{width:26px;height:26px;image-rendering:pixelated;flex-shrink:0}
+#gq-results .gr .gk{
+  margin-left:auto;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--silt);flex-shrink:0;
+}
+#gq-results .gempty{padding:10px 12px;color:var(--silt);font-size:12px}
+
+/* hover preview cards */
+.hovercard{
+  position:fixed;z-index:200;width:270px;pointer-events:none;
+  background:var(--deep);border:1px solid var(--reef);border-radius:5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.55);padding:11px 13px;
+  display:flex;gap:12px;align-items:center;
+}
+.hovercard img{width:74px;height:74px;image-rendering:pixelated;flex-shrink:0}
+.hovercard .hc-t{font-family:"Space Grotesk",sans-serif;font-weight:600;
+  font-size:14.5px;color:var(--foam);line-height:1.25}
+.hovercard .hc-m{font-size:11px;color:var(--tide);margin-top:3px;
+  text-transform:capitalize}
+.hovercard .hc-d{font-size:11px;color:var(--silt);margin-top:4px;
+  line-height:1.45;font-style:italic}
+
+/* ---- article pages ---- */
+.article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
+.article h1{font-size:30px;margin-bottom:6px}
+.article .sub{color:var(--silt);font-size:13px;margin-bottom:26px}
+.article section{margin:26px 0}
+.article h2{
+  font-size:19px;color:var(--amber);margin-bottom:10px;
+  border-bottom:1px solid var(--reef);padding-bottom:6px;
+}
+.article p{margin:9px 0}
+.article ul{margin:8px 0;padding-left:22px}
+.article li{margin:4px 0}
+.callout{
+  background:var(--shelf);border:1px solid var(--reef);
+  border-left:2px solid var(--tide);padding:12px 15px;border-radius:3px;
+  margin:14px 0;font-size:13.5px;
+}
+.callout.warn{border-left-color:var(--amber)}
+
+/* ---- home cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:4px;
+  padding:15px 16px;display:block;color:var(--foam);
+}
+.card:hover{border-color:var(--tide);text-decoration:none}
+.card h3{font-size:15px;color:var(--tide);margin-bottom:5px}
+.card p{margin:0;font-size:12.5px;color:var(--silt);line-height:1.5}
+.statrow{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0}
+.stat .n{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:600;color:var(--tide)}
+.stat .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--silt)}
+
+/* ---- browser (sidebar+detail) pages ---- */
+.wrap{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 45px)}
+@media(max-width:840px){.wrap{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--reef);display:flex;flex-direction:column;min-height:0}
+.padbox{padding:14px 16px 10px}
+.padbox h1{font-size:17px}
+.padbox p.note{margin:5px 0 0;color:var(--silt);font-size:11px;line-height:1.5}
+.searchbox{padding:0 16px 8px}
+input[type=search]{
+  width:100%;padding:8px 11px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:13px;
+}
+input[type=search]:focus,select:focus{outline:2px solid var(--tide);outline-offset:-1px}
+.filters{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap}
+.filters select,.filters label.chk{
+  background:var(--shelf);color:var(--foam);border:1px solid var(--reef);
+  border-radius:3px;font:inherit;font-size:11.5px;padding:4px 6px;
+}
+.filters label.chk{display:flex;align-items:center;gap:5px;cursor:pointer}
+#results{overflow-y:auto;flex:1;padding:0 8px 18px;min-height:0}
+.row{
+  padding:5px 10px;border-radius:3px;cursor:pointer;
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.row:hover{background:var(--shelf)}
+.row[aria-selected=true]{background:var(--reef)}
+.row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .ns{font-size:10px;color:var(--silt);flex-shrink:0}
+img.spr{image-rendering:pixelated;vertical-align:middle;flex-shrink:0}
+.chip img.spr{margin:-3px 3px -3px -2px}
+.mon img.spr{margin:-6px 2px -6px -4px}
+.empty{color:var(--silt);font-size:12px;padding:10px}
+main{overflow-y:auto;padding:24px 30px 70px;min-width:0}
+@media(max-width:840px){main{padding:18px 14px 60px}}
+.item-head{border-bottom:1px solid var(--reef);padding-bottom:14px;margin-bottom:20px}
+.item-head h2{font-size:26px}
+.id{color:var(--tide);font-size:12px;margin-top:4px;word-break:break-all}
+.tip{color:var(--silt);font-size:13px;margin-top:8px;font-style:italic}
+section.blk{margin-bottom:28px}
+section.blk>h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silt);margin-bottom:10px;
+}
+.splash{color:var(--silt);max-width:56ch;font-size:13.5px;line-height:1.8}
+.splash b{color:var(--foam);font-weight:400}
+
+/* chips */
+.chip{
+  display:inline-block;background:var(--deep);border:1px solid var(--reef);
+  border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer;color:var(--foam);
+  margin:0 4px 4px 0;
+}
+a.chip:hover{border-color:var(--tide);color:var(--tide);text-decoration:none}
+.chip.tag{border-style:dashed;color:var(--silt);cursor:default}
+.chip.plain{cursor:default}
+.src{font-size:10.5px;color:var(--silt);margin-top:6px}
+.badge{
+  display:inline-block;border-radius:3px;padding:1px 7px;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--reef);
+}
+.badge.addon{color:var(--amber);border-color:var(--amber)}
+.b-common{color:var(--silt)} .b-uncommon{color:var(--tide)}
+.b-rare{color:var(--amber)} .b-ultra-rare{color:var(--coral)}
+
+/* pokemon type chips: colored dot + text (identity never color-alone) */
+.type{
+  display:inline-flex;align-items:center;gap:6px;background:var(--deep);
+  border:1px solid var(--reef);border-radius:3px;padding:2px 9px 2px 7px;
+  font-size:12px;text-transform:capitalize;margin-right:5px;
+}
+.type i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* stat meters */
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;max-width:420px;align-items:center}
+.stats .k{font-size:11px;color:var(--silt);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stats .bar{height:6px;background:var(--reef);border-radius:3px;overflow:hidden}
+.stats .bar i{display:block;height:100%;background:var(--tide);border-radius:3px}
+.stats .v{font-size:12px;text-align:right;min-width:3ch}
+.stats .total .v,.stats .total .k{color:var(--amber)}
+
+/* generic data tables */
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+table.data th{
+  text-align:left;color:var(--silt);font-weight:400;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.1em;padding:5px 10px 5px 0;
+  border-bottom:1px solid var(--reef);
+}
+table.data td{padding:6px 10px 6px 0;border-bottom:1px solid var(--shelf);vertical-align:top}
+details.biomes{display:inline-block}
+details.biomes summary{cursor:pointer;color:var(--tide);font-size:12px;list-style:none}
+details.biomes summary::after{content:" \25be"}
+details.biomes[open] summary::after{content:" \25b4"}
+details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:4px 0}
+.meta{font-size:11.5px;color:var(--silt)}
+.bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tide)}
+.structgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin:14px 0}
+.structgrid figure{margin:0;background:var(--shelf);border:1px solid var(--reef);
+  border-radius:4px;padding:10px;text-align:center}
+.structgrid img{max-width:100%;max-height:240px;object-fit:contain;image-rendering:auto}
+.structgrid figcaption{font-size:12px;margin-top:7px;color:var(--foam)}
+.drop{
+  display:grid;grid-template-columns:1fr auto;gap:3px 16px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.drop .table{font-size:13px;word-break:break-all}
+.drop .runs{
+  font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;
+  color:var(--amber);white-space:nowrap;text-align:right;line-height:1.2;
+}
+.drop .runs small{display:block;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);font-weight:400}
+.drop .meta{grid-column:1/-1}
+.drop .bar{grid-column:1/-1;height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.drop .bar i{display:block;height:100%;background:var(--tide)}
+.planner{
+  background:var(--shelf);border:1px solid var(--reef);border-left:2px solid var(--amber);
+  padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;
+  gap:11px;flex-wrap:wrap;font-size:13px;
+}
+.planner input{
+  width:64px;padding:5px 7px;background:var(--abyss);color:var(--amber);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-weight:600;
+  text-align:center;
+}
+.planner .lbl{color:var(--silt)}
+.recipe{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:11px 14px;margin-bottom:8px;
+}
+.recipe .kind{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--silt)}
+.recipe .ing{margin-top:7px}
+.none{color:var(--coral);font-size:13px}
+.none b{color:var(--foam)}
+.hint{color:var(--silt);font-size:12px;margin-top:6px;line-height:1.6}
+
+/* trainer team cards */
+.mon{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:10px 13px;margin-bottom:8px;
+  display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;
+}
+.mon .sp{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600}
+.mon .lv{color:var(--amber);font-size:13px}
+.mon .kv{font-size:11.5px;color:var(--silt)}
+.mon .kv b{color:var(--foam);font-weight:400}
+.mon .moves{width:100%;font-size:11.5px;color:var(--silt)}
+.mon .moves code{margin-right:4px}
+
+/* milestone list (progression) */
+.mile{
+  display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.mile .kind{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--reef);border-radius:3px;height:fit-content;
+  white-space:nowrap;margin-top:2px;
+}
+.mile .kind.badge-k{color:var(--amber);border-color:var(--amber)}
+.mile .kind.elite-k{color:var(--coral)}
+.mile .kind.champion-k{color:var(--coral);border-color:var(--coral)}
+.mile .kind.legendary-k{color:var(--tide);border-color:var(--tide)}
+.mile .kind.item-k{color:var(--moss)}
+.mile h4{font-size:14.5px}
+.mile p{margin:2px 0 0;font-size:12.5px;color:var(--silt)}
+.mile .ico{font-size:11px;color:var(--silt)}
+footer.gen{
+  border-top:1px solid var(--reef);color:var(--silt);font-size:11px;
+  padding:14px 18px;text-align:center;
+}
+footer.gen a{color:var(--silt);text-decoration:underline}
+</style>
+</head><body>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="structures.html" aria-current="page">Structures</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a><div class="navsearch"><input id="gq" type="search" placeholder="Search everything…  Ctrl+K" autocomplete="off"><div id="gq-results"></div></div></nav>
+
+<div style="display:flex;flex-direction:column;height:calc(100vh - 45px)">
+  <div style="display:flex;gap:14px;align-items:center;padding:10px 18px;
+              border-bottom:1px solid var(--reef);flex-wrap:wrap">
+    <h1 id="vtitle" style="font-size:16px">3D Structure Viewer</h1>
+    <span class="meta">drag to rotate · scroll to zoom · right-drag to pan</span>
+    <label class="meta" style="display:flex;align-items:center;gap:8px;
+                               margin-left:auto;min-width:260px;flex:0 1 380px">
+      roof slice
+      <input id="yslice" type="range" min="0" max="1" value="1" step="1"
+             style="flex:1;accent-color:var(--tide)">
+      <span id="ylabel" style="min-width:5ch;color:var(--tide)">—</span>
+    </label>
+    <button id="vreset" class="chip" style="cursor:pointer">reset view</button>
+    <a id="vback" class="chip" href="structures.html">← all structures</a>
+  </div>
+  <div id="vwrap" style="flex:1;min-height:0;position:relative">
+    <canvas id="vcanvas" style="width:100%;height:100%;display:block"></canvas>
+    <div id="vmsg" class="meta" style="position:absolute;top:12px;left:16px"></div>
+  </div>
+</div>
+<script src="lib/three.min.js"></script>
+<script src="lib/OrbitControls.js"></script>
+<script>
+(function(){
+  const params = new URLSearchParams(location.search);
+  const slug = (params.get('s') || '').replace(/[^a-z0-9-]/g, '');
+  const msg = document.getElementById('vmsg');
+  if(!slug){ msg.textContent = 'No structure selected — pick one from the Structures page.'; return; }
+  document.getElementById('vtitle').textContent =
+    slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  msg.textContent = 'Loading…';
+
+  const canvas = document.getElementById('vcanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, 2, 0.1, 4000);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+
+  function resize(){
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+
+  const SHADE = {top: 1.0, bottom: 0.5, px: 0.62, nx: 0.62, pz: 0.8, nz: 0.8};
+
+  fetch('voxels/' + slug + '.json')
+    .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(build)
+    .catch(e => { msg.textContent = 'Could not load voxel data (' + e.message +
+      '). The 3D viewer needs the site served over http (it works on the hosted wiki).'; });
+
+  function build(data){
+    const bin = atob(data.blocks);
+    const n = bin.length / 6;
+    const bx = new Uint16Array(n), bz = new Uint16Array(n);
+    const by = new Uint8Array(n), bs = new Uint8Array(n);
+    for(let i = 0; i < n; i++){
+      const o = i * 6;
+      bx[i] = bin.charCodeAt(o) | (bin.charCodeAt(o + 1) << 8);
+      bz[i] = bin.charCodeAt(o + 2) | (bin.charCodeAt(o + 3) << 8);
+      by[i] = bin.charCodeAt(o + 4);
+      bs[i] = bin.charCodeAt(o + 5);
+    }
+    const [SX, SY, SZ] = data.size;
+    const pal = data.palette;
+    // occupancy of opaque blocks for face culling
+    const occ = new Set();
+    for(let i = 0; i < n; i++)
+      if(pal[bs[i]].o) occ.add(bx[i] + '|' + by[i] + '|' + bz[i]);
+
+    // build one merged geometry per Y layer -> slicing = visibility toggles
+    const layers = new Map();
+    function layer(y){
+      let L = layers.get(y);
+      if(!L){ L = {pos: [], col: []}; layers.set(y, L); }
+      return L;
+    }
+    function quad(L, verts, rgb, shade){
+      const r = rgb[0] / 255 * shade, g = rgb[1] / 255 * shade,
+            b = rgb[2] / 255 * shade;
+      const idx = [0, 1, 2, 0, 2, 3];
+      for(const k of idx){
+        L.pos.push(verts[k][0], verts[k][1], verts[k][2]);
+        L.col.push(r, g, b);
+      }
+    }
+    for(let i = 0; i < n; i++){
+      const x = bx[i], y = by[i], z = bz[i], p = pal[bs[i]];
+      const L = layer(y);
+      // top face: never culled, so slicing always shows a solid skin
+      quad(L, [[x,y+1,z],[x,y+1,z+1],[x+1,y+1,z+1],[x+1,y+1,z]], p.t, SHADE.top);
+      if(!occ.has(x + '|' + (y-1) + '|' + z))
+        quad(L, [[x,y,z],[x+1,y,z],[x+1,y,z+1],[x,y,z+1]], p.t, SHADE.bottom);
+      if(!occ.has((x+1) + '|' + y + '|' + z))
+        quad(L, [[x+1,y,z],[x+1,y+1,z],[x+1,y+1,z+1],[x+1,y,z+1]], p.s, SHADE.px);
+      if(!occ.has((x-1) + '|' + y + '|' + z))
+        quad(L, [[x,y,z],[x,y,z+1],[x,y+1,z+1],[x,y+1,z]], p.s, SHADE.nx);
+      if(!occ.has(x + '|' + y + '|' + (z+1)))
+        quad(L, [[x,y,z+1],[x+1,y,z+1],[x+1,y+1,z+1],[x,y+1,z+1]], p.s, SHADE.pz);
+      if(!occ.has(x + '|' + y + '|' + (z-1)))
+        quad(L, [[x,y,z],[x,y+1,z],[x+1,y+1,z],[x+1,y,z]], p.s, SHADE.nz);
+    }
+    const group = new THREE.Group();
+    const mat = new THREE.MeshBasicMaterial({vertexColors: true, side: THREE.DoubleSide});
+    const layerMeshes = [];
+    for(const [y, L] of layers){
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(L.pos, 3));
+      geo.setAttribute('color', new THREE.Float32BufferAttribute(L.col, 3));
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.userData.y = y;
+      group.add(mesh);
+      layerMeshes.push(mesh);
+    }
+    group.position.set(-SX / 2, -SY / 2, -SZ / 2);
+    scene.add(group);
+
+    const slider = document.getElementById('yslice');
+    const ylabel = document.getElementById('ylabel');
+    slider.max = SY - 1;
+    slider.value = SY - 1;
+    ylabel.textContent = 'Y ' + (SY - 1);
+    slider.addEventListener('input', () => {
+      const v = +slider.value;
+      ylabel.textContent = 'Y ' + v;
+      for(const m of layerMeshes) m.visible = m.userData.y <= v;
+    });
+
+    const dist = Math.max(SX, SY, SZ) * 1.7 + 10;
+    function resetView(){
+      camera.position.set(dist * 0.7, dist * 0.55, dist * 0.7);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+    document.getElementById('vreset').addEventListener('click', resetView);
+    resetView();
+    resize();
+    msg.textContent = n.toLocaleString() + ' blocks · ' +
+      SX + '×' + SY + '×' + SZ;
+    (function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    })();
+  }
+})();
+</script>
+
+
+<script defer src="searchindex.js"></script>
+<script defer src="hoverdata.js"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){
+(function(){
+  var nav = document.querySelector('nav.top');
+  function setNavH(){
+    if(nav) document.documentElement.style.setProperty(
+      '--navh', nav.offsetHeight + 'px');
+  }
+  setNavH();
+  window.addEventListener('resize', setNavH);
+  // lazy images can shift layout after the initial anchor jump - re-align
+  if(location.hash){
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var t = document.getElementById(
+          decodeURIComponent(location.hash.slice(1)));
+        if(t && t.scrollIntoView) t.scrollIntoView();
+      }, 250);
+    });
+  }
+})();
+(function(){
+  var inp = document.getElementById('gq');
+  var box = document.getElementById('gq-results');
+  if(!inp || !box) return;
+  var sel = -1, rows = [];
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function img(e){
+    if(e.k === 'pokemon') return '<img src="renders/' + e.i + '.png" alt="" loading="lazy" ' +
+      'onerror="if(this.dataset.f){this.style.visibility=\'hidden\'}else{this.dataset.f=1;this.src=\'sprites/' + (e.x || 0) + '.png\'}">';
+    if(e.k === 'item'){
+      var c = e.i.indexOf(':');
+      return '<img src="icons/' + e.i.slice(0, c) + '/' +
+        e.i.slice(c + 1).replace(/\//g, '__') + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    }
+    if(e.k === 'trainer')
+      return '<img src="renders/trainers/' + e.i + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    return '<span style="width:26px;flex-shrink:0"></span>';
+  }
+  function urlOf(e){
+    if(e.k === 'pokemon') return 'pokedex.html#' + e.i;
+    if(e.k === 'item') return 'items.html#' + encodeURIComponent(e.i);
+    if(e.k === 'trainer') return 'trainers.html#' + encodeURIComponent(e.i);
+    return e.i;   // pages & guide sections store their url directly
+  }
+  function render(hits){
+    rows = hits; sel = -1;
+    if(!hits.length){
+      box.innerHTML = '<div class="gempty">No match.</div>';
+    } else {
+      box.innerHTML = hits.map(function(e){
+        return '<a class="gr" href="' + esc(urlOf(e)) + '">' + img(e) +
+          '<span>' + esc(e.t) + '</span><span class="gk">' + esc(e.k) + '</span></a>';
+      }).join('');
+    }
+    box.style.display = 'block';
+  }
+  function search(q){
+    q = q.trim().toLowerCase();
+    if(q.length < 2){ box.style.display = 'none'; return; }
+    var starts = [], has = [];
+    for(var n = 0; n < SEARCH_INDEX.length; n++){
+      var e = SEARCH_INDEX[n];
+      var t = e.t.toLowerCase();
+      if(t.startsWith(q)) starts.push(e);
+      else if(t.indexOf(q) >= 0 || (e.i && e.i.indexOf(q) >= 0)) has.push(e);
+      if(starts.length >= 14) break;
+    }
+    render(starts.concat(has).slice(0, 14));
+  }
+  var t;
+  inp.addEventListener('input', function(){
+    clearTimeout(t); t = setTimeout(function(){ search(inp.value); }, 80);
+  });
+  inp.addEventListener('keydown', function(ev){
+    var links = box.querySelectorAll('.gr');
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sel = ev.key === 'ArrowDown' ? Math.min(sel + 1, links.length - 1)
+                                   : Math.max(sel - 1, 0);
+      links.forEach(function(l, n){ l.classList.toggle('sel', n === sel); });
+      if(links[sel]) links[sel].scrollIntoView({block: 'nearest'});
+    } else if(ev.key === 'Enter'){
+      var pick = links[sel >= 0 ? sel : 0];
+      if(pick) location.href = pick.getAttribute('href');
+    } else if(ev.key === 'Escape'){
+      box.style.display = 'none'; inp.blur();
+    }
+  });
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.navsearch')) box.style.display = 'none';
+  });
+  document.addEventListener('keydown', function(ev){
+    if((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k'){
+      ev.preventDefault(); inp.focus(); inp.select();
+    }
+  });
+})();
+
+
+(function(){
+  if(typeof HOVER_DATA === 'undefined') return;
+  var card = document.createElement('div');
+  card.className = 'hovercard';
+  card.style.display = 'none';
+  document.body.appendChild(card);
+  var timer = null;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function iconPath(id){
+    var c = id.indexOf(':');
+    if(c < 0) return null;
+    return 'icons/' + id.slice(0, c) + '/' + id.slice(c + 1).replace(/\//g, '__') + '.png';
+  }
+  function monImg(id, dex){
+    return '<img src="renders/' + esc(id) + '.png" alt="" ' +
+      'onerror="if(this.dataset.f||!' + (dex ? 'true' : 'false') +
+      '){this.style.display=\'none\'}else{this.dataset.f=1;this.src=\'sprites/' +
+      (dex || 0) + '.png\'}">';
+  }
+  function parse(el){
+    var go = el.getAttribute('data-go');
+    if(go) return go.indexOf(':') >= 0 ? {k: 'i', id: go} : {k: 'p', id: go};
+    var href = el.getAttribute('href') || '';
+    var m = href.match(/(?:^|\/)(pokedex|items|trainers|spawns)\.html#(.+)$/);
+    if(!m) return null;
+    var id = decodeURIComponent(m[2]);
+    if(m[1] === 'items') return {k: 'i', id: id};
+    if(m[1] === 'trainers') return {k: 't', id: id};
+    return {k: 'p', id: id};
+  }
+  function render(a, info, e){
+    var html = '';
+    if(info.k === 'p'){
+      html = monImg(info.id, e.d) + '<div>' +
+        '<div class="hc-t">' + (e.d ? '#' + String(e.d).padStart(3, '0') + ' ' : '') + esc(e.n) + '</div>' +
+        '<div class="hc-m">' + esc((e.ty || []).join(' / ')) + '</div>' +
+        '<div class="hc-d" style="font-style:normal">BST ' + esc(e.b) +
+        (e.c ? ' · catch rate ' + esc(e.c) : '') + '</div></div>';
+    } else if(info.k === 'i'){
+      var p = iconPath(info.id);
+      html = (p ? '<img src="' + esc(p) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        '<div class="hc-m" style="text-transform:none">' + esc(info.id) + '</div>' +
+        (e.tip ? '<div class="hc-d">' + esc(e.tip) + '</div>' : '') + '</div>';
+    } else {
+      var fb = e.ld ? 'renders/' + esc(e.ld) + '.png' : '';
+      html = '<img src="renders/trainers/' + esc(info.id) + '.png" alt="" ' +
+        'onerror="if(this.dataset.f||!this.dataset.fb){this.style.display=\'none\'}' +
+        'else{this.dataset.f=1;this.src=this.dataset.fb}" data-fb="' + fb + '">' +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        (e.s ? '<div class="hc-m">' + esc(e.s) + ' series</div>' : '') +
+        '<div class="hc-d" style="font-style:normal">' + esc(e.c) + ' Pokémon' +
+        (e.hi ? ' · Lv ' + esc(e.lo) + '–' + esc(e.hi) : '') + '</div></div>';
+    }
+    card.innerHTML = html;
+    card.style.visibility = 'hidden';
+    card.style.display = 'flex';
+    var r = a.getBoundingClientRect();
+    var ch = card.offsetHeight, cw = card.offsetWidth;
+    var left = Math.max(6, Math.min(r.left, window.innerWidth - cw - 10));
+    var top = r.bottom + 8;
+    if(top + ch > window.innerHeight - 8) top = r.top - ch - 8;
+    card.style.left = left + 'px';
+    card.style.top = Math.max(6, top) + 'px';
+    card.style.visibility = 'visible';
+  }
+  document.addEventListener('mouseover', function(ev){
+    var a = ev.target.closest ? ev.target.closest('a[href], [data-go]') : null;
+    clearTimeout(timer);
+    if(!a){ card.style.display = 'none'; return; }
+    var info = parse(a);
+    if(!info){ card.style.display = 'none'; return; }
+    var e = HOVER_DATA[info.k] && HOVER_DATA[info.k][info.id];
+    if(!e){ card.style.display = 'none'; return; }
+    timer = setTimeout(function(){ render(a, info, e); }, 160);
+  });
+  document.addEventListener('mouseout', function(ev){
+    if(ev.target.closest && ev.target.closest('a[href], [data-go]')){
+      clearTimeout(timer);
+      card.style.display = 'none';
+    }
+  });
+  window.addEventListener('scroll', function(){
+    clearTimeout(timer); card.style.display = 'none';
+  }, true);
+})();
+});</script>
+</body></html>
