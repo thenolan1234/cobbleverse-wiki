@@ -262,7 +262,7 @@
     "lumymon:spatial_flute",
     "legendarymonuments:origin_ingot"
    ],
-   "method": "<p>Craft the <a href=\"items.html#lumymon:azure_flute\">Azure Flute</a> from the <a href=\"items.html#lumymon:temporal_flute\">Temporal Flute</a> (from <a href=\"trainers.html#hisui_damon\">Damon</a>), the <a href=\"items.html#lumymon:spatial_flute\">Spatial Flute</a> (from <a href=\"trainers.html#hisui_perula\">Perula</a>) and an <a href=\"items.html#legendarymonuments:origin_ingot\">Origin Ingot</a>. Hold right-click to play it and cross the dimensional veil to the <b>Temple of Sinnoh</b>, where Arceus awaits at level 70.</p>"
+   "method": "<p>Craft the <a href=\"items.html#lumymon:azure_flute\">Azure Flute</a> from the <a href=\"items.html#lumymon:temporal_flute\">Temporal Flute</a> (granted when you summon Dialga at the Spear Pillar altar with an Adamant Crystal), the <a href=\"items.html#lumymon:spatial_flute\">Spatial Flute</a> (granted when you summon Palkia there with a Lustrous Globe) and an <a href=\"items.html#legendarymonuments:origin_ingot\">Origin Ingot</a>. Hold right-click to play it and cross the dimensional veil to the <b>Temple of Sinnoh</b>, where Arceus awaits at level 70.</p>"
   },
   {
    "name": "Victini",
