@@ -97,6 +97,36 @@ _ANIMATED_TINT = {
     "minecraft:lava": ("minecraft:block/lava_still", None, 255),
 }
 
+# chests are entity-textured (64x64 UV sheet); compose block-style tiles.
+# Box-UV rects: lid 14x5x14 @ (0,0), base 14x10x14 @ (0,19) -> north faces
+_CHEST_TEX = {"minecraft:chest": "minecraft:entity/chest/normal",
+              "minecraft:trapped_chest": "minecraft:entity/chest/trapped",
+              "minecraft:ender_chest": "minecraft:entity/chest/ender"}
+
+
+def _chest_tiles(idx: AssetIndex, rl: str):
+    from PIL import ImageOps
+    sheet = idx.read_texture(rl)
+    if sheet is None:
+        return None
+    sheet = sheet.convert("RGBA")
+    if sheet.size != (64, 64):
+        sheet = sheet.resize((64, 64), Image.Resampling.NEAREST)
+    # modern (1.15+) chest sheets store faces vertically flipped
+    lid_top = ImageOps.flip(sheet.crop((14, 0, 28, 14)))
+    lid_n = ImageOps.flip(sheet.crop((14, 14, 28, 19)))
+    base_n = ImageOps.flip(sheet.crop((14, 33, 28, 43)))
+    latch = sheet.crop((1, 1, 3, 5))
+    top = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    side = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    # the chest shape box is (1,0,1)-(15,14,15): projected windows are
+    # u 1..15 / v(top) 1..15 / v(side) 2..16 - paste art exactly there
+    top.paste(lid_top, (1, 1))
+    side.paste(base_n, (1, 6))
+    side.paste(lid_n, (1, 2), lid_n)
+    side.paste(latch, (7, 5), latch)
+    return top, side
+
 
 def block_textures(idx: AssetIndex, name: str):
     """(top RGBA 16x16, side RGBA 16x16) for a block id, best effort."""
@@ -113,6 +143,10 @@ def block_textures(idx: AssetIndex, name: str):
             if alpha != 255:
                 img.putalpha(alpha)
             return img, img
+    if name in _CHEST_TEX:
+        tiles = _chest_tiles(idx, _CHEST_TEX[name])
+        if tiles is not None:
+            return tiles
     if name in _SPECIAL_COLOR:
         img = Image.new("RGBA", (16, 16), _SPECIAL_COLOR[name])
         return img, img
