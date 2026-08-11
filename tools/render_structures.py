@@ -185,6 +185,216 @@ def bake_sprite(top: Image.Image, side: Image.Image) -> Image.Image:
     return spr
 
 
+# ---------------------------------------------------------------- tints
+
+# raw grass/foliage textures are grayscale in the assets and tinted by
+# biome in game - bake a plains-ish tint
+GRASS_TINT = (124, 189, 74)
+FOLIAGE_TINT = (106, 173, 51)
+_GRASS_BOTH = ("short_grass", "grass", "tall_grass", "fern", "large_fern",
+               "vine", "lily_pad", "sugar_cane")
+_PRECOLORED_LEAVES = ("cherry", "azalea", "flowering_azalea", "pale_oak")
+
+
+def _tint(img: Image.Image, rgb) -> Image.Image:
+    r, g, b, a = img.convert("RGBA").split()
+    ch = [c.point(lambda v, m=m: v * m // 255) for c, m in zip((r, g, b), rgb)]
+    return Image.merge("RGBA", (*ch, a))
+
+
+def block_textures_tinted(idx, name: str):
+    top, side = block_textures(idx, name)
+    short = name.split(":")[-1]
+    if short == "grass_block":
+        top = _tint(top, GRASS_TINT)
+    elif short in _GRASS_BOTH:
+        top, side = _tint(top, GRASS_TINT), _tint(side, GRASS_TINT)
+    elif (short.endswith("_leaves")
+          and not any(short.startswith(p) for p in _PRECOLORED_LEAVES)):
+        top, side = _tint(top, FOLIAGE_TINT), _tint(side, FOLIAGE_TINT)
+    return top, side
+
+
+# ---------------------------------------------------------------- shapes
+#
+# Non-full-cube blocks get an approximate real shape instead of a stretched
+# unit cube. Shared by the isometric painter and the 3D voxel exporter:
+#   {"t":"cross"}                  two crossed quads (plants)
+#   {"t":"bx","b":[[x0,y0,z0,x1,y1,z1],...], "u":[u0,v0,u1,v1]?}
+#       axis-aligned boxes in 16ths with projected UVs ("u" overrides the
+#       side-face texture window, e.g. chains whose links sit at u 0..3)
+#   {"t":"fence"|"wall"|"pane"}    center post + arms toward neighbors
+
+_KEEP_PROPS = ("type", "half", "facing", "open", "layers")
+_CROSS_WORDS = ("sapling", "fern", "seagrass", "kelp", "tulip", "orchid",
+                "allium", "dandelion", "poppy", "lilac", "peony", "daisy",
+                "rose", "cobweb", "amethyst_cluster", "bush", "vine",
+                "sugar_cane", "dripstone", "wheat", "beetroot", "carrot",
+                "potato", "pitcher", "sunflower", "torchflower", "sprouts",
+                "roots", "bluet", "lily_of_the_valley", "cornflower",
+                "propagule", "dripleaf", "lichen", "mushroom", "flower",
+                "azalea", "frogspawn", "crop", "grass")
+_SIDE_PLATE = {"north": (0, 0, 13, 16, 16, 16), "south": (0, 0, 0, 16, 16, 3),
+               "east": (0, 0, 0, 3, 16, 16), "west": (13, 0, 0, 16, 16, 16)}
+_WALL_PLATE = {"north": (0, 0, 15, 16, 16, 16), "south": (0, 0, 0, 16, 16, 1),
+               "east": (0, 0, 0, 1, 16, 16), "west": (15, 0, 0, 16, 16, 16)}
+
+
+def _bx(*boxes, u=None):
+    d = {"t": "bx", "b": [list(b) for b in boxes]}
+    if u:
+        d["u"] = list(u)
+    return d
+
+
+def shape_for(name: str, props: dict):
+    short = name.split(":")[-1]
+    p = props or {}
+    if (short.endswith(("_block", "_stem", "_leaves"))
+            or short == "grass_block"):
+        return None
+    if "potted" in short or short == "flower_pot":
+        return _bx((5, 0, 5, 11, 8, 11))
+    if any(w in short for w in _CROSS_WORDS):
+        return {"t": "cross"}
+    if "torch" in short:
+        return _bx((7, 0, 7, 9, 10, 9))
+    if "lantern" in short:
+        return _bx((5, 0, 5, 11, 9, 11))
+    if "candle" in short:
+        return _bx((6, 0, 6, 10, 7, 10))
+    if short == "chain":
+        return _bx((6.5, 0, 6.5, 9.5, 16, 9.5), u=(0, 0, 3, 16))
+    if "end_rod" in short or "lightning_rod" in short:
+        return _bx((6, 0, 6, 10, 16, 10))
+    if "bamboo" in short:
+        return _bx((6.5, 0, 6.5, 9.5, 16, 9.5), u=(0, 0, 3, 16))
+    if short.endswith("_slab"):
+        if p.get("type") == "double":
+            return None
+        return _bx((0, 8, 0, 16, 16, 16) if p.get("type") == "top"
+                   else (0, 0, 0, 16, 8, 16))
+    if short.endswith("_stairs"):
+        f = p.get("facing", "north")
+        top = p.get("half") == "top"
+        slab = (0, 8, 0, 16, 16, 16) if top else (0, 0, 0, 16, 8, 16)
+        rx, rz = (0, 16), (0, 16)
+        if f == "north":
+            rz = (0, 8)
+        elif f == "south":
+            rz = (8, 16)
+        elif f == "east":
+            rx = (8, 16)
+        else:
+            rx = (0, 8)
+        y0, y1 = (0, 8) if top else (8, 16)
+        return _bx(slab, (rx[0], y0, rz[0], rx[1], y1, rz[1]))
+    if short.endswith("_trapdoor"):
+        if p.get("open") == "true":
+            return _bx(_SIDE_PLATE.get(p.get("facing"),
+                                       _SIDE_PLATE["north"]))
+        return _bx((0, 13, 0, 16, 16, 16) if p.get("half") == "top"
+                   else (0, 0, 0, 16, 3, 16))
+    if short.endswith("_door"):
+        return _bx(_SIDE_PLATE.get(p.get("facing"), _SIDE_PLATE["north"]))
+    if "carpet" in short:
+        return _bx((0, 0, 0, 16, 1, 16))
+    if "pressure_plate" in short:
+        return _bx((1, 0, 1, 15, 1, 15))
+    if short == "snow":
+        layers = int(p.get("layers", "1"))
+        return None if layers >= 8 else _bx((0, 0, 0, 16, 2 * layers, 16))
+    if short in ("chest", "trapped_chest", "ender_chest"):
+        return _bx((1, 0, 1, 15, 14, 15))
+    if short.endswith("_bed"):
+        return _bx((0, 0, 0, 16, 9, 16))
+    if short.endswith(("_fence", "_fence_gate")):
+        return {"t": "fence"}
+    if short.endswith("_wall"):
+        return {"t": "wall"}
+    if "pane" in short or short == "iron_bars":
+        return {"t": "pane"}
+    if short == "ladder" or "wall_sign" in short or "wall_banner" in short:
+        return _bx(_WALL_PLATE.get(p.get("facing"), _WALL_PLATE["north"]))
+    if short.endswith("_sign"):
+        return _bx((1, 6, 7, 15, 14, 9), (7, 0, 7, 9, 6, 9))
+    if short.endswith("_banner"):
+        return _bx((1, 0, 7, 15, 16, 9))
+    if "button" in short or short == "lever":
+        return _bx((5, 0, 5, 11, 3, 11))
+    if "skull" in short or "head" in short:
+        return _bx((4, 0, 4, 12, 8, 12))
+    if "campfire" in short:
+        return _bx((0, 0, 0, 16, 4, 16))
+    if short == "lily_pad":
+        return _bx((1, 0, 1, 15, 1, 15))
+    if "rail" in short:
+        return _bx((0, 0, 0, 16, 1, 16))
+    if "anvil" in short:
+        return _bx((2, 0, 2, 14, 16, 14))
+    if short == "hopper":
+        return _bx((0, 8, 0, 16, 16, 16), (4, 0, 4, 12, 8, 12))
+    if short == "lectern":
+        return _bx((0, 0, 0, 16, 2, 16), (4, 2, 4, 12, 15, 12))
+    if short == "brewing_stand":
+        return _bx((0, 0, 0, 16, 2, 16), (7, 2, 7, 9, 14, 9))
+    if short == "bell":
+        return _bx((4, 4, 4, 12, 12, 12))
+    if short == "sea_pickle":
+        return _bx((4, 0, 4, 12, 6, 12))
+    if short == "cake":
+        return _bx((1, 0, 1, 15, 8, 15))
+    if short in ("dirt_path", "farmland"):
+        return _bx((0, 0, 0, 16, 15, 16))
+    return None
+
+
+def _collect_props(nbt, offset, name_index, keep, rot, with_props):
+    """Like _collect but keeps shape-relevant blockstate properties,
+    rotating facing along with the piece."""
+    palette = nbt.get("palette") or (nbt.get("palettes") or [[]])[0]
+    size = [int(v) for v in nbt["size"]]
+    local = []
+    for pe in palette:
+        nm = str(pe["Name"])
+        props = {}
+        if with_props:
+            props = {str(k): str(v)
+                     for k, v in (pe.get("Properties") or {}).items()
+                     if str(k) in _KEEP_PROPS}
+            if props.get("facing") in _ROT_DIR:
+                props["facing"] = _rot_facing(props["facing"], rot % 4)
+        key = nm + "|" + ",".join(f"{k}={v}"
+                                  for k, v in sorted(props.items()))
+        local.append((nm, props, key))
+    remap = []
+    for nm, props, key in local:
+        if key not in name_index:
+            name_index[key] = (len(name_index), nm, props)
+        remap.append(name_index[key][0])
+    ox, oy, oz = offset
+    for b in nbt.get("blocks") or []:
+        st = int(b["state"])
+        if st >= len(local) or is_skipped(local[st][0]):
+            continue
+        x, y, z = (int(v) for v in b["pos"])
+        rx, rz = _rot_pos(x, z, size[0], size[2], rot)
+        keep.append((rx + ox, y + oy, rz + oz, remap[st]))
+
+
+def collect_blocks(parts, with_props=True):
+    """[(x, y, z, state)], [(name, props)] across all parts."""
+    keep, name_index = [], {}
+    for part in parts:
+        nbt, offset = part[0], part[1]
+        rot = part[2] if len(part) > 2 else 0
+        _collect_props(nbt, offset, name_index, keep, rot, with_props)
+    ents = [None] * len(name_index)
+    for _key, (i, nm, props) in name_index.items():
+        ents[i] = (nm, props)
+    return keep, ents
+
+
 # ---------------------------------------------------------------- rendering
 
 def load_nbt(blob: bytes):
@@ -230,37 +440,138 @@ def _collect(nbt, offset, name_index, keep, occupied, rot=0):
             occupied.add(pos)
 
 
+_POST_CORE = {"fence": (6, 0, 6, 10, 16, 10),
+              "wall": (4, 0, 4, 12, 16, 12),
+              "pane": (7, 0, 7, 9, 16, 9)}
+_POST_ARMS = {
+    "fence": {"e": [(10, 6, 7, 16, 9, 9), (10, 12, 7, 16, 15, 9)],
+              "w": [(0, 6, 7, 6, 9, 9), (0, 12, 7, 6, 15, 9)],
+              "s": [(7, 6, 10, 9, 9, 16), (7, 12, 10, 9, 15, 16)],
+              "n": [(7, 6, 0, 9, 9, 6), (7, 12, 0, 9, 15, 6)]},
+    "wall": {"e": [(12, 0, 5, 16, 14, 11)], "w": [(0, 0, 5, 4, 14, 11)],
+             "s": [(5, 0, 12, 11, 14, 16)], "n": [(5, 0, 0, 11, 14, 4)]},
+    "pane": {"e": [(9, 0, 7, 16, 16, 9)], "w": [(0, 0, 7, 7, 16, 9)],
+             "s": [(7, 0, 9, 9, 16, 16)], "n": [(7, 0, 0, 9, 16, 7)]},
+}
+
+
+def _shade_img(img: Image.Image, f: float) -> Image.Image:
+    r, g, b, a = img.split()
+    pt = lambda v: min(255, int(v * f))
+    return Image.merge("RGBA", (r.point(pt), g.point(pt), b.point(pt), a))
+
+
+def _iso_pt(fx, fy, fz):
+    """Block-local fraction -> point in a 2S x 2S sprite."""
+    return (S + (fx - fz) * S, (fx + fz) * S / 2 - fy * S + S)
+
+
+def _draw_box(spr, b, top_img, side_south, side_east, uov=None):
+    """Warp one axis-aligned sub-box (16ths) into the iso sprite; the
+    texture window is projected from the box's extent (vanilla-style)."""
+    x0, y0, z0, x1, y1, z1 = (v / 16.0 for v in b)
+    if uov:
+        su0, sv_t, su1, sv_b = uov[0], uov[1], uov[2], uov[3]
+        s_win = ((su0, sv_b), (su1, sv_b), (su1, sv_t), (su0, sv_t))
+        e_win = s_win
+    else:
+        vb, vt = 16 - b[1], 16 - b[4]
+        s_win = ((b[0], vb), (b[3], vb), (b[3], vt), (b[0], vt))
+        e_win = ((b[2], vb), (b[5], vb), (b[5], vt), (b[2], vt))
+    faces = (
+        (side_south, s_win,
+         (_iso_pt(x0, y0, z1), _iso_pt(x1, y0, z1),
+          _iso_pt(x1, y1, z1), _iso_pt(x0, y1, z1))),
+        (side_east, e_win,
+         (_iso_pt(x1, y0, z0), _iso_pt(x1, y0, z1),
+          _iso_pt(x1, y1, z1), _iso_pt(x1, y1, z0))),
+        (top_img,
+         ((b[0], b[2]), (b[3], b[2]), (b[3], b[5]), (b[0], b[5])),
+         (_iso_pt(x0, y1, z0), _iso_pt(x1, y1, z0),
+          _iso_pt(x1, y1, z1), _iso_pt(x0, y1, z1))),
+    )
+    for img, src, dst in faces:
+        try:
+            co = _coeffs(list(src), list(dst))
+        except Exception:
+            continue                        # degenerate face
+        patch = img.transform((2 * S, 2 * S), Image.Transform.PERSPECTIVE,
+                              co, resample=Image.Resampling.NEAREST)
+        spr.alpha_composite(patch)
+
+
+def bake_shape_sprite(shape, top, side, mask=0):
+    """2S x 2S sprite for a non-cube block; mask = fence/wall/pane arms
+    (1 east, 2 west, 4 south, 8 north)."""
+    spr = Image.new("RGBA", (2 * S, 2 * S), (0, 0, 0, 0))
+    t = shape["t"]
+    if t == "cross":
+        spr.alpha_composite(side, (S - 8, 3 * S // 2 - 16))
+        return spr
+    if t == "bx":
+        boxes = [tuple(b) for b in shape["b"]]
+        uov = shape.get("u")
+    else:
+        boxes = [_POST_CORE[t]]
+        for bit, d in ((1, "e"), (2, "w"), (4, "s"), (8, "n")):
+            if mask & bit:
+                boxes += _POST_ARMS[t][d]
+        uov = None
+    side_s = _shade_img(side, 0.72)
+    side_e = _shade_img(side, 0.55)
+    # painter order: back-to-front, then bottom-up
+    for b in sorted(boxes, key=lambda b: (b[0] + b[2], b[1])):
+        _draw_box(spr, b, top, side_s, side_e, uov)
+    return spr
+
+
 def render_parts(parts, idx: AssetIndex,
                  y_clip_frac: float | None = None) -> Image.Image | None:
     """parts: [(nbt, (ox, oy, oz)[, rot]), ...] - render one or many pieces.
     y_clip_frac removes the top of the build for a cutaway interior view."""
-    keep: list = []
-    occupied: set = set()
-    name_index: dict[str, int] = {}
-    for part in parts:
-        nbt, offset = part[0], part[1]
-        rot = part[2] if len(part) > 2 else 0
-        _collect(nbt, offset, name_index, keep, occupied, rot)
+    keep, ents = collect_blocks(parts)
     if not keep:
         return None
     if y_clip_frac is not None:
         ys = [k[1] for k in keep]
         clip = min(ys) + int((max(ys) - min(ys)) * y_clip_frac)
         keep = [k for k in keep if k[1] <= clip]
-        occupied = {p for p in occupied if p[1] <= clip}
         if not keep:
             return None
-    names = [None] * len(name_index)
-    for nm, i in name_index.items():
-        names[i] = nm
+    shapes = [shape_for(nm, pr) for nm, pr in ents]
+    occupied = {(x, y, z) for x, y, z, st in keep
+                if shapes[st] is None and not is_clear(ents[st][0])}
+    conn = {(x, y, z) for x, y, z, st in keep
+            if shapes[st] is None
+            or shapes[st]["t"] in ("fence", "wall", "pane")}
 
-    sprites: dict[int, Image.Image] = {}
-    for st in {k[3] for k in keep}:
-        sprites[st] = bake_sprite(*block_textures(idx, names[st]))
+    texs: dict[int, tuple] = {}
+    sprites: dict = {}
 
-    xs = [k[0] for k in keep]
-    zs = [k[2] for k in keep]
-    ys = [k[1] for k in keep]
+    def tex(st):
+        if st not in texs:
+            texs[st] = block_textures_tinted(idx, ents[st][0])
+        return texs[st]
+
+    def sprite(st, x, y, z):
+        sh = shapes[st]
+        if sh is None:
+            if st not in sprites:
+                sprites[st] = bake_sprite(*tex(st))
+            return sprites[st]
+        if sh["t"] in ("cross", "bx"):
+            if st not in sprites:
+                sprites[st] = bake_shape_sprite(sh, *tex(st))
+            return sprites[st]
+        mask = ((1 if (x + 1, y, z) in conn else 0)
+                | (2 if (x - 1, y, z) in conn else 0)
+                | (4 if (x, y, z + 1) in conn else 0)
+                | (8 if (x, y, z - 1) in conn else 0))
+        kk = (st, mask)
+        if kk not in sprites:
+            sprites[kk] = bake_shape_sprite(sh, *tex(st), mask)
+        return sprites[kk]
+
     px0 = min(x - z for x, y, z, s in keep) * S
     px1 = max(x - z for x, y, z, s in keep) * S
     py0 = min((x + z) * (S // 2) - y * S for x, y, z, s in keep)
@@ -278,7 +589,7 @@ def render_parts(parts, idx: AssetIndex,
             continue                        # fully hidden from this view
         px = (x - z) * S - px0
         py = (x + z) * (S // 2) - y * S - py0
-        canvas.alpha_composite(sprites[st], (px, py))
+        canvas.alpha_composite(sprite(st, x, y, z), (px, py))
 
     bbox = canvas.getbbox()
     if bbox:
@@ -578,7 +889,9 @@ def inventory():
 
 
 def main() -> None:
-    only = sys.argv[1] if len(sys.argv) > 1 else None
+    force = "--force" in sys.argv
+    rest = [a for a in sys.argv[1:] if not a.startswith("--")]
+    only = rest[0] if rest else None
     inv = inventory()
     print(f"{len(inv)} standalone structures found")
     mods_dir = os.path.join(PACK, "mods")
@@ -595,7 +908,7 @@ def main() -> None:
     zips: dict[str, zipfile.ZipFile] = {}
     for i, e in enumerate(todo, 1):
         out_path = os.path.join(OUT, f"{e['slug']}.png")
-        if os.path.exists(out_path) and only is None:
+        if os.path.exists(out_path) and only is None and not force:
             skip += 1
             continue
         try:
@@ -621,7 +934,7 @@ def main() -> None:
         if only is not None and only not in slug:
             continue
         out_path = os.path.join(OUT, f"{slug}.png")
-        if not os.path.exists(out_path) or only is not None:
+        if not os.path.exists(out_path) or only is not None or force:
             try:
                 img = render_jigsaw_example(slug, struct_rl, seed,
                                             max_pieces, idx, cut)
