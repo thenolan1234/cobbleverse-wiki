@@ -616,7 +616,8 @@ def main() -> None:
     if struct_inv and have:
         pages["structures.html"] = build_structures(struct_inv, have,
                                                     d["species"],
-                                                    content["legendaries"])
+                                                    content["legendaries"],
+                                                    d["mobs"])
         from viewer_page import build_viewer
         pages["viewer.html"] = build_viewer()
 

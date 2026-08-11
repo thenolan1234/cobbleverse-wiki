@@ -319,11 +319,13 @@ _STRUCT_GUIDE = {
 }
 
 
-def _guide_url(e, leg_anchors):
+def _guide_url(e, leg_anchors, gym_map=None):
     slug = e["slug"]
     if slug in _STRUCT_GUIDE:
         return _STRUCT_GUIDE[slug]
     base = slug.replace("-shiny", "")
+    if gym_map and base in gym_map:
+        return f"trainers.html#{gym_map[base]}"
     if base in _GYMS:
         return f"trainers.html#kanto_{base}"
     toks = slug.split("-")
@@ -348,13 +350,30 @@ def _guide_url(e, leg_anchors):
     return None
 
 
+def gym_struct_map(mobs: dict | None) -> dict:
+    """structure base name -> checkpoint trainer id, for every region gym
+    leader whose structure is simply named after them (brock, petra...)."""
+    out = {}
+    for mid in (mobs or {}):
+        for region in ("kanto", "johto", "hoenn", "sinnoh"):
+            if mid.startswith(region + "_"):
+                out[mid[len(region) + 1:]] = mid
+    return out
+
+
 def build_structures(inv: list, have: set, species: dict,
-                     legendaries: dict | None = None) -> str:
+                     legendaries: dict | None = None,
+                     mobs: dict | None = None) -> str:
     leg_anchors = {slugify(l["name"]) for l in
                    (legendaries or {}).get("legendaries", []) if l.get("name")}
+    gym_map = gym_struct_map(mobs)
     cats: dict[str, list] = {}
     for e in inv:
         if e["slug"] not in have:
+            continue
+        base = e["rel"].split("/")[-1].replace("_shiny", "")
+        if base in gym_map:
+            cats.setdefault("Leagues & gyms", []).append(e)
             continue
         for cname, pred in _STRUCT_CATS:
             if pred(e):
@@ -382,7 +401,7 @@ def build_structures(inv: list, have: set, species: dict,
                              f" · <a href='pokedex.html#{esc(cand)}'>dex</a>")
                     break
             full = f"renders/structures/{esc(e['slug'])}.png"
-            guide = _guide_url(e, leg_anchors)
+            guide = _guide_url(e, leg_anchors, gym_map)
             click = esc(guide) if guide else full
             target = "" if guide else " target='_blank' rel='noopener'"
             glink = (f" · <a href='{esc(guide)}'>guide</a>" if guide else "")
