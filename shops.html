@@ -294,9 +294,9 @@ footer.gen a{color:var(--silt);text-decoration:underline}
 <nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="teambuilder.html">Team Builder</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="shops.html" aria-current="page">Shops</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="locations.html">Locations</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="structures.html">Structures</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a><div class="navsearch"><input id="gq" type="search" placeholder="Search everything…  Ctrl+K" autocomplete="off"><div id="gq-results"></div></div></nav>
 
 <style>
-.shopgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:12px;margin:14px 0}
-.shopcard{border:1px solid var(--reef);border-radius:8px;background:var(--deep)}
+.shopgrid{columns:340px;column-gap:12px;margin:14px 0}
+.shopcard{border:1px solid var(--reef);border-radius:8px;background:var(--deep);
+  break-inside:avoid;margin:0 0 12px 0;display:block}
 .shopcard summary{cursor:pointer;padding:10px 12px;font-weight:600;
   display:flex;gap:8px;align-items:center;flex-wrap:wrap;list-style:none}
 .shopcard summary::-webkit-details-marker{display:none}

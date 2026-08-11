@@ -16,9 +16,9 @@ _WHERE = {
 
 _CSS = """
 <style>
-.shopgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:12px;margin:14px 0}
-.shopcard{border:1px solid var(--reef);border-radius:8px;background:var(--deep)}
+.shopgrid{columns:340px;column-gap:12px;margin:14px 0}
+.shopcard{border:1px solid var(--reef);border-radius:8px;background:var(--deep);
+  break-inside:avoid;margin:0 0 12px 0;display:block}
 .shopcard summary{cursor:pointer;padding:10px 12px;font-weight:600;
   display:flex;gap:8px;align-items:center;flex-wrap:wrap;list-style:none}
 .shopcard summary::-webkit-details-marker{display:none}
