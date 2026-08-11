@@ -148,6 +148,10 @@ VIEWER_BODY = r"""
       SX + '×' + SY + '×' + SZ;
     (function animate(){
       requestAnimationFrame(animate);
+      // self-heal sizing: hidden/late-layout tabs report 0x0 until visible
+      if(canvas.clientWidth && (canvas.width !== canvas.clientWidth ||
+                                canvas.height !== canvas.clientHeight))
+        resize();
       controls.update();
       renderer.render(scene, camera);
     })();
