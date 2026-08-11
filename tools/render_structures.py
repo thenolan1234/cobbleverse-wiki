@@ -90,8 +90,29 @@ _TEX_SIDE = ("side", "north", "all", "texture", "particle", "front", "top",
              "end", "cross", "plant", "crop", "pattern")
 
 
+# fluids use animated frame strips, grayscale for water (biome-tinted in
+# game) - take frame 0 and bake the vanilla tint
+_ANIMATED_TINT = {
+    "minecraft:water": ("minecraft:block/water_still", (63, 118, 228), 150),
+    "minecraft:lava": ("minecraft:block/lava_still", None, 255),
+}
+
+
 def block_textures(idx: AssetIndex, name: str):
     """(top RGBA 16x16, side RGBA 16x16) for a block id, best effort."""
+    if name in _ANIMATED_TINT:
+        rl, tint_rgb, alpha = _ANIMATED_TINT[name]
+        img = idx.read_texture(rl)
+        if img is not None:
+            img = img.convert("RGBA")
+            w = img.width
+            img = img.crop((0, 0, w, w)).resize((16, 16),
+                                                Image.Resampling.NEAREST)
+            if tint_rgb:
+                img = _tint(img, tint_rgb)
+            if alpha != 255:
+                img.putalpha(alpha)
+            return img, img
     if name in _SPECIAL_COLOR:
         img = Image.new("RGBA", (16, 16), _SPECIAL_COLOR[name])
         return img, img
