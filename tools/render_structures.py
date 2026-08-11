@@ -59,7 +59,7 @@ _CLEAR_WORDS = ("glass", "pane", "leaves", "water", "fence", "wall", "door",
                 "ladder", "bed", "head", "skull", "pot", "crop", "kelp",
                 "coral", "egg", "bell", "lightning_rod", "cobweb", "chest",
                 "anvil", "brewing", "cauldron", "lectern", "hopper", "azalea",
-                "dripleaf", "pickerel", "bush", "rose", "daisy", "tulip",
+                "dripleaf", "pickle", "bamboo", "bush", "rose", "daisy", "tulip",
                 "orchid", "allium", "dandelion", "poppy", "lilac", "peony",
                 "spawner", "amethyst_cluster", "end_rod", "frogspawn", "wire",
                 "lever", "repeater", "comparator", "path", "farmland")
@@ -85,9 +85,9 @@ def is_clear(name: str) -> bool:
 # ---------------------------------------------------------------- textures
 
 _TEX_TOP = ("top", "up", "end", "all", "texture", "particle", "side", "north",
-            "cross", "plant", "pattern", "front")
+            "cross", "plant", "crop", "pattern", "front")
 _TEX_SIDE = ("side", "north", "all", "texture", "particle", "front", "top",
-             "end", "cross", "plant", "pattern")
+             "end", "cross", "plant", "crop", "pattern")
 
 
 def block_textures(idx: AssetIndex, name: str):

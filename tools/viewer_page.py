@@ -185,13 +185,22 @@ VIEWER_BODY = r"""
     const AW = textured ? atlas.image.width : 1,
           AH = textured ? atlas.image.height : 1;
 
-    // occupancy grid of opaque blocks: face culling + ambient occlusion
+    // occupancy grid of opaque blocks: face culling + ambient occlusion.
+    // conn tracks blocks fences/walls/panes visually connect to.
     const occ = new Uint8Array(SX * SY * SZ);
+    const conn = new Uint8Array(SX * SY * SZ);
     const solid = (x, y, z) =>
       (x >= 0 && y >= 0 && z >= 0 && x < SX && y < SY && z < SZ &&
        occ[(x * SZ + z) * SY + y]) ? 1 : 0;
-    for(let i = 0; i < n; i++)
-      if(pal[bs[i]].o) occ[(bx[i] * SZ + bz[i]) * SY + by[i]] = 1;
+    const joins = (x, y, z) =>
+      (x >= 0 && y >= 0 && z >= 0 && x < SX && y < SY && z < SZ &&
+       conn[(x * SZ + z) * SY + y]) ? 1 : 0;
+    for(let i = 0; i < n; i++){
+      const o = (bx[i] * SZ + bz[i]) * SY + by[i], p = pal[bs[i]];
+      if(p.o) occ[o] = 1;
+      if(!p.sh || p.sh.t === 'fence' || p.sh.t === 'wall' ||
+         p.sh.t === 'pane') conn[o] = 1;
+    }
 
     // per-vertex ambient occlusion; corner flags list each face's quad
     // corners as (min|max, min|max) along its two in-plane axes
@@ -241,9 +250,83 @@ VIEWER_BODY = r"""
         }
       }
     }
+    // one axis-aligned sub-box of a block, positions in 16ths, with the
+    // texture window projected from the box's extent (vanilla-style)
+    function boxFaces(L, x, y, z, p, b, uov){
+      const x0 = x + b[0] / 16, y0 = y + b[1] / 16, z0 = z + b[2] / 16,
+            x1 = x + b[3] / 16, y1 = y + b[4] / 16, z1 = z + b[5] / 16;
+      const at = p.a ? p.a[0] : 0, as = p.a ? p.a[1] : 0;
+      const ux0 = b[0] / 16, ux1 = b[3] / 16,
+            uz0 = b[2] / 16, uz1 = b[5] / 16;
+      let vt = 1 - b[4] / 16, vb = 1 - b[1] / 16,
+          su0 = null, su1 = null;
+      if(uov){ su0 = uov[0] / 16; su1 = uov[2] / 16;
+               vt = uov[1] / 16; vb = uov[3] / 16; }
+      quad(L, [[x0,y1,z0],[x0,y1,z1],[x1,y1,z1],[x1,y1,z0]], p.t,
+           SHADE.top, at, null,
+           [[ux0,uz0],[ux0,uz1],[ux1,uz1],[ux1,uz0]]);
+      quad(L, [[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1]], p.t,
+           SHADE.bottom, at, null,
+           [[ux0,uz0],[ux1,uz0],[ux1,uz1],[ux0,uz1]]);
+      const ex0 = su0 !== null ? su0 : uz0, ex1 = su1 !== null ? su1 : uz1,
+            ez0 = su0 !== null ? su0 : ux0, ez1 = su1 !== null ? su1 : ux1;
+      quad(L, [[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]], p.s,
+           SHADE.px, as, null,
+           [[ex0,vb],[ex0,vt],[ex1,vt],[ex1,vb]]);
+      quad(L, [[x0,y0,z0],[x0,y0,z1],[x0,y1,z1],[x0,y1,z0]], p.s,
+           SHADE.nx, as, null,
+           [[ex0,vb],[ex1,vb],[ex1,vt],[ex0,vt]]);
+      quad(L, [[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]], p.s,
+           SHADE.pz, as, null,
+           [[ez0,vb],[ez1,vb],[ez1,vt],[ez0,vt]]);
+      quad(L, [[x0,y0,z0],[x0,y1,z0],[x1,y1,z0],[x1,y0,z0]], p.s,
+           SHADE.nz, as, null,
+           [[ez0,vb],[ez0,vt],[ez1,vt],[ez1,vb]]);
+    }
+    const FENCE_ARMS = {
+      e: [[10,6,7,16,9,9],[10,12,7,16,15,9]],
+      w: [[0,6,7,6,9,9],[0,12,7,6,15,9]],
+      s: [[7,6,10,9,9,16],[7,12,10,9,15,16]],
+      n: [[7,6,0,9,9,6],[7,12,0,9,15,6]],
+    };
+    const WALL_ARMS = {
+      e: [[12,0,5,16,14,11]], w: [[0,0,5,4,14,11]],
+      s: [[5,0,12,11,14,16]], n: [[5,0,0,11,14,4]],
+    };
+    const PANE_ARMS = {
+      e: [[9,0,7,16,16,9]], w: [[0,0,7,7,16,9]],
+      s: [[7,0,9,9,16,16]], n: [[7,0,0,9,16,7]],
+    };
+    function postShape(L, x, y, z, p, core, arms){
+      boxFaces(L, x, y, z, p, core);
+      if(joins(x + 1, y, z)) for(const b of arms.e) boxFaces(L, x, y, z, p, b);
+      if(joins(x - 1, y, z)) for(const b of arms.w) boxFaces(L, x, y, z, p, b);
+      if(joins(x, y, z + 1)) for(const b of arms.s) boxFaces(L, x, y, z, p, b);
+      if(joins(x, y, z - 1)) for(const b of arms.n) boxFaces(L, x, y, z, p, b);
+    }
     for(let i = 0; i < n; i++){
       const x = bx[i], y = by[i], z = bz[i], p = pal[bs[i]];
       const L = layer(y);
+      const sh = p.sh;
+      if(sh){
+        if(sh.t === 'cross'){
+          const uvq = [[0, 1], [1, 1], [1, 0], [0, 0]];
+          const as = p.a ? p.a[1] : 0;
+          quad(L, [[x,y,z],[x+1,y,z+1],[x+1,y+1,z+1],[x,y+1,z]], p.s,
+               0.9, as, null, uvq);
+          quad(L, [[x,y,z+1],[x+1,y,z],[x+1,y+1,z],[x,y+1,z+1]], p.s,
+               0.9, as, null, uvq);
+        } else if(sh.t === 'bx'){
+          for(const b of sh.b) boxFaces(L, x, y, z, p, b, sh.u);
+        } else if(sh.t === 'fence'){
+          postShape(L, x, y, z, p, [6,0,6,10,16,10], FENCE_ARMS);
+        } else if(sh.t === 'wall'){
+          postShape(L, x, y, z, p, [4,0,4,12,16,12], WALL_ARMS);
+        } else if(sh.t === 'pane'){
+          postShape(L, x, y, z, p, [7,0,7,9,16,9], PANE_ARMS);
+        }
+        continue;
+      }
       const at = p.a ? p.a[0] : 0, as = p.a ? p.a[1] : 0;
       // top face: never culled, so slicing always shows a solid skin;
       // covered tops skip AO (their occluders vanish when sliced away)

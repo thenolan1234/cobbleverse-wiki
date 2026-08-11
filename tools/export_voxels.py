@@ -138,21 +138,201 @@ def avg_color(img: Image.Image):
     return [sum(c[i] for c in px) // len(px) for i in range(3)]
 
 
-def collect_blocks(parts):
-    keep, occupied, name_index = [], set(), {}
+# ---------------------------------------------------------------- shapes
+#
+# Non-full-cube blocks get an approximate real shape instead of a stretched
+# unit cube. All orientation logic lives here (Python); the viewer just
+# draws what it's told:
+#   {"t":"cross"}                  two crossed quads (plants)
+#   {"t":"bx","b":[[x0,y0,z0,x1,y1,z1],...], "u":[u0,v0,u1,v1]?}
+#       axis-aligned boxes in 16ths with projected UVs ("u" overrides the
+#       side-face texture window, e.g. chains whose links sit at u 0..3)
+#   {"t":"fence"|"wall"|"pane"}    center post + arms toward neighbors
+
+_FACING_CW = {"north": "east", "east": "south", "south": "west",
+              "west": "north"}
+_KEEP_PROPS = ("type", "half", "facing", "open", "layers")
+_CROSS_WORDS = ("sapling", "fern", "seagrass", "kelp", "tulip", "orchid",
+                "allium", "dandelion", "poppy", "lilac", "peony", "daisy",
+                "rose", "cobweb", "amethyst_cluster", "bush", "vine",
+                "sugar_cane", "dripstone", "wheat", "beetroot", "carrot",
+                "potato", "pitcher", "sunflower", "torchflower", "sprouts",
+                "roots", "bluet", "lily_of_the_valley", "cornflower",
+                "propagule", "dripleaf", "lichen", "mushroom", "flower",
+                "azalea", "frogspawn", "crop", "grass")
+_SIDE_PLATE = {"north": (0, 0, 13, 16, 16, 16), "south": (0, 0, 0, 16, 16, 3),
+               "east": (0, 0, 0, 3, 16, 16), "west": (13, 0, 0, 16, 16, 16)}
+_WALL_PLATE = {"north": (0, 0, 15, 16, 16, 16), "south": (0, 0, 0, 16, 16, 1),
+               "east": (0, 0, 0, 1, 16, 16), "west": (15, 0, 0, 16, 16, 16)}
+
+
+def _bx(*boxes, u=None):
+    d = {"t": "bx", "b": [list(b) for b in boxes]}
+    if u:
+        d["u"] = list(u)
+    return d
+
+
+def shape_for(name: str, props: dict):
+    short = name.split(":")[-1]
+    p = props or {}
+    if (short.endswith(("_block", "_stem", "_leaves"))
+            or short == "grass_block"):
+        return None
+    if "potted" in short or short == "flower_pot":
+        return _bx((5, 0, 5, 11, 8, 11))
+    if any(w in short for w in _CROSS_WORDS):
+        return {"t": "cross"}
+    if "torch" in short:
+        return _bx((7, 0, 7, 9, 10, 9))
+    if "lantern" in short:
+        return _bx((5, 0, 5, 11, 9, 11))
+    if "candle" in short:
+        return _bx((6, 0, 6, 10, 7, 10))
+    if short == "chain":
+        return _bx((6.5, 0, 6.5, 9.5, 16, 9.5), u=(0, 0, 3, 16))
+    if "end_rod" in short or "lightning_rod" in short:
+        return _bx((6, 0, 6, 10, 16, 10))
+    if "bamboo" in short:
+        return _bx((6.5, 0, 6.5, 9.5, 16, 9.5), u=(0, 0, 3, 16))
+    if short.endswith("_slab"):
+        if p.get("type") == "double":
+            return None
+        return _bx((0, 8, 0, 16, 16, 16) if p.get("type") == "top"
+                   else (0, 0, 0, 16, 8, 16))
+    if short.endswith("_stairs"):
+        f = p.get("facing", "north")
+        top = p.get("half") == "top"
+        slab = (0, 8, 0, 16, 16, 16) if top else (0, 0, 0, 16, 8, 16)
+        rx, rz = (0, 16), (0, 16)
+        if f == "north":
+            rz = (0, 8)
+        elif f == "south":
+            rz = (8, 16)
+        elif f == "east":
+            rx = (8, 16)
+        else:
+            rx = (0, 8)
+        y0, y1 = (0, 8) if top else (8, 16)
+        return _bx(slab, (rx[0], y0, rz[0], rx[1], y1, rz[1]))
+    if short.endswith("_trapdoor"):
+        if p.get("open") == "true":
+            return _bx(_SIDE_PLATE.get(p.get("facing"),
+                                       _SIDE_PLATE["north"]))
+        return _bx((0, 13, 0, 16, 16, 16) if p.get("half") == "top"
+                   else (0, 0, 0, 16, 3, 16))
+    if short.endswith("_door"):
+        return _bx(_SIDE_PLATE.get(p.get("facing"), _SIDE_PLATE["north"]))
+    if "carpet" in short:
+        return _bx((0, 0, 0, 16, 1, 16))
+    if "pressure_plate" in short:
+        return _bx((1, 0, 1, 15, 1, 15))
+    if short == "snow":
+        layers = int(p.get("layers", "1"))
+        return None if layers >= 8 else _bx((0, 0, 0, 16, 2 * layers, 16))
+    if short in ("chest", "trapped_chest", "ender_chest"):
+        return _bx((1, 0, 1, 15, 14, 15))
+    if short.endswith("_bed"):
+        return _bx((0, 0, 0, 16, 9, 16))
+    if short.endswith(("_fence", "_fence_gate")):
+        return {"t": "fence"}
+    if short.endswith("_wall"):
+        return {"t": "wall"}
+    if "pane" in short or short == "iron_bars":
+        return {"t": "pane"}
+    if short == "ladder" or "wall_sign" in short or "wall_banner" in short:
+        return _bx(_WALL_PLATE.get(p.get("facing"), _WALL_PLATE["north"]))
+    if short.endswith("_sign"):
+        return _bx((1, 6, 7, 15, 14, 9), (7, 0, 7, 9, 6, 9))
+    if short.endswith("_banner"):
+        return _bx((1, 0, 7, 15, 16, 9))
+    if "button" in short or short == "lever":
+        return _bx((5, 0, 5, 11, 3, 11))
+    if "skull" in short or "head" in short:
+        return _bx((4, 0, 4, 12, 8, 12))
+    if "campfire" in short:
+        return _bx((0, 0, 0, 16, 4, 16))
+    if short == "lily_pad":
+        return _bx((1, 0, 1, 15, 1, 15))
+    if "rail" in short:
+        return _bx((0, 0, 0, 16, 1, 16))
+    if "anvil" in short:
+        return _bx((2, 0, 2, 14, 16, 14))
+    if short == "hopper":
+        return _bx((0, 8, 0, 16, 16, 16), (4, 0, 4, 12, 8, 12))
+    if short == "lectern":
+        return _bx((0, 0, 0, 16, 2, 16), (4, 2, 4, 12, 15, 12))
+    if short == "brewing_stand":
+        return _bx((0, 0, 0, 16, 2, 16), (7, 2, 7, 9, 14, 9))
+    if short == "bell":
+        return _bx((4, 4, 4, 12, 12, 12))
+    if short == "sea_pickle":
+        return _bx((4, 0, 4, 12, 6, 12))
+    if short == "cake":
+        return _bx((1, 0, 1, 15, 8, 15))
+    if short in ("dirt_path", "farmland"):
+        return _bx((0, 0, 0, 16, 15, 16))
+    return None
+
+
+def _rot_facing(f: str, rot: int) -> str:
+    for _ in range(rot % 4):
+        f = _FACING_CW.get(f, f)
+    return f
+
+
+def _collect_props(nbt, offset, name_index, keep, rot, with_props):
+    """Like rs._collect but keeps shape-relevant blockstate properties,
+    rotating facing along with the piece."""
+    palette = nbt.get("palette") or (nbt.get("palettes") or [[]])[0]
+    size = [int(v) for v in nbt["size"]]
+    local = []
+    for pe in palette:
+        nm = str(pe["Name"])
+        props = {}
+        if with_props:
+            props = {str(k): str(v)
+                     for k, v in (pe.get("Properties") or {}).items()
+                     if str(k) in _KEEP_PROPS}
+            if "facing" in props:
+                props["facing"] = _rot_facing(props["facing"], rot)
+        key = nm + "|" + ",".join(f"{k}={v}"
+                                  for k, v in sorted(props.items()))
+        local.append((nm, props, key))
+    remap = []
+    for nm, props, key in local:
+        if key not in name_index:
+            name_index[key] = (len(name_index), nm, props)
+        remap.append(name_index[key][0])
+    ox, oy, oz = offset
+    for b in nbt.get("blocks") or []:
+        st = int(b["state"])
+        if st >= len(local) or rs.is_skipped(local[st][0]):
+            continue
+        x, y, z = (int(v) for v in b["pos"])
+        rx, rz = rs._rot_pos(x, z, size[0], size[2], rot)
+        keep.append((rx + ox, y + oy, rz + oz, remap[st]))
+
+
+def collect_blocks(parts, with_props=True):
+    keep, name_index = [], {}
     for part in parts:
         nbt, offset = part[0], part[1]
         rot = part[2] if len(part) > 2 else 0
-        rs._collect(nbt, offset, name_index, keep, occupied, rot)
-    names = [None] * len(name_index)
-    for nm, i in name_index.items():
-        names[i] = nm
-    return keep, names
+        _collect_props(nbt, offset, name_index, keep, rot, with_props)
+    ents = [None] * len(name_index)
+    for _key, (i, nm, props) in name_index.items():
+        ents[i] = (nm, props)
+    return keep, ents
 
 
 def export_one(slug, parts, idx, color_cache, atlas):
-    keep, names = collect_blocks(parts)
-    if not keep or len(names) > 255:
+    keep, ents = collect_blocks(parts)
+    if len(ents) > 255:
+        # property-split palette overflowed: retry without properties
+        # (shapes fall back to their default orientation)
+        keep, ents = collect_blocks(parts, with_props=False)
+    if not keep or len(ents) > 255:
         return None
     xs = [k[0] for k in keep]
     ys = [k[1] for k in keep]
@@ -165,14 +345,18 @@ def export_one(slug, parts, idx, color_cache, atlas):
             > 128_000_000):
         return None
     palette = []
-    for nm in names:
+    for nm, props in ents:
         if nm not in color_cache:
             top, side = block_textures_tinted(idx, nm)
             color_cache[nm] = {"t": avg_color(top), "s": avg_color(side),
                                "a": [atlas.add(top), atlas.add(side)]}
         c = color_cache[nm]
-        palette.append({"n": nm, "t": c["t"], "s": c["s"], "a": c["a"],
-                        "o": 0 if rs.is_clear(nm) else 1})
+        shape = shape_for(nm, props)
+        entry = {"n": nm, "t": c["t"], "s": c["s"], "a": c["a"],
+                 "o": 0 if (shape or rs.is_clear(nm)) else 1}
+        if shape:
+            entry["sh"] = shape
+        palette.append(entry)
     buf = bytearray()
     for x, y, z, st in keep:
         buf += struct.pack("<HHBB", x - x0, z - z0, y - y0, st)
