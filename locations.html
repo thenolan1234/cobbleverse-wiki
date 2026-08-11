@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Locations · COBBLEVERSE Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0b1a20; --shelf:#12262e; --reef:#1a3540; --deep:#081318;
+  --foam:#dcecef; --tide:#5ad1c8; --amber:#f0a840; --coral:#e8735c;
+  --silt:#7fa3ae; --moss:#8fd18b;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--reef) var(--abyss)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--abyss); color:var(--foam);
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600; letter-spacing:-.02em; margin:0;
+}
+a{color:var(--tide);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:1px 5px;font-size:12.5px}
+
+/* ---- top nav ---- */
+nav.top{
+  display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;
+  padding:10px 18px;border-bottom:1px solid var(--reef);
+  background:var(--deep);position:sticky;top:0;z-index:50;
+}
+nav.top .brand{
+  font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;
+  color:var(--amber);margin-right:14px;letter-spacing:.02em;
+}
+nav.top .brand small{color:var(--silt);font-weight:400;font-size:11px;margin-left:6px}
+nav.top a.item{
+  padding:4px 10px;border-radius:3px;font-size:12.5px;color:var(--foam);
+}
+nav.top a.item:hover{background:var(--shelf);text-decoration:none}
+nav.top a.item[aria-current=page]{background:var(--reef);color:var(--tide)}
+/* anchor jumps must clear the sticky nav (height measured into --navh) */
+[id]{scroll-margin-top:calc(var(--navh, 52px) + 12px)}
+.navsearch{margin-left:auto;position:relative;min-width:180px;flex:0 1 260px}
+.navsearch input{
+  width:100%;padding:5px 10px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:12.5px;
+}
+.navsearch input:focus{outline:2px solid var(--tide);outline-offset:-1px}
+#gq-results{
+  position:absolute;top:110%;right:0;width:340px;max-width:92vw;max-height:60vh;
+  overflow-y:auto;background:var(--deep);border:1px solid var(--reef);
+  border-radius:4px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;
+}
+#gq-results .gr{
+  display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
+  font-size:13px;color:var(--foam);text-decoration:none;
+}
+#gq-results .gr:hover,#gq-results .gr.sel{background:var(--reef)}
+#gq-results .gr img{width:26px;height:26px;image-rendering:pixelated;flex-shrink:0}
+#gq-results .gr .gk{
+  margin-left:auto;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--silt);flex-shrink:0;
+}
+#gq-results .gempty{padding:10px 12px;color:var(--silt);font-size:12px}
+
+/* hover preview cards */
+.hovercard{
+  position:fixed;z-index:200;width:270px;pointer-events:none;
+  background:var(--deep);border:1px solid var(--reef);border-radius:5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.55);padding:11px 13px;
+  display:flex;gap:12px;align-items:center;
+}
+.hovercard img{width:74px;height:74px;image-rendering:pixelated;flex-shrink:0}
+.hovercard .hc-t{font-family:"Space Grotesk",sans-serif;font-weight:600;
+  font-size:14.5px;color:var(--foam);line-height:1.25}
+.hovercard .hc-m{font-size:11px;color:var(--tide);margin-top:3px;
+  text-transform:capitalize}
+.hovercard .hc-d{font-size:11px;color:var(--silt);margin-top:4px;
+  line-height:1.45;font-style:italic}
+
+/* ---- article pages ---- */
+.article{max-width:880px;margin:0 auto;padding:34px 26px 80px}
+.article h1{font-size:30px;margin-bottom:6px}
+.article .sub{color:var(--silt);font-size:13px;margin-bottom:26px}
+.article section{margin:26px 0}
+.article h2{
+  font-size:19px;color:var(--amber);margin-bottom:10px;
+  border-bottom:1px solid var(--reef);padding-bottom:6px;
+}
+.article p{margin:9px 0}
+.article ul{margin:8px 0;padding-left:22px}
+.article li{margin:4px 0}
+.callout{
+  background:var(--shelf);border:1px solid var(--reef);
+  border-left:2px solid var(--tide);padding:12px 15px;border-radius:3px;
+  margin:14px 0;font-size:13.5px;
+}
+.callout.warn{border-left-color:var(--amber)}
+
+/* ---- home cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:4px;
+  padding:15px 16px;display:block;color:var(--foam);
+}
+.card:hover{border-color:var(--tide);text-decoration:none}
+.card h3{font-size:15px;color:var(--tide);margin-bottom:5px}
+.card p{margin:0;font-size:12.5px;color:var(--silt);line-height:1.5}
+.statrow{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0}
+.stat .n{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:600;color:var(--tide)}
+.stat .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--silt)}
+
+/* ---- browser (sidebar+detail) pages ---- */
+.wrap{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 45px)}
+@media(max-width:840px){.wrap{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--reef);display:flex;flex-direction:column;min-height:0}
+.padbox{padding:14px 16px 10px}
+.padbox h1{font-size:17px}
+.padbox p.note{margin:5px 0 0;color:var(--silt);font-size:11px;line-height:1.5}
+.searchbox{padding:0 16px 8px}
+input[type=search]{
+  width:100%;padding:8px 11px;background:var(--shelf);color:var(--foam);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-size:13px;
+}
+input[type=search]:focus,select:focus{outline:2px solid var(--tide);outline-offset:-1px}
+.filters{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap}
+.filters select,.filters label.chk{
+  background:var(--shelf);color:var(--foam);border:1px solid var(--reef);
+  border-radius:3px;font:inherit;font-size:11.5px;padding:4px 6px;
+}
+.filters label.chk{display:flex;align-items:center;gap:5px;cursor:pointer}
+#results{overflow-y:auto;flex:1;padding:0 8px 18px;min-height:0}
+.row{
+  padding:5px 10px;border-radius:3px;cursor:pointer;
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+}
+.row:hover{background:var(--shelf)}
+.row[aria-selected=true]{background:var(--reef)}
+.row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .ns{font-size:10px;color:var(--silt);flex-shrink:0}
+img.spr{image-rendering:pixelated;vertical-align:middle;flex-shrink:0}
+.chip img.spr{margin:-3px 3px -3px -2px}
+.mon img.spr{margin:-6px 2px -6px -4px}
+.empty{color:var(--silt);font-size:12px;padding:10px}
+main{overflow-y:auto;padding:24px 30px 70px;min-width:0}
+@media(max-width:840px){main{padding:18px 14px 60px}}
+.item-head{border-bottom:1px solid var(--reef);padding-bottom:14px;margin-bottom:20px}
+.item-head h2{font-size:26px}
+.id{color:var(--tide);font-size:12px;margin-top:4px;word-break:break-all}
+.tip{color:var(--silt);font-size:13px;margin-top:8px;font-style:italic}
+section.blk{margin-bottom:28px}
+section.blk>h3{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silt);margin-bottom:10px;
+}
+.splash{color:var(--silt);max-width:56ch;font-size:13.5px;line-height:1.8}
+.splash b{color:var(--foam);font-weight:400}
+
+/* chips */
+.chip{
+  display:inline-block;background:var(--deep);border:1px solid var(--reef);
+  border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer;color:var(--foam);
+  margin:0 4px 4px 0;
+}
+a.chip:hover{border-color:var(--tide);color:var(--tide);text-decoration:none}
+.chip.tag{border-style:dashed;color:var(--silt);cursor:default}
+.chip.plain{cursor:default}
+.src{font-size:10.5px;color:var(--silt);margin-top:6px}
+.badge{
+  display:inline-block;border-radius:3px;padding:1px 7px;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--reef);
+}
+.badge.addon{color:var(--amber);border-color:var(--amber)}
+.b-common{color:var(--silt)} .b-uncommon{color:var(--tide)}
+.b-rare{color:var(--amber)} .b-ultra-rare{color:var(--coral)}
+
+/* pokemon type chips: colored dot + text (identity never color-alone) */
+.type{
+  display:inline-flex;align-items:center;gap:6px;background:var(--deep);
+  border:1px solid var(--reef);border-radius:3px;padding:2px 9px 2px 7px;
+  font-size:12px;text-transform:capitalize;margin-right:5px;
+}
+.type i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* stat meters */
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;max-width:420px;align-items:center}
+.stats .k{font-size:11px;color:var(--silt);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stats .bar{height:6px;background:var(--reef);border-radius:3px;overflow:hidden}
+.stats .bar i{display:block;height:100%;background:var(--tide);border-radius:3px}
+.stats .v{font-size:12px;text-align:right;min-width:3ch}
+.stats .total .v,.stats .total .k{color:var(--amber)}
+
+/* generic data tables */
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+table.data th{
+  text-align:left;color:var(--silt);font-weight:400;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.1em;padding:5px 10px 5px 0;
+  border-bottom:1px solid var(--reef);
+}
+table.data td{padding:6px 10px 6px 0;border-bottom:1px solid var(--shelf);vertical-align:top}
+details.biomes{display:inline-block}
+details.biomes summary{cursor:pointer;color:var(--tide);font-size:12px;list-style:none}
+details.biomes summary::after{content:" \25be"}
+details.biomes[open] summary::after{content:" \25b4"}
+details.biomes .blist{color:var(--silt);font-size:11.5px;max-width:52ch;padding:4px 0}
+.meta{font-size:11.5px;color:var(--silt)}
+.bar{height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tide)}
+.structgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin:14px 0}
+.structgrid figure{margin:0;background:var(--shelf);border:1px solid var(--reef);
+  border-radius:4px;padding:10px;text-align:center}
+.structgrid img{max-width:100%;max-height:240px;object-fit:contain;image-rendering:auto}
+.structgrid figcaption{font-size:12px;margin-top:7px;color:var(--foam)}
+.drop{
+  display:grid;grid-template-columns:1fr auto;gap:3px 16px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.drop .table{font-size:13px;word-break:break-all}
+.drop .runs{
+  font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;
+  color:var(--amber);white-space:nowrap;text-align:right;line-height:1.2;
+}
+.drop .runs small{display:block;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);font-weight:400}
+.drop .meta{grid-column:1/-1}
+.drop .bar{grid-column:1/-1;height:3px;background:var(--reef);border-radius:2px;overflow:hidden}
+.drop .bar i{display:block;height:100%;background:var(--tide)}
+.planner{
+  background:var(--shelf);border:1px solid var(--reef);border-left:2px solid var(--amber);
+  padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;
+  gap:11px;flex-wrap:wrap;font-size:13px;
+}
+.planner input{
+  width:64px;padding:5px 7px;background:var(--abyss);color:var(--amber);
+  border:1px solid var(--reef);border-radius:3px;font:inherit;font-weight:600;
+  text-align:center;
+}
+.planner .lbl{color:var(--silt)}
+.recipe{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:11px 14px;margin-bottom:8px;
+}
+.recipe .kind{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--silt)}
+.recipe .ing{margin-top:7px}
+.none{color:var(--coral);font-size:13px}
+.none b{color:var(--foam)}
+.hint{color:var(--silt);font-size:12px;margin-top:6px;line-height:1.6}
+
+/* trainer team cards */
+.mon{
+  background:var(--shelf);border:1px solid var(--reef);border-radius:3px;
+  padding:10px 13px;margin-bottom:8px;
+  display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;
+}
+.mon .sp{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600}
+.mon .lv{color:var(--amber);font-size:13px}
+.mon .kv{font-size:11.5px;color:var(--silt)}
+.mon .kv b{color:var(--foam);font-weight:400}
+.mon .moves{width:100%;font-size:11.5px;color:var(--silt)}
+.mon .moves code{margin-right:4px}
+
+/* milestone list (progression) */
+.mile{
+  display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  padding:10px 0;border-bottom:1px solid var(--shelf);
+}
+.mile .kind{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--reef);border-radius:3px;height:fit-content;
+  white-space:nowrap;margin-top:2px;
+}
+.mile .kind.badge-k{color:var(--amber);border-color:var(--amber)}
+.mile .kind.elite-k{color:var(--coral)}
+.mile .kind.champion-k{color:var(--coral);border-color:var(--coral)}
+.mile .kind.legendary-k{color:var(--tide);border-color:var(--tide)}
+.mile .kind.item-k{color:var(--moss)}
+.mile h4{font-size:14.5px}
+.mile p{margin:2px 0 0;font-size:12.5px;color:var(--silt)}
+.mile .ico{font-size:11px;color:var(--silt)}
+footer.gen{
+  border-top:1px solid var(--reef);color:var(--silt);font-size:11px;
+  padding:14px 18px;text-align:center;
+}
+footer.gen a{color:var(--silt);text-decoration:underline}
+</style>
+</head><body>
+<nav class="top"><span class="brand">COBBLEVERSE<small>wiki</small></span><a class="item" href="index.html">Home</a><a class="item" href="progression.html">Progression</a><a class="item" href="pokedex.html">Pokédex</a><a class="item" href="teambuilder.html">Team Builder</a><a class="item" href="spawns.html">Spawn Finder</a><a class="item" href="items.html">Items</a><a class="item" href="shops.html">Shops</a><a class="item" href="trainers.html">Trainers</a><a class="item" href="legendaries.html">Legendaries</a><a class="item" href="locations.html" aria-current="page">Locations</a><a class="item" href="mechanics.html">Mechanics</a><a class="item" href="world.html">World</a><a class="item" href="structures.html">Structures</a><a class="item" href="key-items.html">Key Items</a><a class="item" href="tips.html">Tips</a><a class="item" href="mods.html">Mods</a><a class="item" href="videos.html">Videos</a><div class="navsearch"><input id="gq" type="search" placeholder="Search everything…  Ctrl+K" autocomplete="off"><div id="gq-results"></div></div></nav>
+
+<style>
+.locimg{max-width:100%;border:1px solid var(--reef);border-radius:8px}
+.locmeta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0}
+table.loctr{border-collapse:collapse;font-size:13px;margin:10px 0}
+table.loctr td,table.loctr th{padding:4px 10px;border:1px solid var(--reef)}
+.locsec{max-width:960px;margin:0 auto 34px auto}
+.locbox{border:1px solid var(--reef);border-radius:8px;padding:10px 14px;
+  margin:10px 0;background:var(--deep)}
+</style><div class="padbox locsec"><h1>Location Guides</h1><p>COBBLEVERSE hides several multi-floor dungeons guarded by Team Rocket and Team Galactic, plus a few stranger places. Each guide below is generated from the actual structure files: the trainers listed are the ones the building really spawns, and every recipe and drop is verified against the pack data. Click any picture to open the interactive 3D viewer and slice the roof off to see the rooms.</p></div>
+<div class="padbox locsec" id="radio-tower">
+  <h2>Radio Tower</h2>
+  <div class="locmeta">
+    <span class="chip">Johto (opt-in datapack)</span>
+    <span class="chip">recommended level 70+</span>
+  </div>
+  <p>The Rocket Radio Tower is Team Rocket's Johto broadcast base and the home of the pack's Shadow Lugia storyline. A 41x42 footprint climbs roughly 60 blocks from a lobby and fossil lab, through a library floor and a chimney maze, to Giovanni's penthouse under the antenna. Two lectern logs ("PROJECT XD001" and "Shadowfall") set up the plot: Team Rocket's shadow power source was shattered into fragments after Shadow Lugia broke containment. In play that means <strong>8 <a href="items.html#lumymon:corrupted_shard">Corrupted Shards</a></strong> hidden in containers across the tower, a <a href="items.html#lumymon:shadow_heart">Shadow Heart</a> from Apollo, and the <a href="items.html#lumymon:silver_wing">Silver Wing</a> from Giovanni — everything you need to summon Lugia at Whirl Island and flip it into its Shadow form. With guards up to level 72, this is endgame content: bring a healed level 70+ team and spare Poke Balls.</p>
+  <p><a href="viewer.html?s=rocket-radio-tower" title="Open in 3D viewer"><img class="locimg" src="renders/structures/rocket-radio-tower.png" loading="lazy" alt="Radio Tower"></a><br><span class="meta">click to explore in 3D (slice the roof off to see the rooms)</span></p>
+  <div class="locbox"><b>Finding it:</b> <p>The tower generates only when the Johto datapack is enabled, in <strong>savanna</strong> biomes (random spread, ~150-chunk spacing, and it keeps its distance from Koga's structure set). The intended locator is the <a href="items.html#lumymon:radio_card">Radio Card</a> — shaped recipe verified in the Johto datapack: <a href="items.html#cobblemon:red_card">Red Card</a>, Trial Key, Red Card on the top row, three Iron Ingots below. Its tooltip reads "Locates the signal source of the Rocket Radio Tower in Johto", and the mod ships a dedicated radio-tower map marker; community-reported: you redeem the card at the Johto Cartography Table (craftable from 3 <a href="items.html#cobblemon:azure_ball">Azure Balls</a>, 3 planks and a sheet of paper) to receive the locator map. Trial Keys drop from vanilla Trial Chambers — and several more are stashed inside the tower itself for future crafts. Manual fallback: <code>/locate structure cobbleverse:rocket_radio_tower</code>.</p></div>
+  <h3>Trainers inside</h3><table class='loctr'><thead><tr><th>trainer</th><th>level</th><th>notes</th></tr></thead><tbody><tr><td><a href='trainers.html#team_rocket_giovanni'>Giovanni</a></td><td style='text-align:right'>70</td><td>Rooftop boss. Ground-heavy six: Tyranitar, Rhyperior, Nidoking, Kangaskhan, Garchomp, Torterra; four Full Restores. Guaranteed Silver Wing on first defeat; rebattleable (up to 10 total defeats), with a chance at further Silver Wings and legendary-grade loot.</td></tr><tr><td><a href='trainers.html#team_rocket_admin_apollo'>Apollo</a></td><td style='text-align:right'>66</td><td>Admin on the second floor. Poison- and Ground-heavy team (Drapion, Clodsire, Sharpedo, Glimmora, Gastrodon, Hippowdon). One-time battle - drops the Shadow Heart plus a Team Rocket TM on first defeat.</td></tr><tr><td><a href='trainers.html#team_rocket_officer_01'>Team Rocket Officer</a></td><td style='text-align:right'>72</td><td>Strongest guards in the tower (Nidoking, Muk, Sandslash, Golem, Probopass). One spawner cycles four Officer variants.</td></tr><tr><td><a href='trainers.html#team_rocket_officer_02'>Team Rocket Officer</a></td><td style='text-align:right'>71</td><td>Officer variant - Nidoking, Muk, Sandslash, Golem, Nosepass.</td></tr><tr><td><a href='trainers.html#team_rocket_officer_03'>Team Rocket Officer</a></td><td style='text-align:right'>71</td><td>Officer variant - Salazzle, Muk, Raticate, Golem, Nosepass.</td></tr><tr><td><a href='trainers.html#team_rocket_officer_04'>Team Rocket Officer</a></td><td style='text-align:right'>71</td><td>Officer variant - Golem, Muk, Salazzle, Raticate, Nosepass.</td></tr><tr><td><a href='trainers.html#team_rocket_scout_01'>Team Rocket Scout</a></td><td style='text-align:right'>67</td><td>Second-floor spawner cycles four Scout variants - Skuntank, Sharpedo, Pyroar, Claydol.</td></tr><tr><td><a href='trainers.html#team_rocket_scout_02'>Team Rocket Scout</a></td><td style='text-align:right'>65</td><td>Scout variant - Pyroar, Skuntank, Sharpedo, Claydol.</td></tr><tr><td><a href='trainers.html#team_rocket_scout_03'>Team Rocket Scout</a></td><td style='text-align:right'>65</td><td>Scout variant - Heatmor, Skuntank, Beheeyem, Claydol.</td></tr><tr><td><a href='trainers.html#team_rocket_scout_04'>Team Rocket Scout</a></td><td style='text-align:right'>65</td><td>Scout variant - Beheeyem, Skuntank, Claydol, Heatmor.</td></tr><tr><td><a href='trainers.html#team_rocket_spy_01'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Second-floor spawner cycles four Spy variants - Ghost-heavy teams (Gengar, Trevenant, Mismagius, Crobat, Banette).</td></tr><tr><td><a href='trainers.html#team_rocket_spy_02'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Spy variant - Banette, Gengar, Mismagius, Trevenant, Crobat.</td></tr><tr><td><a href='trainers.html#team_rocket_spy_03'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Spy variant - Drifblim, Mismagius, Mimikyu, Banette, Crobat.</td></tr><tr><td><a href='trainers.html#team_rocket_spy_04'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Spy variant - Crobat, Drifblim, Mimikyu, Banette, Mismagius.</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_01'>Team Rocket Scientist</a></td><td style='text-align:right'>56</td><td>Lab spawner cycles four Scientist variants - fossil and Porygon teams (Kabutops, Omastar, Porygon, Rotom).</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_02'>Team Rocket Scientist</a></td><td style='text-align:right'>55</td><td>Scientist variant - Omastar, Kabutops, Rotom, Porygon.</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_03'>Team Rocket Scientist</a></td><td style='text-align:right'>55</td><td>Scientist variant - Rotom, Kabutops, Aerodactyl, Porygon2.</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_04'>Team Rocket Scientist</a></td><td style='text-align:right'>55</td><td>Scientist variant - Aerodactyl, Porygon-Z, Omastar, Rotom.</td></tr><tr><td><a href='trainers.html#team_rocket_agent_01'>Team Rocket Agent</a></td><td style='text-align:right'>50</td><td>Lobby spawner cycles four Agent variants - Hypno, Golbat, Noctowl.</td></tr><tr><td><a href='trainers.html#team_rocket_agent_02'>Team Rocket Agent</a></td><td style='text-align:right'>49</td><td>Agent variant - Weezing, Hypno, Raticate.</td></tr><tr><td><a href='trainers.html#team_rocket_agent_03'>Team Rocket Agent</a></td><td style='text-align:right'>49</td><td>Agent variant - Magneton, Machoke, Arbok.</td></tr><tr><td><a href='trainers.html#team_rocket_agent_04'>Team Rocket Agent</a></td><td style='text-align:right'>49</td><td>Agent variant - Arbok, Noctowl, Raticate.</td></tr><tr><td><a href='trainers.html#team_rocket_member_01'>Team Rocket Grunt</a></td><td style='text-align:right'>45</td><td>Ground-floor spawner cycles four Grunt variants - Golbat, Weezing, Arbok.</td></tr><tr><td><a href='trainers.html#team_rocket_member_02'>Team Rocket Grunt</a></td><td style='text-align:right'>44</td><td>Grunt variant - Raticate, Magneton, Mightyena.</td></tr><tr><td><a href='trainers.html#team_rocket_member_03'>Team Rocket Grunt</a></td><td style='text-align:right'>44</td><td>Grunt variant - Golbat, Weezing, Machoke.</td></tr><tr><td><a href='trainers.html#team_rocket_member_04'>Team Rocket Grunt</a></td><td style='text-align:right'>44</td><td>Grunt variant - Weezing, Golbat, Arbok.</td></tr></tbody></table>
+  <h3>Loot &amp; collectibles</h3>
+  <p><strong>The shard chain.</strong> Exactly <strong>8 <a href="items.html#lumymon:corrupted_shard">Corrupted Shards</a></strong> are placed in the tower's containers (verified in the structure file): a barrel below the ground floor, the front-desk chest, a barrel on the mezzanine, a gilded chest and a loot-stashed side table on the library floor, a barrel and a sculk-filled trapped chest in the maze, and a barrel on the top floor. Combine all 8 around Apollo's <a href="items.html#lumymon:shadow_heart">Shadow Heart</a> in a 3x3 grid to craft the <a href="items.html#lumymon:shadow_soul_stone">Shadow Soul Stone</a> — its tooltip confirms it "Transforms Lugia into its Shadow Form" and that a second right-click reverts it, so the toggle is reusable.</p>
+<p><strong>Boss drops.</strong> <a href="trainers.html#team_rocket_admin_apollo">Apollo</a> guarantees the Shadow Heart on his single allowed defeat. <a href="trainers.html#team_rocket_giovanni">Giovanni</a> guarantees the <a href="items.html#lumymon:silver_wing">Silver Wing</a> first time down — tooltip: "Required to summon Lugia at the Whirl Island" — and repeat wins roll legendary-tier loot pools that can drop additional Silver Wings.</p>
+<p><strong>Other highlights.</strong> A <a href="items.html#lumymon:synthetic_matrix">Synthetic Matrix</a> sits in a barrel beside the library lectern; smith it onto a Netherite Chestplate (with a Move Upgrade Smithing Template) for <a href="items.html#lumymon:rocket_armor">Rocket Armor</a>, which "unleashes Mewtwo's true armored potential". Also verified in containers: a <a href="items.html#mega_showdown:mega_stone">Mega Stone</a> in a study gilded chest, TM Shadow Ball, TMs Bonemerang, Petal Blizzard, Noble Roar, Clear Smog and Rock Polish, a <a href="items.html#cobblemon:sail_fossil">Sail Fossil</a> and <a href="items.html#cobblemon:armor_fossil">Armor Fossil</a> loaded in the lab's blast furnaces, a Dragon Egg in the ground-floor vault, 5 Trial Keys and 3 Ominous Trial Keys, Ancient Debris, a <a href="items.html#cobblemon:max_revive">Max Revive</a>, mints, gems, relic coins and pouches, Moon/Luxury/Dusk and ancient Poke Balls, and a Ground Memory.</p>
+  <h3>Walkthrough</h3>
+  <p><strong>Ground floor - lobby and lab.</strong> Four spawners guard the entrance level: Agents (up to 50), Grunts (mid-40s), Scientists (mid-50s) in the fossil lab, and — the trap for underleveled parties — Officers at <strong>70-72</strong>. The lab holds a Fossil Analyzer, Restoration Tanks, and two blast furnaces pre-loaded with the Sail and Armor Fossils. A lectern log ("PROJECT XD001") introduces the Shadow Lugia experiment. Shards here: the front-desk chest (community-reported: behind the lattice), a barrel tucked below floor level, and a mezzanine barrel with Luxury and Moon Balls. The floor also hides a redstone vault — dozens of decoy levers wired across the walls with four iron doors and a Dragon Egg inside; community-reported: only specific levers open the doors, so flip methodically.</p>
+<p><strong>Second floor - library and Apollo.</strong> Spies (Ghost-heavy teams, ~60) and Scouts (~65-67) patrol here alongside <a href="trainers.html#team_rocket_admin_apollo">Apollo</a>. The library lectern holds the "Shadowfall" log — the shattering of the shadow power source. Two hidden levers are community-reported on this floor: one in the library's back corner and one under a sofa, each opening a secret room. Verified container finds: a Corrupted Shard in a gilded chest, another inside a side table in the brewing-stand room, the Synthetic Matrix barrel behind the lectern, the Mega Stone gilded chest, Trial Keys in decorated pots, and a white gilded chest with an Ominous Trial Key.</p>
+<p><strong>Maze floor.</strong> Above the library, a chimney maze with a dozen levers and weathered copper doors. Two trapped chests packed with sculk veins hold a Corrupted Shard and an Ominous Trial Key — expect a redstone sting when you open them. A dead-end barrel (community-reported: marked by a lantern) hides another shard, and a barrel near the trapped chests carries Ancient Debris and relic coin pouches.</p>
+<p><strong>Tower top - Giovanni.</strong> The penthouse under the antenna is <a href="trainers.html#team_rocket_giovanni">Giovanni</a>'s: a level 68-70 Ground-core six with four Full Restores in his bag. The final shard barrel sits on this floor (community-reported: behind one of the ancient statues), along with Trial Keys, a Max Revive, Dusk Balls and TM Rock Polish. Beat him for the Silver Wing, craft the Shadow Soul Stone from your 8 shards + Shadow Heart, then head to Whirl Island: the Silver Wing summons Lugia, and the stone toggles it between normal and Shadow form at will. A Lugia Radar (a Psychic Gem, a Poke Radar, 2 Water Stones and 3 Amethyst Shards) is craftable if you need help finding the island.</p>
+</div>
+<div class="padbox locsec" id="team-rocket-tower">
+  <h2>Team Rocket Tower</h2>
+  <div class="locmeta">
+    <span class="chip">Kanto (active by default)</span>
+    <span class="chip">recommended level 80+</span>
+  </div>
+  <p>A 60-block black-and-red skyscraper in the badlands and Team Rocket's Kanto headquarters. Six ranks of Rocket trainers respawn from cycling spawners on the way up — Grunts around level 45 at the lobby to level-80 bosses at the top — making it both a trainer gauntlet and a reliable Trial Key farm. The prize is the <a href="items.html#lumymon:cloning_catalyst">Cloning Catalyst</a> from Admin Atena: paired with <a href="items.html#lumymon:ancient_dna">Ancient DNA</a> (Giovanni's first-defeat drop at his own gym) it creates Mewtwo in the resurrection machine, and the tower even stocks loose Monitor and Fossil Analyzer machine blocks you can pick up for that build. Note that Giovanni himself does not appear here — his hideout is a separate deep-dark structure. There is no Berserk Gene in this pack; the tower's Mewtwo endgame instead runs through the Cloning Catalyst and the craftable <a href="items.html#lumymon:rocket_armor">Rocket Armor</a> (Netherite Chestplate + <a href="items.html#lumymon:synthetic_matrix">Synthetic Matrix</a> + a Move Upgrade Smithing Template at a smithing table), which "unleashes Mewtwo's true armored potential".</p>
+  <p><a href="viewer.html?s=team-rocket-tower" title="Open in 3D viewer"><img class="locimg" src="renders/structures/team-rocket-tower.png" loading="lazy" alt="Team Rocket Tower"></a><br><span class="meta">click to explore in 3D (slice the roof off to see the rooms)</span></p>
+  <div class="locbox"><b>Finding it:</b> <p>Craft a <a href="items.html#lumymon:rocket_key">Rocket Key</a> — 3 Tinted Glass, 1 <a href="items.html#cobblemon:destiny_knot">Destiny Knot</a> and 1 Iron Ingot in a shaped grid (glass at top-middle, top-right and middle-right, knot in the center, iron bottom-left). The key is registered directly to this structure and "secretly transmits the coordinates of the Team Rocket Tower" with its own map marker; you redeem it at the pack's Map Trader block like the other locator keys. A spare Rocket Key also sits in a black drawer inside Giovanni's Gym (the separate <code>cobbleverse:giovanni</code> hideout).</p><p>Manual route: <code>/locate structure cobbleverse:team_rocket_tower</code>. The tower generates only in the Badlands biome proper (<code>minecraft:badlands</code>, not the eroded or wooded variants; spacing 60 chunks, separation 30). A 1-in-100 roll generates the "shiny" variant of the tower instead.</p></div>
+  <h3>Trainers inside</h3><table class='loctr'><thead><tr><th>trainer</th><th>level</th><th>notes</th></tr></thead><tbody><tr><td><a href='trainers.html#team_rocket_member_01'>Team Rocket Grunt</a></td><td style='text-align:right'>45</td><td>Lobby tier; always drops a Trial Key, plus a chance of rare Poke Balls or potions</td></tr><tr><td><a href='trainers.html#team_rocket_member_02'>Team Rocket Grunt</a></td><td style='text-align:right'>44</td><td>Lobby tier; always drops a Trial Key</td></tr><tr><td><a href='trainers.html#team_rocket_member_03'>Team Rocket Grunt</a></td><td style='text-align:right'>44</td><td>Lobby tier; always drops a Trial Key</td></tr><tr><td><a href='trainers.html#team_rocket_member_04'>Team Rocket Grunt</a></td><td style='text-align:right'>44</td><td>Lobby tier; always drops a Trial Key</td></tr><tr><td><a href='trainers.html#team_rocket_agent_01'>Team Rocket Agent</a></td><td style='text-align:right'>50</td><td>Floor 2; drops battle potions</td></tr><tr><td><a href='trainers.html#team_rocket_agent_02'>Team Rocket Agent</a></td><td style='text-align:right'>49</td><td>Floor 2; drops battle potions</td></tr><tr><td><a href='trainers.html#team_rocket_agent_03'>Team Rocket Agent</a></td><td style='text-align:right'>49</td><td>Floor 2; drops battle potions</td></tr><tr><td><a href='trainers.html#team_rocket_agent_04'>Team Rocket Agent</a></td><td style='text-align:right'>49</td><td>Floor 2; drops battle potions</td></tr><tr><td><a href='trainers.html#team_rocket_spy_01'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Floor 3 west; Ghost-heavy team (plus Crobat), ender-themed loot (Ender Pearls, Eyes of Ender)</td></tr><tr><td><a href='trainers.html#team_rocket_spy_02'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Floor 3 west; Ghost-heavy team</td></tr><tr><td><a href='trainers.html#team_rocket_spy_03'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Floor 3 west; Ghost-heavy team</td></tr><tr><td><a href='trainers.html#team_rocket_spy_04'>Team Rocket Spy</a></td><td style='text-align:right'>60</td><td>Floor 3 west; Ghost-heavy team</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_01'>Team Rocket Scientist</a></td><td style='text-align:right'>56</td><td>Floor 3 east; fossil team, can drop fossils, tumblestones or a Fossilized Helmet (first defeat only)</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_02'>Team Rocket Scientist</a></td><td style='text-align:right'>55</td><td>Floor 3 east; fossil team</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_03'>Team Rocket Scientist</a></td><td style='text-align:right'>55</td><td>Floor 3 east; fossil team</td></tr><tr><td><a href='trainers.html#team_rocket_scientist_04'>Team Rocket Scientist</a></td><td style='text-align:right'>55</td><td>Floor 3 east; fossil team</td></tr><tr><td><a href='trainers.html#team_rocket_officer_01'>Team Rocket Officer</a></td><td style='text-align:right'>72</td><td>Floor 4; drops vitamins, TMs and potions</td></tr><tr><td><a href='trainers.html#team_rocket_officer_02'>Team Rocket Officer</a></td><td style='text-align:right'>71</td><td>Floor 4; drops vitamins, TMs and potions</td></tr><tr><td><a href='trainers.html#team_rocket_officer_03'>Team Rocket Officer</a></td><td style='text-align:right'>71</td><td>Floor 4; drops vitamins, TMs and potions</td></tr><tr><td><a href='trainers.html#team_rocket_officer_04'>Team Rocket Officer</a></td><td style='text-align:right'>71</td><td>Floor 4; drops vitamins, TMs and potions</td></tr><tr><td><a href='trainers.html#team_rocket_scout_01'>Team Rocket Scout</a></td><td style='text-align:right'>67</td><td>Floor 5; drops type gems</td></tr><tr><td><a href='trainers.html#team_rocket_scout_02'>Team Rocket Scout</a></td><td style='text-align:right'>65</td><td>Floor 5; drops type gems</td></tr><tr><td><a href='trainers.html#team_rocket_scout_03'>Team Rocket Scout</a></td><td style='text-align:right'>65</td><td>Floor 5; drops type gems</td></tr><tr><td><a href='trainers.html#team_rocket_scout_04'>Team Rocket Scout</a></td><td style='text-align:right'>65</td><td>Floor 5; drops type gems</td></tr><tr><td><a href='trainers.html#team_rocket_admin_atena'>Atena</a></td><td style='text-align:right'>80</td><td>Sealed admin office below the generals' floor; guaranteed Cloning Catalyst every defeat, TMs on first defeat</td></tr><tr><td><a href='trainers.html#team_rocket_general_archer'>Team Rocket General Archer</a></td><td style='text-align:right'>80</td><td>Top-floor boss; drops 1-2 Ominous Trial Keys per win for the first four defeats, plus Z-Move or TM loot</td></tr></tbody></table>
+  <h3>Loot &amp; collectibles</h3>
+  <p><strong>Key items:</strong> Admin Atena's loot table rolls a guaranteed <a href="items.html#lumymon:cloning_catalyst">Cloning Catalyst</a> — "catalyzes the creation of Mewtwo in the Resurrection Machine when paired with Ancient DNA". General Archer pays out 1-2 Ominous Trial Keys per win (first four defeats), every Grunt drops a Trial Key, and more of both keys sit in the top-floor barrels — community-reported, the Ominous Trial Keys are what open the vault at the Johto Radio Tower.</p><p><strong>Container highlights (verified in structure data):</strong> a rooftop hopper at the antenna tip holds a <a href="items.html#mega_showdown:darkinium_z">Darkinium-Z</a>; a generals'-floor barrel holds 11 <a href="items.html#mega_showdown:dark_tera_shard">Dark Tera Shards</a> plus 2 Trial Keys and an Ominous Trial Key, with a second barrel of 11 White Apricorns and another Ominous Trial Key, and a decorated pot hiding a Trial Key; Atena's floor has 9 <a href="items.html#cobblemon:relic_coin">Relic Coins</a> + an Ominous Trial Key in one barrel and Calcium, PP Max, Iron and 2 Exp. Candy M in another; the lobby's black gilded chest carries 5 <a href="items.html#cobblemon:slate_ball">Slate Balls</a> and 7 <a href="items.html#cobblemon:black_apricorn">Black Apricorns</a>, next to a barrel of 13 Relic Coins; office barrels on floors 3-4 hold 2 <a href="items.html#cobblemon:rare_candy">Rare Candies</a>, Poke Balls and an Ominous Bottle (floor 3) and a <a href="items.html#cobblemon:dark_gem">Dark Gem</a> (floor 4). Chiseled bookshelves on floor 2 hide Efficiency III, Sharpness III and Piercing II enchanted books.</p><p><strong>Machine parts:</strong> an unformed Monitor (floor 2) and Fossil Analyzer (floor 3) can be broken and taken — two of the three blocks of the fossil resurrection multiblock, alongside the <a href="items.html#cobblemon:restoration_tank">Restoration Tank</a> you supply yourself. A free PC sits on floor 4.</p>
+  <h3>Walkthrough</h3>
+  <p><strong>Lobby:</strong> a spawner behind the front desk cycles four <a href="trainers.html#team_rocket_member_01">Team Rocket Grunts</a> (lv 43-45; Golbat/Weezing/Arbok squads plus one Raticate/Magneton/Mightyena set). Grab the relic-coin barrel and the black gilded chest, then head up — a button opens the iron door (community-reported: in the back-left corner).</p><p><strong>Floor 2:</strong> <a href="trainers.html#team_rocket_agent_01">Team Rocket Agents</a> (lv 44-50) hold the east lounge. Break the Monitor screen here and pocket it for your Mewtwo machine, and check the west bookshelves for enchanted books.</p><p><strong>Floor 3:</strong> a double fight floor — <a href="trainers.html#team_rocket_spy_01">Team Rocket Spies</a> (lv 58-60, Ghost-heavy squads: Gengar, Mismagius, Banette, Trevenant and Mimikyu, all backed by a Crobat) on the west side and <a href="trainers.html#team_rocket_scientist_01">Team Rocket Scientists</a> (lv 45-56, fossil teams: Kabutops, Omastar, Aerodactyl, Porygon line) in the east lab, where a Fossil Analyzer block is free to take.</p><p><strong>Floor 4:</strong> <a href="trainers.html#team_rocket_officer_01">Team Rocket Officers</a> (lv 59-72, Poison/Ground bruisers) guard the office block with the Dark Gem barrel and a usable PC.</p><p><strong>Floor 5:</strong> <a href="trainers.html#team_rocket_scout_01">Team Rocket Scouts</a> (lv 64-67) are the last regular rank before the long ladder shafts up the tower core.</p><p><strong>Generals' floor:</strong> the banner-draped war room near the top spawns <a href="trainers.html#team_rocket_general_archer">Team Rocket General Archer</a> (lv 77-80: Houndoom, Muk, Magmortar, Weezing, Probopass, Golbat, 3 Full Restores). Its spawner also lists a "team_rocket_general_atena" id that has no trainer definition anywhere in the pack data, so Archer is the fight you get. Loot the apricorn and Tera Shard barrels and the Trial Key pot before moving on.</p><p><strong>Atena's office:</strong> directly beneath the generals' floor is a sealed admin room holding <a href="trainers.html#team_rocket_admin_atena">Atena</a> (lv 78-80: Arbok, Vileplume, Muk, Hypno, Honchkrow) — community-reported, you reach it by breaking through the floor under Archer's room, which matches the room's position in the structure data. Every win against her banks a <a href="items.html#lumymon:cloning_catalyst">Cloning Catalyst</a>. Note: the rare shiny tower variant omits her dedicated spawner.</p><p><strong>Rooftop:</strong> climb the antenna scaffolding above the war room to a hopper at the very tip containing the <a href="items.html#mega_showdown:darkinium_z">Darkinium-Z</a>.</p><p><strong>After the tower:</strong> combine the Cloning Catalyst with <a href="items.html#lumymon:ancient_dna">Ancient DNA</a> — Giovanni's first-defeat reward at his separate deep-dark gym, which also stocks a spare Rocket Key and a fully formed Restoration Tank — to resurrect Mewtwo.</p>
+</div>
+<div class="padbox locsec" id="team-galactic-hq">
+  <h2>Team Galactic HQ</h2>
+  <div class="locmeta">
+    <span class="chip">Sinnoh (opt-in datapack)</span>
+    <span class="chip">recommended level 85+</span>
+  </div>
+  <p>The Team Galactic HQ is the finale of the opt-in Sinnoh datapack's villain arc and the biggest Galactic structure in the pack — a 112x80 office tower complex, 53 blocks tall, stuffed with 27 trainer spawners across labs, offices, a gym, a canteen and dormitory floors. It exists for one reason: <a href="trainers.html#team_galactic_cyrus">Cyrus</a> waits in the central tower and your first win over him is a guaranteed drop of the <a href="items.html#lumymon:red_chain">Red Chain</a>, the item that summons Dialga, Palkia and Giratina at their altars. The building also hides the <a href="items.html#mega_showdown:adamant_orb">Adamant Orb</a> and <a href="items.html#mega_showdown:lustrous_orb">Lustrous Orb</a>, plus the <a href="items.html#lumymon:torn_journal">Torn Journal</a> and two <a href="items.html#lumymon:torn_page">Torn Pages</a> used toward the <a href="items.html#lumymon:old_journal">Old Journal</a> that reveals Turnback Cave. There is no Master Ball here — the prize is the Red Chain and the legendary-item side loot. Storyline order matters: Commander Jupiter (Eterna Building) unlocks Saturn, and Saturn unlocks Cyrus.</p>
+  <p><a href="viewer.html?s=team-galactic-hq" title="Open in 3D viewer"><img class="locimg" src="renders/structures/team-galactic-hq.png" loading="lazy" alt="Team Galactic HQ"></a><br><span class="meta">click to explore in 3D (slice the roof off to see the rooms)</span></p>
+  <div class="locbox"><b>Finding it:</b> <p>Craft the <a href="items.html#lumymon:galactic_keycard">Galactic Keycard</a> — 1x Recovery Compass, 1x <a href="items.html#toms_storage:adv_wireless_terminal">Advanced Wireless Terminal</a> and 3x <a href="items.html#cobblemon:cyan_plaque">Cyan Plaque</a> (compass on top, terminal center, plaques on the sides and below). The keycard is a LumyMon locator item bound directly to this structure — its tooltip reads &quot;Encrypted card that transmits the location of the Team Galactic HQ&quot; (community-reported: pairing it with a map at a cartography table charts the nearest HQ). Command fallback: <code>/locate structure cobbleverse:team_galactic_hq</code>. The HQ generates only in Steppe biomes (<code>terralith:steppe</code>) at 140-chunk spacing with a 75% placement rate, so expect a long flight without the keycard.</p></div>
+  <h3>Trainers inside</h3><table class='loctr'><thead><tr><th>trainer</th><th>level</th><th>notes</th></tr></thead><tbody><tr><td><a href='trainers.html#team_galactic_recruit_01'>Team Galactic Recruit</a></td><td style='text-align:right'>65</td><td>Ground-floor patrol pool (6 spawners rotate recruits 01-05). Drops common Poke Balls, berries and nature items, with a chance of a Trial Key.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_02'>Team Galactic Recruit</a></td><td style='text-align:right'>63</td><td>Same recruit pool; Mimikyu and Drapion.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_03'>Team Galactic Recruit</a></td><td style='text-align:right'>60</td><td>Same recruit pool; Lucario lead.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_04'>Team Galactic Recruit</a></td><td style='text-align:right'>58</td><td>Same recruit pool; classic Sinnoh grunt team.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_05'>Team Galactic Recruit</a></td><td style='text-align:right'>55</td><td>Same recruit pool; easiest roll (Magikarp, Wurmple and friends).</td></tr><tr><td><a href='trainers.html#team_galactic_employee_01'>Team Galactic Employee</a></td><td style='text-align:right'>68</td><td>Office pool (5 spawners rotate employees 01-04). Drops paper, ink and banner patterns.</td></tr><tr><td><a href='trainers.html#team_galactic_employee_02'>Team Galactic Employee</a></td><td style='text-align:right'>68</td><td>Same employee pool; Bronzong plus Weavile.</td></tr><tr><td><a href='trainers.html#team_galactic_employee_03'>Team Galactic Employee</a></td><td style='text-align:right'>61</td><td>Same employee pool; lightest roll.</td></tr><tr><td><a href='trainers.html#team_galactic_employee_04'>Team Galactic Employee</a></td><td style='text-align:right'>67</td><td>Same employee pool; Skuntank ace.</td></tr><tr><td><a href='trainers.html#team_galactic_secretary_01'>Team Galactic Receptionist</a></td><td style='text-align:right'>100</td><td>Three front-desk spawners reference the receptionist group. Every receptionist runs a single level 100 Venusaur — an optional gag fight far above the rest of the building. Skippable.</td></tr><tr><td><a href='trainers.html#team_galactic_secretary_02'>Team Galactic Receptionist</a></td><td style='text-align:right'>100</td><td>Second desk; identical level 100 Venusaur.</td></tr><tr><td><a href='trainers.html#team_galactic_secretary_03'>Team Galactic Receptionist</a></td><td style='text-align:right'>100</td><td>Third desk; identical level 100 Venusaur.</td></tr><tr><td><a href='trainers.html#team_galactic_apiarist'>Team Galactic Apiarits</a></td><td style='text-align:right'>68</td><td>Guards the honey room (bee nests, honey blocks). Drops honeycomb and honey bottles.</td></tr><tr><td><a href='trainers.html#team_galactic_garbageman'>Team Galactic Garbageman</a></td><td style='text-align:right'>69</td><td>Toxic-waste room; full poison team (Weezing, Skuntank, Muk, Garbodor). Drops slime balls and poisonous potatoes.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_01'>Team Galactic Scientist</a></td><td style='text-align:right'>62</td><td>Lab pool (3 spawners rotate scientists 01-05). Drops tumblestones.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_02'>Team Galactic Scientist</a></td><td style='text-align:right'>66</td><td>Same scientist pool.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_03'>Team Galactic Scientist</a></td><td style='text-align:right'>70</td><td>Same scientist pool; strongest roll (Porygon-Z, Weavile).</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_04'>Team Galactic Scientist</a></td><td style='text-align:right'>66</td><td>Same scientist pool; poison-lean team.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_05'>Team Galactic Scientist</a></td><td style='text-align:right'>65</td><td>Same scientist pool; six-mon roll.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_01'>Team Galactic Researcher</a></td><td style='text-align:right'>63</td><td>Research pool (2 spawners rotate researchers 01-05). Drops tumblestones, books and enchanted books.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_02'>Team Galactic Researcher</a></td><td style='text-align:right'>68</td><td>Same researcher pool; Gallade ace.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_03'>Team Galactic Researcher</a></td><td style='text-align:right'>70</td><td>Same researcher pool; fossil team with Sandy Shocks.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_04'>Team Galactic Researcher</a></td><td style='text-align:right'>63</td><td>Same researcher pool; six-mon roll.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_05'>Team Galactic Researcher</a></td><td style='text-align:right'>68</td><td>Same researcher pool; Garchomp ace.</td></tr><tr><td><a href='trainers.html#team_galactic_engineer_01'>Team Galactic Engineer</a></td><td style='text-align:right'>68</td><td>Machine-deck pool (1 spawner rotates engineers 01-03). Drops redstone components, Upgrade, and rarely a Locator Chip.</td></tr><tr><td><a href='trainers.html#team_galactic_engineer_02'>Team Galactic Engineer</a></td><td style='text-align:right'>64</td><td>Same engineer pool; steel team.</td></tr><tr><td><a href='trainers.html#team_galactic_engineer_03'>Team Galactic Engineer</a></td><td style='text-align:right'>64</td><td>Same engineer pool; Iron Thorns ace.</td></tr><tr><td><a href='trainers.html#team_galactic_supervisor'>Galactic Supervisor</a></td><td style='text-align:right'>70</td><td>West tower upper floor. Drops paper and books with a chance of a PC or monitor, a Trial Key, or — rarely — one of the four Genesect drives (Burn/Chill/Douse/Shock). Rebattleable up to 3 defeats.</td></tr><tr><td><a href='trainers.html#team_galactic_director'>Team Galactic Lab Director</a></td><td style='text-align:right'>70</td><td>East tower upper floor; six-mon level 70 team. Drops 1-2 guaranteed Ominous Trial Keys plus a chance at one of the 17 type memory discs (for Type: Null/Silvally). Up to 3 defeats.</td></tr><tr><td><a href='trainers.html#team_galactic_commander_saturn'>Saturn</a></td><td style='text-align:right'>78</td><td>West tower commander. Locked until Commander Jupiter (Eterna Building) is beaten. Drops the Valor Proof (reveals Lake Valor for the Azelf trial) on every win; rare mochi and Ominous Trial Keys only start rolling from your sixth defeat of him (rebattleable up to 20 career defeats).</td></tr><tr><td><a href='trainers.html#team_galactic_cyrus'>Cyrus</a></td><td style='text-align:right'>88</td><td>Final boss, central tower arena. Locked until Saturn is beaten; only 2 career defeats allowed. The Red Chain is a guaranteed drop on your first win only — the rematch instead rolls rare candies, TMs or an Ominous Trial Key. Carries 5 Full Restores.</td></tr></tbody></table>
+  <h3>Loot &amp; collectibles</h3>
+  <p>Guaranteed placements verified in the structure file: the <a href="items.html#mega_showdown:adamant_orb">Adamant Orb</a> sits in an item frame in the east-tower lab and the <a href="items.html#mega_showdown:lustrous_orb">Lustrous Orb</a> hides in an invisible glow frame nearby — both are held-item boosts for Dialga and Palkia. The <a href="items.html#lumymon:torn_journal">Torn Journal</a> (east-wing library bookshelf) and two <a href="items.html#lumymon:torn_page">Torn Pages</a> (an upper shelf of that same library, and the top-floor suite) combine with a third page found elsewhere into the <a href="items.html#lumymon:old_journal">Old Journal</a>, which reveals Turnback Cave. A <a href="items.html#lumymon:locator_chip">Locator Chip</a> sits in an upper-floor wall cabinet, two Trial Keys are slotted into chiseled bookshelves with two more hidden in invisible item frames on the ground floor, an Ominous Trial Key sits in a jungle barrel beside a Totem of Undying, and a blue gilded chest near the lobby holds 9 <a href="items.html#cobblemon:relic_coin">Relic Coins</a> and a <a href="items.html#cobblemon:relic_coin_pouch">Relic Coin Pouch</a>. Display cases (breakable) hold an <a href="items.html#cobblemon:ability_patch">Ability Patch</a>, a <a href="items.html#cobblemon:dubious_disc">Dubious Disc</a>, capture/suspicious sherds, tumblestone samples, Mega Meteorid ores and Distortion-block specimens. Two Gimmighoul chests spawn coin-hoarders on the west tower.</p><p>Rolled loot: 8 premium containers use the <code>team_galactic_hq</code> table (Tera Shards of every type, 3-5 Poke Ball rolls up to <a href="items.html#cobblemon:ultra_ball">Ultra Ball</a>, mints, evolution items, relic coins), 30 more containers — 17 wall cabinets, 8 nightstands, four gilded chests and a barrel — use the weaker <code>team_galactic_generic</code> table, and one gilded chest in the east wing rolls the <code>spear_pillar</code> table (tumblestones, Hisuian ancient balls, remedies, 4-12 relic coins). Trainer drops are the real prizes: the <a href="items.html#lumymon:red_chain">Red Chain</a> from Cyrus, the <a href="items.html#lumymon:valor_proof">Valor Proof</a> from Saturn, Genesect drives from the Supervisor and memory discs from the Lab Director. No Master Ball generates here — but the Ominous Trial Keys bosses drop can open ominous trial chamber vaults, which have a small Master Ball chance in this pack.</p>
+  <h3>Walkthrough</h3>
+  <p><strong>1. Gear the run.</strong> Craft the <a href="items.html#lumymon:galactic_keycard">Galactic Keycard</a>, use it to pinpoint the HQ and fly to the Steppe. Bring a level 85+ team with Fighting, Electric and Ground coverage — the building is Dark/Poison/Steel-heavy — and beat Commander Jupiter at the Eterna Building first or Saturn will refuse to battle.</p><p><strong>2. Lobby.</strong> Twin glowing "TEAM GALACTIC HQ" signs mark the south entrances, which converge on a shared lobby. The three receptionist desks are trap fights — each <a href="trainers.html#team_galactic_secretary_01">Receptionist</a> fields a level 100 Venusaur. Fight them only for fun; they gate nothing.</p><p><strong>3. Ground floor sweep.</strong> Recruit and Employee spawners cover the offices, honey room (<a href="trainers.html#team_galactic_apiarist">Apiarits</a>), canteen and the toxic-waste room (<a href="trainers.html#team_galactic_garbageman">Garbageman</a>). Grab the relic-coin chest near the west offices and read the canteen lectern for a laugh. Community-reported: a concealed route behind the kitchen's black curtains.</p><p><strong>4. East-wing labs.</strong> Scientists and Researchers patrol the laboratories. Break the display cases for tumblestone and Mega Meteorid specimens, pull the <a href="items.html#lumymon:torn_journal">Torn Journal</a> from the library bookshelf — the first <a href="items.html#lumymon:torn_page">Torn Page</a> hides on an upper shelf of the same library — and loot the gilded chest that rolls Spear Pillar loot (ancient balls, tumblestones).</p><p><strong>5. The orbs.</strong> In the east-tower lab area, take the <a href="items.html#mega_showdown:adamant_orb">Adamant Orb</a> from its item frame; the <a href="items.html#mega_showdown:lustrous_orb">Lustrous Orb</a> is in an invisible glow frame close by — sweep walls and floors with your crosshair until the outline appears.</p><p><strong>6. Ride the bubble elevators.</strong> Soul-sand bubble columns in each tower are the main vertical routes; different columns stop at different floors, so try both sides of a shaft (community-reported: specific sides serve specific floors). The wall-of-levers rooms are server consoles — the 200+ levers are decorative, though the building does contain tripwire and sticky-piston circuitry; the library's book-triggered secret passage is community-reported and worth testing.</p><p><strong>7. Mid floors.</strong> A gym with two Dynamax Power Spots flanks the central tower, and a west-side bookshelf on these floors holds another Trial Key. The "Trial of Valor: Ops Manual" lectern up here previews the Lake Valor trial — exactly what Saturn's Valor Proof unlocks after this dungeon.</p><p><strong>8. Saturn, then the upper brass.</strong> <a href="trainers.html#team_galactic_commander_saturn">Saturn</a> (level 75-78) waits in the west tower — beat him for the <a href="items.html#lumymon:valor_proof">Valor Proof</a>, which reveals Lake Valor for the Azelf trial. Higher up, the <a href="trainers.html#team_galactic_supervisor">Supervisor</a> (west, Genesect drives) and <a href="trainers.html#team_galactic_director">Lab Director</a> (east, memory discs) are repeatable up to three wins each. The Engineer deck sits below the Director; check the wall cabinet for the <a href="items.html#lumymon:locator_chip">Locator Chip</a> and the jungle barrel for an Ominous Trial Key (a Totem of Undying sits beside it).</p><p><strong>9. Dormitories.</strong> The dormitory floors are lined with lootable nightstands and cabinets (generic Galactic table, one premium). The second <a href="items.html#lumymon:torn_page">Torn Page</a> is in the top suite's chiseled bookshelf — easy to miss, check every slot. Two Gimmighoul chests on the west tower give Gimmighoul encounters for coin farming.</p><p><strong>10. Cyrus.</strong> The central tower arena holds <a href="trainers.html#team_galactic_cyrus">Cyrus</a>: level 85-88 Dark/Flying offense (Honchkrow, Crobat, Gyarados, Weavile, Corviknight, Houndoom) backed by 5 Full Restores. Electric and Rock coverage shreds the flyers; watch Houndoom's Sludge Bomb on fairies. Your first victory is a guaranteed <a href="items.html#lumymon:red_chain">Red Chain</a> — take it to the altars of Dialga, Palkia or Giratina to summon them. Only two career defeats are allowed, and the Red Chain drops on the first alone; the rematch instead rolls rare candies, TMs or an Ominous Trial Key.</p>
+</div>
+<div class="padbox locsec" id="eterna-building">
+  <h2>Team Galactic Eterna Building</h2>
+  <div class="locmeta">
+    <span class="chip">Sinnoh (opt-in datapack)</span>
+    <span class="chip">recommended level 75+</span>
+  </div>
+  <p>A 43&times;50&times;43 Team Galactic office tower and the second stop in the Galactic commander chain: her spawner only produces <a href="trainers.html#team_galactic_commander_jupiter">Jupiter</a> after you have beaten Mars at the Wind Plant, and beating Jupiter in turn unlocks Saturn at Team Galactic HQ (defeat requirements verified in trainer data). Jupiter's signature drop is the <a href="items.html#lumymon:acuity_proof">Acuity Proof</a>, "used to reveal its hidden location" per its tooltip &mdash; the key to finding Lake Acuity and Uxie. Below the rooftop arena sit three floors of grunt battles, two <a href="items.html#mega_showdown:zygarde_cell">Zygarde Cells</a>, and a hidden cache of Rotom appliance units.</p>
+  <p><a href="viewer.html?s=eterna-building" title="Open in 3D viewer"><img class="locimg" src="renders/structures/eterna-building.png" loading="lazy" alt="Team Galactic Eterna Building"></a><br><span class="meta">click to explore in 3D (slice the roof off to see the rooms)</span></p>
+  <div class="locbox"><b>Finding it:</b> <p>The building generates only in the <strong>Arid Highlands</strong> biome (<code>terralith:arid_highlands</code>), placed by random spread at roughly 90-chunk spacing. The dedicated locator is the <a href="items.html#lumymon:secret_key">Secret Key</a> &mdash; its tooltip reads "High-tech device disguised as a normal key pinpointing the Team Galactic Eterna Building". Craft it shaped: a <a href="items.html#cobblemon:zoom_lens">Zoom Lens</a> top-right, a <a href="items.html#cobblemon:cell_battery">Cell Battery</a> in the center, and two <a href="items.html#cobblemon:normal_gem">Normal Gems</a> along the bottom row. Combine the key with an empty map at a cartography table to get a structure map (community-reported usage). With cheats, <code>/locate structure cobbleverse:eterna_building</code> works directly.</p></div>
+  <h3>Trainers inside</h3><table class='loctr'><thead><tr><th>trainer</th><th>level</th><th>notes</th></tr></thead><tbody><tr><td><a href='trainers.html#team_galactic_recruit_01'>Team Galactic Recruit</a></td><td style='text-align:right'>65</td><td>Ground-floor lobby spawner pool; solo Gyarados. Carries 1 Full Restore.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_02'>Team Galactic Recruit</a></td><td style='text-align:right'>63</td><td>Lobby pool; Mimikyu and Drapion. Carries 1 Full Restore.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_03'>Team Galactic Recruit</a></td><td style='text-align:right'>60</td><td>Lobby pool; Lucario-led trio. Carries 1 Full Restore.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_04'>Team Galactic Recruit</a></td><td style='text-align:right'>58</td><td>Lobby pool; Staraptor/Luxray team of four. Carries 1 Full Restore.</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_05'>Team Galactic Recruit</a></td><td style='text-align:right'>55</td><td>Lobby pool; five low-stakes Pokemon (Magikarp, Zubat line filler).</td></tr><tr><td><a href='trainers.html#team_galactic_employee_01'>Team Galactic Employee</a></td><td style='text-align:right'>68</td><td>Ground-floor office spawner pool; Ambipom, Forretress, Crobat, Machamp.</td></tr><tr><td><a href='trainers.html#team_galactic_employee_02'>Team Galactic Employee</a></td><td style='text-align:right'>68</td><td>Office pool; Bronzong and Weavile. Carries 1 Full Restore.</td></tr><tr><td><a href='trainers.html#team_galactic_employee_03'>Team Galactic Employee</a></td><td style='text-align:right'>61</td><td>Office pool; Chatot, Glameow, Forretress. Carries 2 Full Restores.</td></tr><tr><td><a href='trainers.html#team_galactic_employee_04'>Team Galactic Employee</a></td><td style='text-align:right'>67</td><td>Office pool; Ambipom, Bronzor, Raticate, Skuntank.</td></tr><tr><td><a href='trainers.html#team_galactic_engineer_01'>Team Galactic Engineer</a></td><td style='text-align:right'>68</td><td>Floor 2 server-room spawner pool; Magnezone, Metagross, Iron Treads.</td></tr><tr><td><a href='trainers.html#team_galactic_engineer_02'>Team Galactic Engineer</a></td><td style='text-align:right'>64</td><td>Server-room pool; Steel-heavy team of four (Magnezone, Scizor, Klinklang, Aggron).</td></tr><tr><td><a href='trainers.html#team_galactic_engineer_03'>Team Galactic Engineer</a></td><td style='text-align:right'>64</td><td>Server-room pool; team of five (Klefki, Bisharp, Cufant, Metagross, Iron Thorns).</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_01'>Team Galactic Researcher</a></td><td style='text-align:right'>63</td><td>Floor 2 lab spawner pool; Psychic-leaning four (Porygon2, Kadabra, Magneton, Espeon).</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_02'>Team Galactic Researcher</a></td><td style='text-align:right'>68</td><td>Lab pool; Porygon-Z, Bronzong, Starmie, Gallade.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_03'>Team Galactic Researcher</a></td><td style='text-align:right'>70</td><td>Lab pool; fossil team with Spiritomb and Sandy Shocks. Carries 3 Full Restores.</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_04'>Team Galactic Researcher</a></td><td style='text-align:right'>63</td><td>Lab pool; full team of six with an Alakazam ace (no Garchomp).</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_05'>Team Galactic Researcher</a></td><td style='text-align:right'>68</td><td>Lab pool; team of six including Chandelure and Garchomp.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_01'>Team Galactic Scientist</a></td><td style='text-align:right'>62</td><td>Floor 3 research-lab spawner pool; Bronzong, Luxray, Magnezone.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_02'>Team Galactic Scientist</a></td><td style='text-align:right'>66</td><td>Floor 3 pool; Bronzong, Gastrodon, Drifblim, Magnezone. Carries 2 Super Potions.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_03'>Team Galactic Scientist</a></td><td style='text-align:right'>70</td><td>Floor 3 pool; Skarmory, Porygon-Z, Golbat, Weavile. Carries 3 Full Restores.</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_04'>Team Galactic Scientist</a></td><td style='text-align:right'>66</td><td>Floor 3 pool; Poison trio (Tentacruel, Crobat, Drapion).</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_05'>Team Galactic Scientist</a></td><td style='text-align:right'>65</td><td>Floor 3 pool; team of six, mostly Poison (Tentacruel, Crobat, Drapion, Roselia, Toxicroak) plus Gastrodon.</td></tr><tr><td><a href='trainers.html#team_galactic_commander_jupiter'>Jupiter</a></td><td style='text-align:right'>75</td><td>Rooftop boss. Six Pokemon, Lv 73-75, competitive held items; 4 Full Restores. Drops the Acuity Proof (signature item). Requires Mars defeated first; beating her unlocks Saturn.</td></tr></tbody></table>
+  <h3>Loot &amp; collectibles</h3>
+  <p>Seven gilded chests are placed in the tower; four roll the <code>cobbleverse:structures/eterna_building</code> loot table &mdash; two on the ground floor, one on floor 4, one in the rooftop arena. Each rolls Pok&eacute; Balls (including <a href="items.html#cobblemon:luxury_ball">Luxury</a>, <a href="items.html#cobblemon:premier_ball">Premier</a> and <a href="items.html#cobblemon:slate_ball">Slate Balls</a>), healing items, <a href="items.html#cobblemon:relic_coin">Relic Coins</a>, ores, and low-odds bonus pulls of a <a href="items.html#mega_showdown:stellar_tera_shard">Stellar Tera Shard</a>, <a href="items.html#minecraft:breeze_rod">Breeze Rod</a>, type gems, mints, or evolution items.</p><p>Fixed placements verified in the structure file: exactly <strong>two <a href="items.html#mega_showdown:zygarde_cell">Zygarde Cells</a></strong> sit inside Crafter blocks in the floor-2 machinery, with a <a href="items.html#tmcraft:gold_blank_disc">Gold Blank Disc</a> in a third crafter nearby. The hidden floor-4 chest holds three Rotom appliances &mdash; <a href="items.html#mega_showdown:rotom_fan">Fan Unit</a>, <a href="items.html#mega_showdown:rotom_mow">Mow Unit</a> and <a href="items.html#mega_showdown:rotom_washing_machine">Wash Unit</a> &mdash; plus a "Data Log: #479 ROTOM" lore book. A floor-2 bookshelf conceals a <a href="items.html#minecraft:trial_key">Trial Key</a> among lore books; furniture caches yield Relic Coins, four <a href="items.html#cobblemon:relic_coin_pouch">Relic Coin Pouches</a>, a <a href="items.html#cobblemon:protein">Protein</a> and a <a href="items.html#cobblemon:zinc">Zinc</a>, and a floor-3 barrel is stuffed with <a href="items.html#minecraft:ghast_tear">Ghast Tears</a>. A Gimmighoul Chest sits on floor 3, and Jupiter herself drops the <a href="items.html#lumymon:acuity_proof">Acuity Proof</a>.</p>
+  <h3>Walkthrough</h3>
+  <p><strong>Ground floor.</strong> The lobby spawner cycles five <a href="trainers.html#team_galactic_recruit_05">Team Galactic Recruits</a> (Lv 55&ndash;65) and a second spawner in the side office cycles four <a href="trainers.html#team_galactic_employee_01">Employees</a> (Lv 61&ndash;68). Grab the two loot-table gilded chests here and check the blue drawer for loose Relic Coins before heading up.</p><p><strong>Floor 2.</strong> The server room spawns <a href="trainers.html#team_galactic_engineer_01">Engineers</a> (Steel-heavy, Lv 64&ndash;68) and the adjoining lab spawns <a href="trainers.html#team_galactic_researcher_03">Researchers</a> (up to Lv 70). Open every Crafter block in the machinery banks: two hold the building's <strong>Zygarde Cells</strong> and one holds a Gold Blank Disc. The chiseled bookshelves by the lounge hide a Trial Key and three written lore books; the wall cabinet above holds Relic Coin Pouches and vitamins. The hidden cabinet reported here is community-reported &mdash; the room's 50-odd wall levers are decorative server switches in the pack data.</p><p><strong>Floor 3.</strong> A single spawner cycles five <a href="trainers.html#team_galactic_scientist_03">Scientists</a> (Lv 62&ndash;70, heavy Poison and Steel). Loot the mangrove barrel of Ghast Tears, the brewing stand (Awakening, Antidote), and interact with the Gimmighoul Chest.</p><p><strong>Floor 4.</strong> Living quarters with a dozen armor stands (the armory), one more loot-table gilded chest, and two empty decoy chests. A painting on the north wall conceals the Rotom cache room (painting placement verified; the reveal mechanic is community-reported) &mdash; inside is the chest with the Fan, Mow and Wash Units. From here a soul-sand <strong>bubble elevator</strong> (verified: 32-block bubble column) carries you to the roof; a magma column nearby handles the descent.</p><p><strong>Rooftop arena.</strong> <a href="trainers.html#team_galactic_commander_jupiter">Jupiter</a> waits at fixed battle positions under the Galactic banners. She only appears once Mars is beaten. Her Lv 73&ndash;75 team leans Dark/Poison &mdash; Purugly, Gengar (Shadow Tag), Skuntank, Eviolite Golbat, Assault Vest Tyranitar and Life Orb Absol &mdash; and she burns through four Full Restores, so bring Fighting, Ground and Psychic coverage and watch for Sucker Punch on three of her six. A final loot chest sits behind the banner wall at the arena's edge. Her Acuity Proof drop points the way to Lake Acuity and Uxie; Saturn at Team Galactic HQ is your next stop.</p>
+</div>
+<div class="padbox locsec" id="wind-plant">
+  <h2>Team Galactic Wind Plant</h2>
+  <div class="locmeta">
+    <span class="chip">Sinnoh (opt-in datapack)</span>
+    <span class="chip">recommended level 75+</span>
+  </div>
+  <p>The Team Galactic Wind Plant is COBBLEVERSE's take on Valley Windworks: a turbine facility on the Blooming Plateau that Team Galactic has seized to siphon power for the Red Chain project. It is a small four-step dungeon — three grunt-tier battles on the ground floor, then Commander <a href="trainers.html#team_galactic_commander_mars">Mars</a> (max Lv. 75) upstairs — and it opens the Sinnoh commander chain: her guaranteed drop, the <a href="items.html#lumymon:verity_proof">Verity Proof</a>, reveals Lake Verity and starts the Mesprit questline, and beating her is the data-verified prerequisite for Commander Jupiter to spawn at all.</p><p>Come for the boss, stay for the shelves: the facility's chiseled bookshelves hide a <a href="items.html#lumymon:torn_page">Torn Page</a> for the Old Journal (Giratina questline), two Trial Keys, three enchanted books, and a stack of Galactic lore books written by Cyrus and Mars herself.</p>
+  <p><a href="viewer.html?s=wind-plant" title="Open in 3D viewer"><img class="locimg" src="renders/structures/wind-plant.png" loading="lazy" alt="Team Galactic Wind Plant"></a><br><span class="meta">click to explore in 3D (slice the roof off to see the rooms)</span></p>
+  <div class="locbox"><b>Finding it:</b> <p>The Wind Plant generates only in the <strong>Blooming Plateau</strong> biome (<code>terralith:blooming_plateau</code>) and requires the opt-in Sinnoh datapack (<code>COBBLEVERSE-Sinnoh-DP</code> in <code>datapacks/extra</code>) to be enabled. Look for the wind turbines above the treeline.</p><p><strong>Locator item:</strong> craft a <a href="items.html#lumymon:turbine_key">Turbine Key</a> — shaped recipe with 1x <a href="items.html#cobblemon:electirizer">Electirizer</a> (top right), 1x <a href="items.html#cobblemon:magnet">Magnet</a> (center), and 2x Wind Charge (bottom left). The key is hard-bound to the <code>cobbleverse:wind_plant</code> structure: place it in the key slot of a LumyMon regional cartography table together with an empty map to receive a structure map pointing at the facility.</p><p><strong>Command:</strong> <code>/locate structure cobbleverse:wind_plant</code>. Placement is random-spread with spacing 90 / separation 45 chunks.</p></div>
+  <h3>Trainers inside</h3><table class='loctr'><thead><tr><th>trainer</th><th>level</th><th>notes</th></tr></thead><tbody><tr><td><a href='trainers.html#team_galactic_recruit_01'>Team Galactic Recruit</a></td><td style='text-align:right'>65</td><td>Solo Gyarados variant; recruit pool drops common Poke Balls or berries (below 20 defeats), with a small Trial Key chance at any defeat count</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_02'>Team Galactic Recruit</a></td><td style='text-align:right'>63</td><td>Mimikyu/Drapion variant</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_03'>Team Galactic Recruit</a></td><td style='text-align:right'>60</td><td>Lucario lead variant</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_04'>Team Galactic Recruit</a></td><td style='text-align:right'>58</td><td>Staraptor/Luxray variant</td></tr><tr><td><a href='trainers.html#team_galactic_recruit_05'>Team Galactic Recruit</a></td><td style='text-align:right'>55</td><td>Joke team (Magikarp, Wurmple); easiest roll of the pool</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_01'>Team Galactic Scientist</a></td><td style='text-align:right'>62</td><td>Screens Bronzong lead; scientists drop tumblestones</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_02'>Team Galactic Scientist</a></td><td style='text-align:right'>66</td><td>Stall variant (Gastrodon, Drifblim)</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_03'>Team Galactic Scientist</a></td><td style='text-align:right'>70</td><td>Hardest scientist roll: Life Orb Porygon-Z, Weavile</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_04'>Team Galactic Scientist</a></td><td style='text-align:right'>66</td><td>Poison hazards variant (Tentacruel, Crobat, Drapion)</td></tr><tr><td><a href='trainers.html#team_galactic_scientist_05'>Team Galactic Scientist</a></td><td style='text-align:right'>65</td><td>Six-Pokemon poison squad</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_01'>Team Galactic Researcher</a></td><td style='text-align:right'>63</td><td>Porygon2/Espeon variant; researchers drop tumblestones plus paper/books</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_02'>Team Galactic Researcher</a></td><td style='text-align:right'>68</td><td>Rain tricks variant (Bronzong, Starmie)</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_03'>Team Galactic Researcher</a></td><td style='text-align:right'>70</td><td>Fossil-themed variant (Omastar, Aerodactyl, Spiritomb)</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_04'>Team Galactic Researcher</a></td><td style='text-align:right'>63</td><td>Six-Pokemon special-attacker squad</td></tr><tr><td><a href='trainers.html#team_galactic_researcher_05'>Team Galactic Researcher</a></td><td style='text-align:right'>68</td><td>Six-Pokemon squad with Garchomp and Electivire</td></tr><tr><td><a href='trainers.html#team_galactic_commander_mars'>Mars</a></td><td style='text-align:right'>75</td><td>Boss; always drops Verity Proof (Lake Verity locator). Intimidate Salamence holds Leftovers. Repeat wins past 5 can add a TM or Ominous Trial Key. Defeating her unlocks Commander Jupiter</td></tr></tbody></table>
+  <h3>Loot &amp; collectibles</h3>
+  <p><strong>Three <a href="items.html#cobblemon:gilded_chest">Gilded Chests</a></strong> roll the <code>cobbleverse:structures/wind_plant</code> table: <a href="items.html#cobblemon:relic_coin">Relic Coins</a>, potions, <a href="items.html#cobblemon:tasty_tail">Tasty Tails</a>, a spread of Poke Balls (Fast, Heavy, Luxury, Dusk, Love and more), nuggets/ingots, Wind Charges and Breeze Rods, a chance at 2-4 Tera Shards of any type, and one guaranteed roll from the TM, evolution-item, or mint tables.</p><p><strong>Bookshelf collectibles</strong> (open the chiseled bookshelves — all counts verified in structure data): 1x <a href="items.html#lumymon:torn_page">Torn Page</a> (combines with a Torn Journal into the <a href="items.html#lumymon:old_journal">Old Journal</a> for the Giratina/Turnback Cave chain), 2x Trial Key, and enchanted books of Riptide II, Unbreaking II, and Breach II, plus lore volumes on the Rotom Catalogue, bait seasoning, and Raikou hunting.</p><p><strong>Boss reward:</strong> Mars always drops the <a href="items.html#lumymon:verity_proof">Verity Proof</a>, "used to reveal its hidden location" — take it to a regional cartography table with an empty map to chart Lake Verity for the Mesprit encounter. Rematches beyond five wins against her can also pay out a TM or an Ominous Trial Key.</p>
+  <h3>Walkthrough</h3>
+  <p>The plant is a 67x40x35 facility with a ground floor of labs and a raised boss arena. Three trainer spawners cover the ground floor; each pulls one trainer from a five-variant pool (levels 55-70), so every run's lineup differs — worst case is a Lv. 70 Scientist or Researcher.</p><p><strong>Ground floor.</strong> Work through the three wings: a <a href="trainers.html#team_galactic_recruit_01">Team Galactic Recruit</a> guards the lab beside the lectern, a <a href="trainers.html#team_galactic_scientist_01">Team Galactic Scientist</a> holds the generator room, and a <a href="trainers.html#team_galactic_researcher_01">Team Galactic Researcher</a> patrols the far wing (community-reported room order: entrance corridor, then the yellow main corridor, generator room on the right, bookshelf room last; compass directions vary with structure rotation). All three gilded chests are on the ground floor — two at floor level and one perched on a lab table.</p><p><strong>Loot the shelves.</strong> Before heading up, click through every chiseled bookshelf: the Torn Page, both Trial Keys, and all three enchanted books sit in bookshelf slots, not chests. The lectern holds Mars's "Trial of Verity: Ops Manual," which spells out the post-dungeon chain: Verity Proof reveals Lake Verity, drive out the resident Hisuian Goodra for the Mesprit Plume, summon Mesprit for the Emotional Jewel. A free Cobblemon PC and an (unassembled) fossil machine monitor are also on this floor.</p><p><strong>Boss: Mars.</strong> Stairs lead to her statue-flanked arena on the upper level. She runs a full six — Purugly, Weavile, Salamence, Crobat, Raichu, Espeon (Lv. 73-75, full IVs, competitive EV spreads) — leaning on Fake Out chip, Knock Off, and Protect stalling, with four Full Restores in the bag. Bring Ice or Fairy coverage for Salamence and something faster than Weavile. Her Verity Proof drop is guaranteed, and the win flags Commander Jupiter (Eterna Building) to appear next.</p>
+</div>
+<div class="padbox locsec" id="wishing-weald">
+  <h2>Wishing Weald</h2>
+  <div class="locmeta">
+    <span class="chip">Base pack (Mega Showdown)</span>
+    <span class="chip">recommended level any</span>
+  </div>
+  <p>The Wishing Weald is Mega Showdown's Dynamax structure: a small ruined garden plaza (single template piece, 28×12×28) whose centerpiece is a <a href="items.html#mega_showdown:wishing_star_crystal">Wishing Star Crystal</a>. Mining the crystal is the intended way to obtain a <a href="items.html#mega_showdown:wishing_star">Wishing Star</a>, the key ingredient of the <a href="items.html#mega_showdown:dynamax_band">Dynamax Band</a> — the accessory that lets your Pokémon Dynamax in battle. There are no trainers or NPCs here; it is a pure loot-and-harvest stop, worth visiting early since the ruin also guarantees <a href="items.html#mega_showdown:zygarde_cell">Zygarde Cells</a> for the <a href="items.html#mega_showdown:zygarde_cube">Zygarde Cube</a> questline.</p>
+  <p><a href="viewer.html?s=wishing-weald-wishing-weald" title="Open in 3D viewer"><img class="locimg" src="renders/structures/wishing-weald-wishing-weald.png" loading="lazy" alt="Wishing Weald"></a><br><span class="meta">click to explore in 3D (slice the roof off to see the rooms)</span></p>
+  <div class="locbox"><b>Finding it:</b> <p>No locator item exists for this structure — use <code>/locate structure mega_showdown:wishing_weald</code>. It generates on the world surface in biomes tagged <code>#cobblemon:is_spooky</code>: in this pack that resolves to <strong>Dark Forest</strong> (vanilla) and <strong>Pale Garden</strong> (added by VanillaBackport via <code>#c:is_spooky</code>); the other tag entries point to biome mods not installed here. Placement is a 30-chunk spread with 20-chunk separation at 0.5 frequency, so half of its grid cells roll empty — expect a real hike between sites. Walking into the structure grants the advancement <em>Fairy-tale Forest, Here I Come!</em></p></div>
+  
+  <h3>Loot &amp; collectibles</h3>
+  <p><strong>Wishing Star Crystal:</strong> the pack's template contains exactly one crystal, at the center of the plaza. Break it with any tool (no Silk Touch) and it drops one <a href="items.html#mega_showdown:wishing_star">Wishing Star</a>; with Silk Touch you get the <a href="items.html#mega_showdown:wishing_star_crystal">Wishing Star Crystal</a> block itself instead, so leave Silk Touch at home unless you want the decoration. Community guides report three crystals per site, but the current structure file holds one — treat higher counts as community-reported. Picking up a Wishing Star grants <em>Falling Rocks? Nah, Free Power!</em></p><p><strong>Gilded Chest</strong> (one, three blocks from the crystal — direction varies with the structure's rotation; loot table <code>mega_showdown:wishing_weald/wishing_weald_chest</code>): a guaranteed 1–2 <a href="items.html#mega_showdown:zygarde_cell">Zygarde Cells</a>, exactly one roll on the Exp. Candy set, and up to one roll each on ancient held items, evolution stones, and Mega Showdown held items (<a href="items.html#cobblemon:clear_amulet">Clear Amulet</a>, <a href="items.html#cobblemon:lagging_tail">Lagging Tail</a>, <a href="items.html#cobblemon:grip_claw">Grip Claw</a>, <a href="items.html#mega_showdown:soul_dew">Soul Dew</a>, <a href="items.html#mega_showdown:adrenaline_orb">Adrenaline Orb</a>).</p><p><strong>Archaeology:</strong> four suspicious gravel blocks are buried at ground level around the plaza. Brush each for one roll on the site's dig table: <a href="items.html#cobblemon:relic_coin">Relic Coin</a> (25/41), copper ingot (10/41), a random type gem (5/41), or a gold ingot (1/41). Bring a brush.</p>
+  <h3>Walkthrough</h3>
+  <p>The Weald is a single open-air piece — mossy stone, tuff and andesite ruins around a flowered courtyard — so there is nothing to unlock and no interior to clear. Head to the center of the 28×28 footprint: the <a href="items.html#mega_showdown:wishing_star_crystal">Wishing Star Crystal</a> sits at ground level with the <a href="items.html#cobblemon:gilded_chest">Gilded Chest</a> three blocks to one side. Mind your footing while digging: the ruin masonry includes five infested cobblestone blocks that release silverfish when broken, so avoid tearing down walls casually.</p><p>Sweep the courtyard with a brush for the four suspicious gravel spots (all at floor level, scattered around the crystal), loot the chest, and mine the crystal without Silk Touch for your <a href="items.html#mega_showdown:wishing_star">Wishing Star</a>.</p><p><strong>The Dynamax Band chain:</strong> craft the <a href="items.html#mega_showdown:dynamax_band">Dynamax Band</a> (shaped, verified in pack data) with three <a href="items.html#cobblemon:pink_apricorn">Pink Apricorns</a> across the top, iron ingot / <a href="items.html#mega_showdown:wishing_star">Wishing Star</a> / iron ingot in the middle, and three <a href="items.html#cobblemon:blue_apricorn">Blue Apricorns</a> across the bottom. Crafting it grants <em>Go Big or Go Home!</em> and unlocks Dynamaxing in battle. To raise a Pokémon's Dynamax Level afterwards, craft <a href="items.html#mega_showdown:dynamax_candy">Dynamax Candy</a> — four <a href="items.html#cobblemon:exp_candy_s">Exp. Candy S</a> around a <a href="items.html#mega_showdown:max_mushroom">Max Mushroom</a> (the mushroom comes from raid dens, not this structure).</p>
+</div>
+<footer class="gen">Generated from the pack’s own data files by <code>tools/</code> in this folder · COBBLEVERSE · Cobblemon 1.7.3 · MC 1.21.1</footer>
+<script defer src="searchindex.js"></script>
+<script defer src="hoverdata.js"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){
+(function(){
+  var nav = document.querySelector('nav.top');
+  function setNavH(){
+    if(nav) document.documentElement.style.setProperty(
+      '--navh', nav.offsetHeight + 'px');
+  }
+  setNavH();
+  window.addEventListener('resize', setNavH);
+  // lazy images can shift layout after the initial anchor jump - re-align
+  if(location.hash){
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var t = document.getElementById(
+          decodeURIComponent(location.hash.slice(1)));
+        if(t && t.scrollIntoView) t.scrollIntoView();
+      }, 250);
+    });
+  }
+})();
+(function(){
+  var inp = document.getElementById('gq');
+  var box = document.getElementById('gq-results');
+  if(!inp || !box) return;
+  var sel = -1, rows = [];
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function img(e){
+    if(e.k === 'pokemon') return '<img src="renders/' + e.i + '.png" alt="" loading="lazy" ' +
+      'onerror="if(this.dataset.f){this.style.visibility=\'hidden\'}else{this.dataset.f=1;this.src=\'sprites/' + (e.x || 0) + '.png\'}">';
+    if(e.k === 'item'){
+      var c = e.i.indexOf(':');
+      return '<img src="icons/' + e.i.slice(0, c) + '/' +
+        e.i.slice(c + 1).replace(/\//g, '__') + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    }
+    if(e.k === 'trainer')
+      return '<img src="renders/trainers/' + e.i + '.png" alt="" loading="lazy" ' +
+        'onerror="this.style.visibility=\'hidden\'">';
+    return '<span style="width:26px;flex-shrink:0"></span>';
+  }
+  function urlOf(e){
+    if(e.k === 'pokemon') return 'pokedex.html#' + e.i;
+    if(e.k === 'item') return 'items.html#' + encodeURIComponent(e.i);
+    if(e.k === 'trainer') return 'trainers.html#' + encodeURIComponent(e.i);
+    return e.i;   // pages & guide sections store their url directly
+  }
+  function render(hits){
+    rows = hits; sel = -1;
+    if(!hits.length){
+      box.innerHTML = '<div class="gempty">No match.</div>';
+    } else {
+      box.innerHTML = hits.map(function(e){
+        return '<a class="gr" href="' + esc(urlOf(e)) + '">' + img(e) +
+          '<span>' + esc(e.t) + '</span><span class="gk">' + esc(e.k) + '</span></a>';
+      }).join('');
+    }
+    box.style.display = 'block';
+  }
+  function search(q){
+    q = q.trim().toLowerCase();
+    if(q.length < 2){ box.style.display = 'none'; return; }
+    var starts = [], has = [];
+    for(var n = 0; n < SEARCH_INDEX.length; n++){
+      var e = SEARCH_INDEX[n];
+      var t = e.t.toLowerCase();
+      if(t.startsWith(q)) starts.push(e);
+      else if(t.indexOf(q) >= 0 || (e.i && e.i.indexOf(q) >= 0)) has.push(e);
+      if(starts.length >= 14) break;
+    }
+    render(starts.concat(has).slice(0, 14));
+  }
+  var t;
+  inp.addEventListener('input', function(){
+    clearTimeout(t); t = setTimeout(function(){ search(inp.value); }, 80);
+  });
+  inp.addEventListener('keydown', function(ev){
+    var links = box.querySelectorAll('.gr');
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sel = ev.key === 'ArrowDown' ? Math.min(sel + 1, links.length - 1)
+                                   : Math.max(sel - 1, 0);
+      links.forEach(function(l, n){ l.classList.toggle('sel', n === sel); });
+      if(links[sel]) links[sel].scrollIntoView({block: 'nearest'});
+    } else if(ev.key === 'Enter'){
+      var pick = links[sel >= 0 ? sel : 0];
+      if(pick) location.href = pick.getAttribute('href');
+    } else if(ev.key === 'Escape'){
+      box.style.display = 'none'; inp.blur();
+    }
+  });
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.navsearch')) box.style.display = 'none';
+  });
+  document.addEventListener('keydown', function(ev){
+    if((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k'){
+      ev.preventDefault(); inp.focus(); inp.select();
+    }
+  });
+})();
+
+
+(function(){
+  if(typeof HOVER_DATA === 'undefined') return;
+  var card = document.createElement('div');
+  card.className = 'hovercard';
+  card.style.display = 'none';
+  document.body.appendChild(card);
+  var timer = null;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function iconPath(id){
+    var c = id.indexOf(':');
+    if(c < 0) return null;
+    return 'icons/' + id.slice(0, c) + '/' + id.slice(c + 1).replace(/\//g, '__') + '.png';
+  }
+  function monImg(id, dex){
+    return '<img src="renders/' + esc(id) + '.png" alt="" ' +
+      'onerror="if(this.dataset.f||!' + (dex ? 'true' : 'false') +
+      '){this.style.display=\'none\'}else{this.dataset.f=1;this.src=\'sprites/' +
+      (dex || 0) + '.png\'}">';
+  }
+  function parse(el){
+    var go = el.getAttribute('data-go');
+    if(go) return go.indexOf(':') >= 0 ? {k: 'i', id: go} : {k: 'p', id: go};
+    var href = el.getAttribute('href') || '';
+    var m = href.match(/(?:^|\/)(pokedex|items|trainers|spawns)\.html#(.+)$/);
+    if(!m) return null;
+    var id = decodeURIComponent(m[2]);
+    if(m[1] === 'items') return {k: 'i', id: id};
+    if(m[1] === 'trainers') return {k: 't', id: id};
+    return {k: 'p', id: id};
+  }
+  function render(a, info, e){
+    var html = '';
+    if(info.k === 'p'){
+      html = monImg(info.id, e.d) + '<div>' +
+        '<div class="hc-t">' + (e.d ? '#' + String(e.d).padStart(3, '0') + ' ' : '') + esc(e.n) + '</div>' +
+        '<div class="hc-m">' + esc((e.ty || []).join(' / ')) + '</div>' +
+        '<div class="hc-d" style="font-style:normal">BST ' + esc(e.b) +
+        (e.c ? ' · catch rate ' + esc(e.c) : '') + '</div></div>';
+    } else if(info.k === 'i'){
+      var p = iconPath(info.id);
+      html = (p ? '<img src="' + esc(p) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        '<div class="hc-m" style="text-transform:none">' + esc(info.id) + '</div>' +
+        (e.tip ? '<div class="hc-d">' + esc(e.tip) + '</div>' : '') + '</div>';
+    } else {
+      var fb = e.ld ? 'renders/' + esc(e.ld) + '.png' : '';
+      html = '<img src="renders/trainers/' + esc(info.id) + '.png" alt="" ' +
+        'onerror="if(this.dataset.f||!this.dataset.fb){this.style.display=\'none\'}' +
+        'else{this.dataset.f=1;this.src=this.dataset.fb}" data-fb="' + fb + '">' +
+        '<div><div class="hc-t">' + esc(e.n) + '</div>' +
+        (e.s ? '<div class="hc-m">' + esc(e.s) + ' series</div>' : '') +
+        '<div class="hc-d" style="font-style:normal">' + esc(e.c) + ' Pokémon' +
+        (e.hi ? ' · Lv ' + esc(e.lo) + '–' + esc(e.hi) : '') + '</div></div>';
+    }
+    card.innerHTML = html;
+    card.style.visibility = 'hidden';
+    card.style.display = 'flex';
+    var r = a.getBoundingClientRect();
+    var ch = card.offsetHeight, cw = card.offsetWidth;
+    var left = Math.max(6, Math.min(r.left, window.innerWidth - cw - 10));
+    var top = r.bottom + 8;
+    if(top + ch > window.innerHeight - 8) top = r.top - ch - 8;
+    card.style.left = left + 'px';
+    card.style.top = Math.max(6, top) + 'px';
+    card.style.visibility = 'visible';
+  }
+  document.addEventListener('mouseover', function(ev){
+    var a = ev.target.closest ? ev.target.closest('a[href], [data-go]') : null;
+    clearTimeout(timer);
+    if(!a){ card.style.display = 'none'; return; }
+    var info = parse(a);
+    if(!info){ card.style.display = 'none'; return; }
+    var e = HOVER_DATA[info.k] && HOVER_DATA[info.k][info.id];
+    if(!e){ card.style.display = 'none'; return; }
+    timer = setTimeout(function(){ render(a, info, e); }, 160);
+  });
+  document.addEventListener('mouseout', function(ev){
+    if(ev.target.closest && ev.target.closest('a[href], [data-go]')){
+      clearTimeout(timer);
+      card.style.display = 'none';
+    }
+  });
+  window.addEventListener('scroll', function(){
+    clearTimeout(timer); card.style.display = 'none';
+  }, true);
+})();
+});</script>
+</body></html>

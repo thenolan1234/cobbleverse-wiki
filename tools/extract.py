@@ -23,6 +23,8 @@ Reads jars and datapack zips only. Never writes into the pack folder.
 from __future__ import annotations
 
 import argparse
+import gzip
+import io
 import json
 import os
 import re
@@ -626,6 +628,111 @@ def resolve_tags(tags: dict[str, list]) -> dict[str, list]:
 
 # ---------------------------------------------------------------- main
 
+def scan_shops(pack: str) -> dict:
+    """CobbleDollars economy: base shop + bank from config/, plus the named
+    shopkeeper NPCs (cobble_merchant entities) embedded in datapack
+    structure NBTs. Read-only; needs nbtlib for the NPC part."""
+    out: dict = {"merchants": [], "default": [], "bank": []}
+    cfg = os.path.join(pack, "config", "cobbledollars")
+    try:
+        with open(os.path.join(cfg, "default_shop.json"), encoding="utf-8") as fh:
+            for cat in json.load(fh).get("defaultShop", []):
+                for cname, items in cat.items():
+                    out["default"].append({
+                        "category": cname,
+                        "items": [{"item": i["item"], "price": int(i["price"])}
+                                  for i in items]})
+    except (OSError, ValueError, KeyError):
+        pass
+    try:
+        with open(os.path.join(cfg, "bank.json"), encoding="utf-8") as fh:
+            out["bank"] = [{"item": e["item"], "price": int(e["price"])}
+                           for e in json.load(fh).get("bank", [])]
+    except (OSError, ValueError, KeyError):
+        pass
+    try:
+        import nbtlib
+    except ImportError:
+        print("  (nbtlib missing - skipping shopkeeper NPCs)")
+        return out
+
+    def clean_name(raw) -> str:
+        s = str(raw)
+        try:
+            v = json.loads(s)
+            if isinstance(v, str):
+                return v
+            if isinstance(v, dict):
+                return str(v.get("text", s))
+        except ValueError:
+            pass
+        return s.strip('"')
+
+    merchants: dict[str, dict] = {}
+    dp_dir = os.path.join(pack, "datapacks")
+    sources = [(os.path.join(dp_dir, f), False)
+               for f in sorted(os.listdir(dp_dir)) if f.endswith(".zip")]
+    extra = os.path.join(dp_dir, "extra")
+    if os.path.isdir(extra):
+        sources += [(os.path.join(extra, f), True)
+                    for f in sorted(os.listdir(extra)) if f.endswith(".zip")]
+    for path, addon in sources:
+        try:
+            zf = zipfile.ZipFile(path)
+        except zipfile.BadZipFile:
+            continue
+        for n in zf.namelist():
+            if not n.endswith(".nbt"):
+                continue
+            blob = zf.read(n)
+            probe = blob
+            if blob[:2] == b"\x1f\x8b":
+                try:
+                    probe = gzip.decompress(blob)
+                except OSError:
+                    continue
+            if b"cobble_merchant" not in probe:
+                continue
+            try:
+                nbt = nbtlib.File.parse(io.BytesIO(probe)).unpack()
+            except Exception:
+                continue
+            group = n.rsplit("/", 2)[-2] if "/" in n else ""
+            for ent in nbt.get("entities", []):
+                d = ent.get("nbt", {})
+                if str(d.get("id", "")) != "cobbledollars:cobble_merchant":
+                    continue
+                name = clean_name(d.get("CustomName", "Merchant"))
+                m = merchants.setdefault(
+                    name, {"name": name, "offers": [], "where": set(),
+                           "addon": addon, "_seen": set()})
+                m["where"].add(group)
+                m["addon"] = m["addon"] and addon
+                for shop in d.get("CobbleMerchantShop", []):
+                    for off in shop.get("Offers", []):
+                        item = str((off.get("Item") or {}).get("id", ""))
+                        if not item:
+                            continue
+                        count = int((off.get("Item") or {}).get("count", 1))
+                        try:
+                            price = int(str(off.get("Price", "0")))
+                        except ValueError:
+                            price = 0
+                        stock = int(off.get("Stock", 0))
+                        key = (item, price, count)
+                        if key in m["_seen"]:
+                            continue
+                        m["_seen"].add(key)
+                        m["offers"].append({"item": item, "price": price,
+                                            "stock": stock, "count": count})
+    for m in merchants.values():
+        m.pop("_seen")
+        m["where"] = sorted(m["where"])
+        m["offers"].sort(key=lambda o: (o["price"], o["item"]))
+    out["merchants"] = sorted(merchants.values(), key=lambda m: m["name"])
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pack", default=DEFAULT_PACK)
@@ -686,6 +793,7 @@ def main() -> None:
         "series": store.series,
         "advancements": store.advancements,
         "origins": store.origins,
+        "shops": scan_shops(pack),
     }
 
     out_path = os.path.abspath(args.out)

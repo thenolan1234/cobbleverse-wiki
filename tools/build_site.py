@@ -545,7 +545,8 @@ def main() -> None:
     content_dir = os.path.join(ROOT, "content")
     content = {}
     for key in ("progression", "legendaries", "trainers_guide", "mods",
-                "mechanics", "regions", "items_notable", "videos", "tips"):
+                "mechanics", "regions", "items_notable", "videos", "tips",
+                "locations"):
         content[key] = load_json(os.path.join(content_dir, f"{key}.json"))
 
     # data-exact seasoning tables regenerate into Mechanics every build
@@ -597,6 +598,17 @@ def main() -> None:
                                  "videos, checked against the pack data"),
     }
 
+    if d.get("shops", {}).get("merchants"):
+        from pages_shops import build_shops
+        pages["shops.html"] = build_shops(d["shops"], make_name_of(d["names"]))
+    from pages_teambuilder import build_teambuilder
+    pages["teambuilder.html"] = build_teambuilder(d["species"], d["mobs"],
+                                                  d["trainers"])
+    loc_content = content.get("locations")
+    if loc_content:
+        from pages_locations import build_locations
+        pages["locations.html"] = build_locations(loc_content, d)
+
     struct_inv = load_json(os.path.join(ROOT, "data", "structures.json")) or []
     struct_dir = os.path.join(ROOT, "renders", "structures")
     have = ({f[:-4] for f in os.listdir(struct_dir) if f.endswith(".png")}
@@ -638,6 +650,12 @@ def main() -> None:
         nm = e["rel"].split("/")[-1].replace("_", " ").title()
         idx.append({"t": nm + " (structure)", "k": "guide",
                     "i": "structures.html"})
+    for m in d.get("shops", {}).get("merchants", []):
+        idx.append({"t": m["name"] + " (shop)", "k": "guide",
+                    "i": f"shops.html#{slugify(m['name'])}"})
+    for loc in (content.get("locations") or {}).get("locations", []) or []:
+        idx.append({"t": loc["name"] + " (dungeon)", "k": "guide",
+                    "i": f"locations.html#{loc['slug']}"})
     with open(os.path.join(ROOT, "searchindex.js"), "w",
               encoding="utf-8") as fh:
         fh.write("const SEARCH_INDEX=" +
