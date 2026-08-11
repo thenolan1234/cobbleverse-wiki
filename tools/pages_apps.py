@@ -107,15 +107,18 @@ function show(id){
   };
 
   const heroSprites = `
-    <div style="display:flex;gap:10px;flex-shrink:0">
+    <div style="flex-shrink:0;text-align:center">
+    <div style="display:flex;gap:10px">
       <figure style="margin:0;text-align:center">
-        ${heroImg(id, s.dex, 140, false)}
+        <a href="viewer.html?p=${id}" title="Open in 3D viewer">${heroImg(id, s.dex, 140, false)}</a>
         <figcaption class="meta" style="font-size:10px">normal</figcaption>
       </figure>
       <figure style="margin:0;text-align:center">
-        ${heroImg(id, s.dex, 140, true)}
+        <a href="viewer.html?p=${id}" title="Open in 3D viewer">${heroImg(id, s.dex, 140, true)}</a>
         <figcaption class="meta" style="font-size:10px;color:var(--amber)">✦ shiny</figcaption>
       </figure>
+    </div>
+    <a class="meta" href="viewer.html?p=${id}" style="font-size:10.5px">↻ view in 3D</a>
     </div>`;
   let html = `<div class="item-head" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
     ${heroSprites}

@@ -319,10 +319,20 @@ footer.gen a{color:var(--silt);text-decoration:underline}
 (function(){
   const params = new URLSearchParams(location.search);
   const slug = (params.get('s') || '').replace(/[^a-z0-9-]/g, '');
+  const mon = (params.get('p') || '').replace(/[^a-z0-9-]/g, '');
   const msg = document.getElementById('vmsg');
-  if(!slug){ msg.textContent = 'No structure selected — pick one from the Structures page.'; return; }
+  if(!slug && !mon){ msg.textContent = 'Nothing selected — pick a structure or Pokémon.'; return; }
   document.getElementById('vtitle').textContent =
-    slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    (mon || slug).replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  if(mon){
+    document.getElementById('vback').href = 'pokedex.html#' + mon;
+    document.getElementById('vback').textContent = '← Pokédex page';
+    document.querySelector('label.meta').style.display = 'none';  // no roof slice
+    const btn = document.createElement('button');
+    btn.className = 'chip'; btn.style.cursor = 'pointer';
+    btn.id = 'vshiny'; btn.textContent = '✦ shiny';
+    document.getElementById('vreset').before(btn);
+  }
   msg.textContent = 'Loading…';
 
   const canvas = document.getElementById('vcanvas');
@@ -342,11 +352,85 @@ footer.gen a{color:var(--silt);text-decoration:underline}
 
   const SHADE = {top: 1.0, bottom: 0.5, px: 0.62, nx: 0.62, pz: 0.8, nz: 0.8};
 
-  fetch('voxels/' + slug + '.json')
+  const dataUrl = mon ? 'models3d/' + mon + '.json' : 'voxels/' + slug + '.json';
+  fetch(dataUrl)
     .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(build)
-    .catch(e => { msg.textContent = 'Could not load voxel data (' + e.message +
+    .then(d => mon ? buildMon(d) : build(d))
+    .catch(e => { msg.textContent = 'Could not load 3D data (' + e.message +
       '). The 3D viewer needs the site served over http (it works on the hosted wiki).'; });
+
+  function buildMon(d){
+    const loader = new THREE.TextureLoader();
+    let shiny = false;
+    const textures = {};
+    function texFor(isShiny, cb){
+      const key = isShiny ? 'shiny' : 'normal';
+      if(textures[key]) return cb(textures[key]);
+      loader.load('models3d/' + mon + (isShiny ? '_shiny' : '') + '.png', t => {
+        t.magFilter = THREE.NearestFilter;
+        t.minFilter = THREE.NearestFilter;
+        t.flipY = true;
+        textures[key] = t;
+        cb(t);
+      }, undefined, () => cb(null));
+    }
+    const nf = d.s.length;
+    const pos = new Float32Array(nf * 6 * 3);
+    const uv = new Float32Array(nf * 6 * 2);
+    const col = new Float32Array(nf * 6 * 3);
+    const order = [0, 1, 2, 0, 2, 3];
+    let pi = 0, ui = 0, ci = 0;
+    for(let f = 0; f < nf; f++){
+      const shade = d.s[f];
+      for(const k of order){
+        const p = (f * 4 + k) * 3, q = (f * 4 + k) * 2;
+        pos[pi++] = d.p[p]; pos[pi++] = d.p[p + 1]; pos[pi++] = d.p[p + 2];
+        uv[ui++] = d.u[q] / d.tw;
+        uv[ui++] = 1 - d.u[q + 1] / d.th;
+        col[ci++] = shade; col[ci++] = shade; col[ci++] = shade;
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    geo.computeBoundingBox();
+    const bb = geo.boundingBox;
+    const mat = new THREE.MeshBasicMaterial({vertexColors: true,
+      side: THREE.DoubleSide, transparent: true, alphaTest: 0.05});
+    const mesh = new THREE.Mesh(geo, mat);
+    const cx = (bb.min.x + bb.max.x) / 2, cy = (bb.min.y + bb.max.y) / 2,
+          cz = (bb.min.z + bb.max.z) / 2;
+    mesh.position.set(-cx, -cy, -cz);
+    scene.add(mesh);
+    texFor(false, t => { if(t){ mat.map = t; mat.needsUpdate = true; } });
+    const sb = document.getElementById('vshiny');
+    if(sb) sb.addEventListener('click', () => {
+      shiny = !shiny;
+      sb.style.background = shiny ? 'var(--reef)' : '';
+      texFor(shiny, t => { if(t){ mat.map = t; mat.needsUpdate = true; } });
+    });
+    const span = Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y,
+                          bb.max.z - bb.min.z);
+    const dist = span * 1.6 + 8;
+    function resetView(){
+      camera.position.set(dist * 0.65, dist * 0.4, -dist * 0.65);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+    document.getElementById('vreset').addEventListener('click', resetView);
+    resetView();
+    resize();
+    msg.textContent = nf.toLocaleString() + ' faces';
+    (function animate(){
+      requestAnimationFrame(animate);
+      if(canvas.clientWidth && (canvas.width !== canvas.clientWidth ||
+                                canvas.height !== canvas.clientHeight))
+        resize();
+      controls.update();
+      renderer.render(scene, camera);
+    })();
+  }
 
   function build(data){
     const bin = atob(data.blocks);
