@@ -91,11 +91,67 @@ def build_progression(content: dict | None, names: dict) -> str:
 
 # ---------------------------------------------------------------- legendaries
 
+_LEG_MEDIA_CSS = """
+<style>
+.legmedia{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;
+  margin:10px 0}
+.legmedia figure{margin:0;text-align:center}
+.legmedia figcaption{font-size:10.5px;color:var(--dim)}
+img.legmon{width:96px;height:96px;object-fit:contain}
+img.legplace{max-height:170px;max-width:330px;border:1px solid var(--reef);
+  border-radius:8px;object-fit:contain}
+</style>"""
+
+
+def _leg_species(leg, species, name_lookup) -> list:
+    """All species ids shown by this entry: the primary one plus any
+    whose display name appears in the entry title."""
+    out = []
+    sp = leg.get("species")
+    if sp and sp in species:
+        out.append(sp)
+    for part in re.split(r"[,&/()]| and ", leg.get("name", "")):
+        sid = name_lookup.get(part.strip().lower())
+        if sid and sid not in out:
+            out.append(sid)
+    return out
+
+
+def _legendary_struct_map(legendaries: list) -> dict:
+    """anchor -> [structure slugs with renders], via the same routing the
+    structures gallery uses (kept in sync automatically)."""
+    import json as _json
+    import os as _os
+    here = _os.path.dirname(_os.path.abspath(__file__))
+    root = _os.path.normpath(_os.path.join(here, ".."))
+    try:
+        with open(_os.path.join(root, "data", "structures.json"),
+                  encoding="utf-8") as fh:
+            inv = _json.load(fh)
+    except OSError:
+        return {}
+    rdir = _os.path.join(root, "renders", "structures")
+    leg_anchors = {slugify(l["name"]) for l in legendaries if l.get("name")}
+    out: dict[str, list] = {}
+    for e in inv:
+        slug = e["slug"]
+        if slug.endswith("-shiny"):
+            continue
+        if not _os.path.exists(_os.path.join(rdir, f"{slug}.png")):
+            continue
+        url = _guide_url(e, leg_anchors)
+        if url and url.startswith("legendaries.html#"):
+            out.setdefault(url.split("#", 1)[1], []).append(slug)
+    return out
+
+
 def build_legendaries(content: dict | None, species: dict) -> str:
     if not content:
         return build_guide("legendaries.html", "Legendaries", None,
                            "How every legendary is obtained in this pack")
-    parts = ["<h1>Legendaries</h1>",
+    name_lookup = {s["name"].lower(): sid for sid, s in species.items()}
+    struct_map = _legendary_struct_map(content.get("legendaries", []))
+    parts = [_LEG_MEDIA_CSS, "<h1>Legendaries</h1>",
              "<p class='sub'>How every legendary and mythical is actually "
              "obtained in COBBLEVERSE</p>",
              _safe(content.get("intro", ""))]
@@ -105,8 +161,28 @@ def build_legendaries(content: dict | None, species: dict) -> str:
         title = esc(name)
         if sp and sp in species:
             title = f"<a href='pokedex.html#{esc(sp)}'>{title}</a>"
+        media = []
+        for sid in _leg_species(leg, species, name_lookup)[:4]:
+            media.append(
+                f"<figure><a href='viewer.html?p={esc(sid)}' "
+                f"title='View in 3D'><img class='legmon' "
+                f"src='renders/{esc(sid)}.png' loading='lazy' alt='' "
+                f"onerror=\"this.closest('figure').remove()\"></a>"
+                f"<figcaption>{esc(species[sid]['name'])}</figcaption>"
+                f"</figure>")
+        for slug in struct_map.get(slugify(name), [])[:4]:
+            pretty = slug.replace("-", " ").title()
+            media.append(
+                f"<figure><a href='viewer.html?s={esc(slug)}' "
+                f"title='Explore in 3D'><img class='legplace' "
+                f"src='renders/structures/{esc(slug)}.png' loading='lazy' "
+                f"alt='{esc(pretty)}'></a>"
+                f"<figcaption>{esc(pretty)} · click for 3D</figcaption>"
+                f"</figure>")
+        media_html = (f"<div class='legmedia'>{''.join(media)}</div>"
+                      if media else "")
         parts.append(f"<section><h2 id='{slugify(name)}'>{title}</h2>"
-                     f"{_safe(leg.get('method', ''))}")
+                     f"{media_html}{_safe(leg.get('method', ''))}")
         items = leg.get("keyItems") or []
         if items:
             chips = " ".join(
@@ -220,6 +296,14 @@ _STRUCT_GUIDE = {
     "lake-guardians-lake-acuity": "legendaries.html#uxie-mesprit-azelf",
     "lake-guardians-lake-valor": "legendaries.html#uxie-mesprit-azelf",
     "lake-guardians-lake-verity": "legendaries.html#uxie-mesprit-azelf",
+    "whirl-island": "legendaries.html#lugia",
+    "fullmoon-island": "legendaries.html#cresselia",
+    "bell-tower": "legendaries.html#ho-oh",
+    "burned-tower": "legendaries.html#raikou-entei-suicune",
+    "sky-pillar": "legendaries.html#mega-rayquaza",
+    "snowpoint-temple": "legendaries.html#regigigas",
+    "spear-pillar": "legendaries.html#dialga-palkia",
+    "split-decision-temple": "legendaries.html#regieleki-regidrago",
     "team-rocket-tower": "locations.html#team-rocket-tower",
     "team-rocket-tower-shiny": "locations.html#team-rocket-tower",
     "rocket-radio-tower": "locations.html#radio-tower",
