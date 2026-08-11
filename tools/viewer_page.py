@@ -51,6 +51,7 @@ VIEWER_BODY = r"""
   const camera = new THREE.PerspectiveCamera(50, 2, 0.1, 4000);
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
+  window.__v = {renderer, scene, camera, controls};
 
   function resize(){
     const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -68,6 +69,10 @@ VIEWER_BODY = r"""
     .then(d => mon ? buildMon(d) : build(d))
     .catch(e => { msg.textContent = 'Could not load 3D data (' + e.message +
       '). The 3D viewer needs the site served over http (it works on the hosted wiki).'; });
+
+  function fail(e){
+    msg.textContent = 'Viewer error: ' + (e && e.message ? e.message : e);
+  }
 
   function buildMon(d){
     const loader = new THREE.TextureLoader();
@@ -143,6 +148,18 @@ VIEWER_BODY = r"""
   }
 
   function build(data){
+    // block-texture atlas is optional: fall back to avg-color faces
+    new THREE.TextureLoader().load('voxels/atlas.png?v=__ATLASV__', t => {
+      t.magFilter = THREE.NearestFilter;
+      t.minFilter = THREE.NearestFilter;
+      t.generateMipmaps = false;
+      try { buildScene(data, t); } catch(e){ fail(e); }
+    }, undefined, () => {
+      try { buildScene(data, null); } catch(e){ fail(e); }
+    });
+  }
+
+  function buildScene(data, atlas){
     const bin = atob(data.blocks);
     const n = bin.length / 6;
     const bx = new Uint16Array(n), bz = new Uint16Array(n);
@@ -155,51 +172,119 @@ VIEWER_BODY = r"""
       bs[i] = bin.charCodeAt(o + 5);
     }
     const [SX, SY, SZ] = data.size;
+    if(SX * SY * SZ > 1.5e8)
+      throw new Error('structure too large (' + SX + 'x' + SY + 'x' + SZ + ')');
     const pal = data.palette;
-    // occupancy of opaque blocks for face culling
-    const occ = new Set();
+    // textured only if every palette entry has atlas indices AND the loaded
+    // sheet actually covers them (a stale cached atlas may be shorter)
+    let textured = !!atlas && pal.every(p => p.a);
+    if(textured){
+      const maxTile = Math.max(...pal.map(p => Math.max(p.a[0], p.a[1])));
+      if(((maxTile / 32) | 0) * 16 + 16 > atlas.image.height) textured = false;
+    }
+    const AW = textured ? atlas.image.width : 1,
+          AH = textured ? atlas.image.height : 1;
+
+    // occupancy grid of opaque blocks: face culling + ambient occlusion
+    const occ = new Uint8Array(SX * SY * SZ);
+    const solid = (x, y, z) =>
+      (x >= 0 && y >= 0 && z >= 0 && x < SX && y < SY && z < SZ &&
+       occ[(x * SZ + z) * SY + y]) ? 1 : 0;
     for(let i = 0; i < n; i++)
-      if(pal[bs[i]].o) occ.add(bx[i] + '|' + by[i] + '|' + bz[i]);
+      if(pal[bs[i]].o) occ[(bx[i] * SZ + bz[i]) * SY + by[i]] = 1;
+
+    // per-vertex ambient occlusion; corner flags list each face's quad
+    // corners as (min|max, min|max) along its two in-plane axes
+    const AOF = [0.5, 0.72, 0.87, 1.0];
+    const F00 = [[0, 0], [0, 1], [1, 1], [1, 0]],
+          F01 = [[0, 0], [1, 0], [1, 1], [0, 1]];
+    function aos(sample, flags){
+      const out = [0, 0, 0, 0];
+      for(let k = 0; k < 4; k++){
+        const da = flags[k][0] ? 1 : -1, db = flags[k][1] ? 1 : -1;
+        const s1 = sample(da, 0), s2 = sample(0, db);
+        out[k] = AOF[s1 && s2 ? 0 : 3 - s1 - s2 - sample(da, db)];
+      }
+      return out;
+    }
+    // tile-local texture corners: sides show texture top at block top
+    const UV_TOP = F00.map(([a, b]) => [a, b]),
+          UV_BOT = F01.map(([a, b]) => [a, b]),
+          UV_PX = F01.map(([a, b]) => [b, 1 - a]),
+          UV_NX = F00.map(([a, b]) => [b, 1 - a]),
+          UV_PZ = F01.map(([a, b]) => [a, 1 - b]),
+          UV_NZ = F00.map(([a, b]) => [a, 1 - b]);
 
     // build one merged geometry per Y layer -> slicing = visibility toggles
     const layers = new Map();
     function layer(y){
       let L = layers.get(y);
-      if(!L){ L = {pos: [], col: []}; layers.set(y, L); }
+      if(!L){ L = {pos: [], col: [], uv: []}; layers.set(y, L); }
       return L;
     }
-    function quad(L, verts, rgb, shade){
-      const r = rgb[0] / 255 * shade, g = rgb[1] / 255 * shade,
-            b = rgb[2] / 255 * shade;
-      const idx = [0, 1, 2, 0, 2, 3];
+    function quad(L, verts, rgb, shade, tile, av, uvc){
+      let idx = [0, 1, 2, 0, 2, 3];
+      // flip the quad diagonal toward the darker corner pair so AO
+      // interpolates without the classic diagonal banding
+      if(av && av[0] + av[2] > av[1] + av[3]) idx = [1, 2, 3, 1, 3, 0];
+      const u0 = textured ? (tile % 32) * 16 : 0,
+            v0 = textured ? ((tile / 32) | 0) * 16 : 0;
       for(const k of idx){
         L.pos.push(verts[k][0], verts[k][1], verts[k][2]);
-        L.col.push(r, g, b);
+        const f = shade * (av ? av[k] : 1);
+        if(textured){
+          L.col.push(f, f, f);
+          L.uv.push((u0 + 0.35 + uvc[k][0] * 15.3) / AW,
+                    1 - (v0 + 0.35 + uvc[k][1] * 15.3) / AH);
+        } else {
+          L.col.push(rgb[0] / 255 * f, rgb[1] / 255 * f, rgb[2] / 255 * f);
+        }
       }
     }
     for(let i = 0; i < n; i++){
       const x = bx[i], y = by[i], z = bz[i], p = pal[bs[i]];
       const L = layer(y);
-      // top face: never culled, so slicing always shows a solid skin
-      quad(L, [[x,y+1,z],[x,y+1,z+1],[x+1,y+1,z+1],[x+1,y+1,z]], p.t, SHADE.top);
-      if(!occ.has(x + '|' + (y-1) + '|' + z))
-        quad(L, [[x,y,z],[x+1,y,z],[x+1,y,z+1],[x,y,z+1]], p.t, SHADE.bottom);
-      if(!occ.has((x+1) + '|' + y + '|' + z))
-        quad(L, [[x+1,y,z],[x+1,y+1,z],[x+1,y+1,z+1],[x+1,y,z+1]], p.s, SHADE.px);
-      if(!occ.has((x-1) + '|' + y + '|' + z))
-        quad(L, [[x,y,z],[x,y,z+1],[x,y+1,z+1],[x,y+1,z]], p.s, SHADE.nx);
-      if(!occ.has(x + '|' + y + '|' + (z+1)))
-        quad(L, [[x,y,z+1],[x+1,y,z+1],[x+1,y+1,z+1],[x,y+1,z+1]], p.s, SHADE.pz);
-      if(!occ.has(x + '|' + y + '|' + (z-1)))
-        quad(L, [[x,y,z],[x,y+1,z],[x+1,y+1,z],[x+1,y,z]], p.s, SHADE.nz);
+      const at = p.a ? p.a[0] : 0, as = p.a ? p.a[1] : 0;
+      // top face: never culled, so slicing always shows a solid skin;
+      // covered tops skip AO (their occluders vanish when sliced away)
+      quad(L, [[x,y+1,z],[x,y+1,z+1],[x+1,y+1,z+1],[x+1,y+1,z]], p.t,
+           SHADE.top, at,
+           solid(x, y + 1, z) ? null
+             : aos((da, db) => solid(x + da, y + 1, z + db), F00), UV_TOP);
+      if(!solid(x, y - 1, z))
+        quad(L, [[x,y,z],[x+1,y,z],[x+1,y,z+1],[x,y,z+1]], p.t,
+             SHADE.bottom, at,
+             aos((da, db) => solid(x + da, y - 1, z + db), F01), UV_BOT);
+      if(!solid(x + 1, y, z))
+        quad(L, [[x+1,y,z],[x+1,y+1,z],[x+1,y+1,z+1],[x+1,y,z+1]], p.s,
+             SHADE.px, as,
+             aos((da, db) => solid(x + 1, y + da, z + db), F01), UV_PX);
+      if(!solid(x - 1, y, z))
+        quad(L, [[x,y,z],[x,y,z+1],[x,y+1,z+1],[x,y+1,z]], p.s,
+             SHADE.nx, as,
+             aos((da, db) => solid(x - 1, y + da, z + db), F00), UV_NX);
+      if(!solid(x, y, z + 1))
+        quad(L, [[x,y,z+1],[x+1,y,z+1],[x+1,y+1,z+1],[x,y+1,z+1]], p.s,
+             SHADE.pz, as,
+             aos((da, db) => solid(x + da, y + db, z + 1), F01), UV_PZ);
+      if(!solid(x, y, z - 1))
+        quad(L, [[x,y,z],[x,y+1,z],[x+1,y+1,z],[x+1,y,z]], p.s,
+             SHADE.nz, as,
+             aos((da, db) => solid(x + da, y + db, z - 1), F00), UV_NZ);
     }
     const group = new THREE.Group();
-    const mat = new THREE.MeshBasicMaterial({vertexColors: true, side: THREE.DoubleSide});
+    const mat = textured
+      ? new THREE.MeshBasicMaterial({vertexColors: true, map: atlas,
+          alphaTest: 0.5, side: THREE.DoubleSide})
+      : new THREE.MeshBasicMaterial({vertexColors: true,
+          side: THREE.DoubleSide});
     const layerMeshes = [];
     for(const [y, L] of layers){
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.Float32BufferAttribute(L.pos, 3));
       geo.setAttribute('color', new THREE.Float32BufferAttribute(L.col, 3));
+      if(textured)
+        geo.setAttribute('uv', new THREE.Float32BufferAttribute(L.uv, 2));
       const mesh = new THREE.Mesh(geo, mat);
       mesh.userData.y = y;
       group.add(mesh);
@@ -246,4 +331,16 @@ VIEWER_BODY = r"""
 
 
 def build_viewer() -> str:
-    return page("3D Viewer", "structures.html", VIEWER_BODY, full_height=True)
+    # cache-bust the atlas by its tile count: the sheet is append-only, so
+    # the count changes exactly when the image content does
+    import json as _json
+    import os as _os
+    meta = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                         "..", "voxels", "atlas_meta.json")
+    try:
+        with open(meta) as fh:
+            atlas_v = str(_json.load(fh)["count"])
+    except OSError:
+        atlas_v = "0"
+    body = VIEWER_BODY.replace("__ATLASV__", atlas_v)
+    return page("3D Viewer", "structures.html", body, full_height=True)
